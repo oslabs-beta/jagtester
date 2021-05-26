@@ -1,16 +1,19 @@
 {
     "compilerOptions": {
+        "rootDir": ".",
         "module": "commonjs",
         "esModuleInterop": true,
         "target": "es6",
         "noImplicitAny": true,
+        "strict": true,
         "moduleResolution": "node",
         "sourceMap": true,
-        "outDir": "server/dist",
+        "outDir": "../../dist/server",
+        "composite": true,
         "baseUrl": ".",
         "paths": {
-            "*": ["node_modules/*"]
+            "*": ["../../node_modules/*"]
         }
     },
-    "include": ["./server/src/**/*"]
+    "include": ["./**/*"]
 }
