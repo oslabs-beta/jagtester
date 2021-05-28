@@ -28,7 +28,8 @@
         "path": "^0.12.7",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
-        "react-router": "^5.2.0"
+        "react-router": "^5.2.0",
+        "response-time": "^2.3.2"
     },
     "devDependencies": {
         "@babel/core": "^7.14.3",
@@ -42,6 +43,7 @@
         "@types/node": "^15.6.1",
         "@types/react": "^17.0.8",
         "@types/react-dom": "^17.0.5",
+        "@types/response-time": "^2.3.4",
         "@types/webpack": "^5.28.0",
         "@types/webpack-dev-server": "^3.11.4",
         "@typescript-eslint/eslint-plugin": "^4.25.0",

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction, Application } from 'express';
+import responseTime from 'response-time';
 
 function getMiddleware(app: Application) {
     let collectedData: {
@@ -103,6 +104,12 @@ function getMiddleware(app: Application) {
     };
 
     // this is the actual middleware that will take jagtestercommands
+    const responseTimeFunc: (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => void = responseTime({ suffix: false });
+
     return (req: Request, res: Response, next: NextFunction) => {
         // getting the command
         const jagtestercommand = +req.headers.jagtestercommand;
@@ -140,8 +147,7 @@ function getMiddleware(app: Application) {
                 }
                 break;
         }
-
-        return next();
+        return responseTimeFunc(req, res, next);
     };
 }
 

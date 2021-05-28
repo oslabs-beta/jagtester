@@ -9,14 +9,22 @@ enum Jagtestercommands {
     resetCollectedData,
 }
 const router = express.Router();
-const timeArr: {
-    receivedTotalTime?: number;
-    recordedTotalTime: number;
-}[] = [];
+const testRequestCount = 3000;
+const timeArr: TimeArrInterface[] = [];
 let errorCount = 0;
 const agent = new http.Agent({ keepAlive: true });
 const targetURL = 'http://localhost:3030/testroute';
+
+interface TimeArrInterface {
+    receivedTotalTime: number;
+    recordedTotalTime: number;
+}
+
 interface CollctedDataSingle {
+    receivedTime: number;
+    recordedTime: number;
+    errorCount: number;
+    requestCount: number;
     reqId?: string;
     reqRoute: string;
     middlewares: {
@@ -37,17 +45,11 @@ const sendRequests = (rps: number) => {
                 },
             })
                 .then((res) => {
-                    let receivedTotalTime: number | undefined = undefined;
+                    let receivedTotalTime = 0;
                     if (res.headers.has('x-response-time')) {
                         const xResponseTime =
                             res.headers.get('x-response-time');
-                        const xResponseTimeSubstr = xResponseTime?.substring(
-                            0,
-                            xResponseTime.length - 2
-                        );
-                        receivedTotalTime = xResponseTimeSubstr
-                            ? +xResponseTimeSubstr
-                            : undefined;
+                        receivedTotalTime = xResponseTime ? +xResponseTime : 0;
                     }
                     timeArr.push({
                         receivedTotalTime,
@@ -68,7 +70,7 @@ router.get('/start', (req, res) => {
         },
     })
         .then(() => {
-            sendRequests(100);
+            sendRequests(testRequestCount);
             res.send(`sent start request`);
         })
         .catch((err) => res.send(err));
@@ -89,9 +91,9 @@ router.get('/getbackendlogs', (req, res) => {
         .then((fetchRes) => fetchRes.json())
         .then((data) => {
             const collectedDataArr: CollctedDataSingle[] = [];
-            Object.keys(data).forEach((reqId: string) => {
-                collectedDataArr.push(data[reqId]);
-            });
+            for (const key in data) {
+                collectedDataArr.push(data[key]);
+            }
             const collectedDataSingle: CollctedDataSingle =
                 collectedDataArr.reduce((acc, cur) => {
                     for (let i = 0; i < acc.middlewares.length; i++) {
@@ -109,6 +111,36 @@ router.get('/getbackendlogs', (req, res) => {
                         (100 * middleware.elapsedTime) / collectedDataArr.length
                     ) / 100;
             });
+
+            let averagedTimeArr: TimeArrInterface = {
+                receivedTotalTime: 0,
+                recordedTotalTime: 0,
+            };
+            if (timeArr.length > 0) {
+                averagedTimeArr = timeArr.reduce((acc, cur) => {
+                    const newAcc: TimeArrInterface = {
+                        receivedTotalTime: 0,
+                        recordedTotalTime: 0,
+                    };
+                    newAcc.receivedTotalTime =
+                        acc.receivedTotalTime + cur.receivedTotalTime;
+                    newAcc.recordedTotalTime =
+                        acc.recordedTotalTime + cur.recordedTotalTime;
+                    return newAcc;
+                });
+            }
+            collectedDataSingle.recordedTime =
+                Math.round(
+                    (100 * averagedTimeArr.recordedTotalTime) /
+                        (testRequestCount - errorCount)
+                ) / 100;
+            collectedDataSingle.receivedTime =
+                Math.round(
+                    (100 * averagedTimeArr.receivedTotalTime) /
+                        (testRequestCount - errorCount)
+                ) / 100;
+            collectedDataSingle.errorCount = errorCount;
+            collectedDataSingle.requestCount = testRequestCount;
 
             return res.json(collectedDataSingle);
         })
