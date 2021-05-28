@@ -6,8 +6,8 @@
     "scripts": {
         "build-front": "webpack --config webpack.prod.config.ts",
         "dev-front": "webpack serve --config webpack.dev.config.ts",
-        "dev-back": "tsc --build --watch src -w & nodemon ./dist/server/index.js",
-        "start": "tsc --build --watch src lib & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts"
+        "dev-back": "tsc --build --watch src lib -w & nodemon ./dist/server/index.js",
+        "start": "tsc --build -w src lib & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts"
     },
     "repository": {
         "type": "git",
@@ -21,8 +21,10 @@
     },
     "homepage": "https://github.com/oslabs-beta/jagtester#readme",
     "dependencies": {
+        "@types/node-fetch": "^2.5.10",
         "bootstrap": "^5.0.1",
         "express": "^4.17.1",
+        "node-fetch": "^2.6.1",
         "path": "^0.12.7",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",

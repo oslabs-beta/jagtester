@@ -14,6 +14,7 @@ function getMiddleware(app: Application) {
     let isPrototypeChanged = false;
 
     enum Jagtestercommands {
+        updateLayer,
         running,
         endTest,
         resetCollectedData,
@@ -64,11 +65,13 @@ function getMiddleware(app: Application) {
         try {
             const beforeFunctionCall = Date.now(),
                 fnName = this.name,
-                reqId = req.headers.jagtesterreqid.toString(),
+                reqId = req.headers.jagtesterreqid
+                    ? req.headers.jagtesterreqid.toString()
+                    : undefined,
                 reqRoute = req.url;
 
             // create a data object in the collected data if it doesnt already exist
-            if (!collectedData[reqId]) {
+            if (!collectedData[reqId] && reqId) {
                 collectedData[reqId] = {
                     reqId,
                     reqRoute,
@@ -76,17 +79,22 @@ function getMiddleware(app: Application) {
                 };
             }
 
-            // add layer information to the collectedData
-            collectedData[reqId].middlewares.push({
-                fnName,
-                elapsedTime: 0,
-            });
+            if (reqId) {
+                // add layer information to the collectedData
+                collectedData[reqId].middlewares.push({
+                    fnName,
+                    elapsedTime: 0,
+                });
+            }
 
             // call the middleware and time it in the next function
             fn(req, res, function () {
-                const lastElIndex = collectedData[reqId].middlewares.length - 1;
-                collectedData[reqId].middlewares[lastElIndex].elapsedTime =
-                    Date.now() - beforeFunctionCall;
+                if (reqId) {
+                    const lastElIndex =
+                        collectedData[reqId].middlewares.length - 1;
+                    collectedData[reqId].middlewares[lastElIndex].elapsedTime =
+                        Date.now() - beforeFunctionCall;
+                }
                 next();
             });
         } catch (err) {
@@ -100,10 +108,19 @@ function getMiddleware(app: Application) {
         const jagtestercommand = +req.headers.jagtestercommand;
 
         switch (jagtestercommand) {
-            //changing the prototype of the layer handle request
+            //changing the prototype of the layer handle request while running
             case Jagtestercommands.running:
-                !isPrototypeChanged && updateLayerPrototype();
+                if (!isPrototypeChanged) {
+                    updateLayerPrototype();
+                }
                 break;
+
+            //changing the prototype of the layer handle request
+            case Jagtestercommands.updateLayer:
+                if (!isPrototypeChanged) {
+                    updateLayerPrototype();
+                }
+                return res.sendStatus(200);
 
             //reset the prototype and send back json data
             case Jagtestercommands.endTest:
@@ -118,7 +135,9 @@ function getMiddleware(app: Application) {
 
             default:
                 // changing layer prototype back to original
-                isPrototypeChanged && resetLayerPrototype();
+                if (isPrototypeChanged) {
+                    resetLayerPrototype();
+                }
                 break;
         }
 
