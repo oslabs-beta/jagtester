@@ -1,5 +1,5 @@
 import express from 'express';
-import fetch, { FetchError } from 'node-fetch';
+import fetch from 'node-fetch';
 import http from 'http';
 
 enum Jagtestercommands {
@@ -9,7 +9,10 @@ enum Jagtestercommands {
     resetCollectedData,
 }
 const router = express.Router();
-const timeArr: number[] = [];
+const timeArr: {
+    receivedTotalTime?: number;
+    recordedTotalTime: number;
+}[] = [];
 let errorCount = 0;
 const agent = new http.Agent({ keepAlive: true });
 const targetURL = 'http://localhost:3030/testroute';
@@ -33,8 +36,23 @@ const sendRequests = (rps: number) => {
                     jagtesterreqid: i.toString(),
                 },
             })
-                .then(() => {
-                    timeArr.push(Date.now() - timeBefore);
+                .then((res) => {
+                    let receivedTotalTime: number | undefined = undefined;
+                    if (res.headers.has('x-response-time')) {
+                        const xResponseTime =
+                            res.headers.get('x-response-time');
+                        const xResponseTimeSubstr = xResponseTime?.substring(
+                            0,
+                            xResponseTime.length - 2
+                        );
+                        receivedTotalTime = xResponseTimeSubstr
+                            ? +xResponseTimeSubstr
+                            : undefined;
+                    }
+                    timeArr.push({
+                        receivedTotalTime,
+                        recordedTotalTime: Date.now() - timeBefore,
+                    });
                 })
                 .catch(() => errorCount++);
         };
@@ -50,7 +68,7 @@ router.get('/start', (req, res) => {
         },
     })
         .then(() => {
-            sendRequests(4000);
+            sendRequests(100);
             res.send(`sent start request`);
         })
         .catch((err) => res.send(err));
@@ -88,8 +106,8 @@ router.get('/getbackendlogs', (req, res) => {
             collectedDataSingle.middlewares.forEach((middleware) => {
                 middleware.elapsedTime =
                     Math.round(
-                        (1e2 * middleware.elapsedTime) / collectedDataArr.length
-                    ) / 1e2;
+                        (100 * middleware.elapsedTime) / collectedDataArr.length
+                    ) / 100;
             });
 
             return res.json(collectedDataSingle);
