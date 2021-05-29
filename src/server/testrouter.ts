@@ -9,17 +9,19 @@ enum Jagtestercommands {
     resetCollectedData,
 }
 const router = express.Router();
-const testRequestCount = 3000;
+const testRequestRPS = 3000;
+const testRequestSeconds = 3;
 const timeArr: TimeArrInterface[] = [];
 let errorCount = 0;
 const agent = new http.Agent({ keepAlive: true });
-const targetURL = 'http://localhost:3030/testroute';
+const targetURL = 'http://localhost:3030/';
 
 interface TimeArrInterface {
     receivedTotalTime: number;
     recordedTotalTime: number;
 }
 
+// interface for collected data, it will be averaged out before sending back to front end
 interface CollctedDataSingle {
     receivedTime: number;
     recordedTime: number;
@@ -33,32 +35,35 @@ interface CollctedDataSingle {
     }[];
 }
 
-const sendRequests = (rps: number) => {
-    for (let i = 0; i < rps; i++) {
-        const sendFetch = () => {
-            const timeBefore = Date.now();
-            fetch(targetURL, {
-                agent,
-                headers: {
-                    jagtestercommand: Jagtestercommands.running.toString(),
-                    jagtesterreqid: i.toString(),
-                },
+const sendRequests = (rps: number, secondsToTest: number) => {
+    const sendFetch = (reqId: number) => {
+        const timeBefore = Date.now();
+        fetch(targetURL, {
+            agent,
+            headers: {
+                jagtestercommand: Jagtestercommands.running.toString(),
+                jagtesterreqid: reqId.toString(),
+            },
+        })
+            .then((res) => {
+                let receivedTotalTime = 0;
+                if (res.headers.has('x-response-time')) {
+                    const xResponseTime = res.headers.get('x-response-time');
+                    receivedTotalTime = xResponseTime ? +xResponseTime : 0;
+                }
+                timeArr.push({
+                    receivedTotalTime,
+                    recordedTotalTime: Date.now() - timeBefore,
+                });
             })
-                .then((res) => {
-                    let receivedTotalTime = 0;
-                    if (res.headers.has('x-response-time')) {
-                        const xResponseTime =
-                            res.headers.get('x-response-time');
-                        receivedTotalTime = xResponseTime ? +xResponseTime : 0;
-                    }
-                    timeArr.push({
-                        receivedTotalTime,
-                        recordedTotalTime: Date.now() - timeBefore,
-                    });
-                })
-                .catch(() => errorCount++);
-        };
-        setTimeout(sendFetch, Math.floor(Math.random() * 1000));
+            .catch(() => errorCount++);
+    };
+
+    // outer for loop to run for every second and set timeouts for after that second
+    for (let j = 0; j < secondsToTest; j++) {
+        for (let i = 0; i < rps; i++) {
+            setTimeout(sendFetch.bind(this, i + j * rps), Math.floor(Math.random() * 1000 + 1000 * j));
+        }
     }
 };
 
@@ -70,7 +75,9 @@ router.get('/start', (req, res) => {
         },
     })
         .then(() => {
-            sendRequests(testRequestCount);
+            timeArr.splice(0, timeArr.length);
+            errorCount = 0;
+            sendRequests(testRequestRPS, testRequestSeconds);
             res.send(`sent start request`);
         })
         .catch((err) => res.send(err));
@@ -94,22 +101,20 @@ router.get('/getbackendlogs', (req, res) => {
             for (const key in data) {
                 collectedDataArr.push(data[key]);
             }
-            const collectedDataSingle: CollctedDataSingle =
-                collectedDataArr.reduce((acc, cur) => {
-                    for (let i = 0; i < acc.middlewares.length; i++) {
-                        if (i < cur.middlewares.length) {
-                            acc.middlewares[i].elapsedTime +=
-                                cur.middlewares[i].elapsedTime;
-                        }
-                    }
-                    return acc;
-                });
 
+            // add middlewares elapsed times
+            const collectedDataSingle: CollctedDataSingle = collectedDataArr.reduce((acc, cur) => {
+                for (let i = 0; i < acc.middlewares.length; i++) {
+                    if (i < cur.middlewares.length) {
+                        acc.middlewares[i].elapsedTime += cur.middlewares[i].elapsedTime;
+                    }
+                }
+                return acc;
+            });
+
+            // divide by the count of requests
             collectedDataSingle.middlewares.forEach((middleware) => {
-                middleware.elapsedTime =
-                    Math.round(
-                        (100 * middleware.elapsedTime) / collectedDataArr.length
-                    ) / 100;
+                middleware.elapsedTime = Math.round((100 * middleware.elapsedTime) / collectedDataArr.length) / 100;
             });
 
             let averagedTimeArr: TimeArrInterface = {
@@ -122,25 +127,23 @@ router.get('/getbackendlogs', (req, res) => {
                         receivedTotalTime: 0,
                         recordedTotalTime: 0,
                     };
-                    newAcc.receivedTotalTime =
-                        acc.receivedTotalTime + cur.receivedTotalTime;
-                    newAcc.recordedTotalTime =
-                        acc.recordedTotalTime + cur.recordedTotalTime;
+                    newAcc.receivedTotalTime = acc.receivedTotalTime + cur.receivedTotalTime;
+                    newAcc.recordedTotalTime = acc.recordedTotalTime + cur.recordedTotalTime;
                     return newAcc;
                 });
             }
             collectedDataSingle.recordedTime =
-                Math.round(
-                    (100 * averagedTimeArr.recordedTotalTime) /
-                        (testRequestCount - errorCount)
-                ) / 100;
+                Math.round((100 * averagedTimeArr.recordedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) / 100;
             collectedDataSingle.receivedTime =
-                Math.round(
-                    (100 * averagedTimeArr.receivedTotalTime) /
-                        (testRequestCount - errorCount)
-                ) / 100;
+                Math.round((100 * averagedTimeArr.receivedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) / 100;
             collectedDataSingle.errorCount = errorCount;
-            collectedDataSingle.requestCount = testRequestCount;
+            collectedDataSingle.requestCount = testRequestRPS * testRequestSeconds;
+
+            // setting the last middleware's elapsed time to the total minus the rest
+            let sumOfMiddlewareTimes = 0;
+            for (const time of collectedDataSingle.middlewares) sumOfMiddlewareTimes += time.elapsedTime;
+            collectedDataSingle.middlewares[collectedDataSingle.middlewares.length - 1].elapsedTime =
+                collectedDataSingle.receivedTime - sumOfMiddlewareTimes;
 
             return res.json(collectedDataSingle);
         })

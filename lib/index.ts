@@ -22,8 +22,7 @@ function getMiddleware(app: Application) {
     }
 
     const resetLayerPrototype = () => {
-        app._router.stack[0].__proto__.handle_request =
-            originalLayerHandleRequest;
+        app._router.stack[0].__proto__.handle_request = originalLayerHandleRequest;
         isPrototypeChanged = false;
     };
 
@@ -32,11 +31,7 @@ function getMiddleware(app: Application) {
         isPrototypeChanged = true;
     };
 
-    const originalLayerHandleRequest = function handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    const originalLayerHandleRequest = function handle(req: Request, res: Response, next: NextFunction) {
         const fn = this.handle;
 
         if (fn.length > 3) {
@@ -51,11 +46,7 @@ function getMiddleware(app: Application) {
         }
     };
 
-    const newLayerHandleRequest = function handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    const newLayerHandleRequest = function handle(req: Request, res: Response, next: NextFunction) {
         const fn = this.handle;
 
         if (fn.length > 3) {
@@ -66,9 +57,7 @@ function getMiddleware(app: Application) {
         try {
             const beforeFunctionCall = Date.now(),
                 fnName = this.name,
-                reqId = req.headers.jagtesterreqid
-                    ? req.headers.jagtesterreqid.toString()
-                    : undefined,
+                reqId = req.headers.jagtesterreqid ? req.headers.jagtesterreqid.toString() : undefined,
                 reqRoute = req.url;
 
             // create a data object in the collected data if it doesnt already exist
@@ -91,10 +80,8 @@ function getMiddleware(app: Application) {
             // call the middleware and time it in the next function
             fn(req, res, function () {
                 if (reqId) {
-                    const lastElIndex =
-                        collectedData[reqId].middlewares.length - 1;
-                    collectedData[reqId].middlewares[lastElIndex].elapsedTime =
-                        Date.now() - beforeFunctionCall;
+                    const lastElIndex = collectedData[reqId].middlewares.length - 1;
+                    collectedData[reqId].middlewares[lastElIndex].elapsedTime = Date.now() - beforeFunctionCall;
                 }
                 next();
             });
@@ -104,12 +91,6 @@ function getMiddleware(app: Application) {
     };
 
     // this is the actual middleware that will take jagtestercommands
-    const responseTimeFunc: (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) => void = responseTime({ suffix: false });
-
     return (req: Request, res: Response, next: NextFunction) => {
         // getting the command
         const jagtestercommand = +req.headers.jagtestercommand;
@@ -127,6 +108,7 @@ function getMiddleware(app: Application) {
                 if (!isPrototypeChanged) {
                     updateLayerPrototype();
                 }
+                collectedData = {};
                 return res.sendStatus(200);
 
             //reset the prototype and send back json data
@@ -147,7 +129,7 @@ function getMiddleware(app: Application) {
                 }
                 break;
         }
-        return responseTimeFunc(req, res, next);
+        return responseTime({ suffix: false })(req, res, next);
     };
 }
 
