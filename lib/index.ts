@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, Application } from 'express';
 import responseTime from 'response-time';
 
 function getMiddleware(app: Application) {
-    let collectedData: {
+    interface CollectedData {
         [key: string]: {
             reqId: string;
             reqRoute: string;
@@ -11,24 +11,27 @@ function getMiddleware(app: Application) {
                 elapsedTime: number;
             }[];
         };
-    } = {};
+    }
+
+    let collectedData: CollectedData = {};
     let isPrototypeChanged = false;
 
     enum Jagtestercommands {
         updateLayer,
         running,
         endTest,
-        resetCollectedData,
     }
 
     const resetLayerPrototype = () => {
         app._router.stack[0].__proto__.handle_request = originalLayerHandleRequest;
         isPrototypeChanged = false;
+        collectedData = {};
     };
 
     const updateLayerPrototype = () => {
         app._router.stack[0].__proto__.handle_request = newLayerHandleRequest;
         isPrototypeChanged = true;
+        collectedData = {};
     };
 
     const originalLayerHandleRequest = function handle(req: Request, res: Response, next: NextFunction) {
@@ -79,7 +82,7 @@ function getMiddleware(app: Application) {
 
             // call the middleware and time it in the next function
             fn(req, res, function () {
-                if (reqId) {
+                if (reqId && collectedData[reqId]) {
                     const lastElIndex = collectedData[reqId].middlewares.length - 1;
                     collectedData[reqId].middlewares[lastElIndex].elapsedTime = Date.now() - beforeFunctionCall;
                 }
@@ -105,22 +108,14 @@ function getMiddleware(app: Application) {
 
             //changing the prototype of the layer handle request
             case Jagtestercommands.updateLayer:
-                if (!isPrototypeChanged) {
-                    updateLayerPrototype();
-                }
-                collectedData = {};
+                updateLayerPrototype();
                 return res.sendStatus(200);
 
             //reset the prototype and send back json data
             case Jagtestercommands.endTest:
-                const copiedData = JSON.parse(JSON.stringify(collectedData));
-                isPrototypeChanged && resetLayerPrototype();
-                return res.json(copiedData);
-
-            //reset the colleceted data
-            case Jagtestercommands.resetCollectedData:
-                collectedData = {};
-                break;
+                res.json(collectedData);
+                resetLayerPrototype();
+                return;
 
             default:
                 // changing layer prototype back to original

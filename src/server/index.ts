@@ -13,4 +13,4 @@ app.use('/test', testRouter);
 
 app.listen(port, () => console.log(`Running on on port ${port}`));
 
-console.log(`Worker ${process.pid} started`);
+console.log(`Server running on http://localhost:${port}`);
