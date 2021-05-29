@@ -1,10 +1,19 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
+import HomePage from './pages/home';
+import TestPage from './pages/testconfigpage';
+import Navigation from './components/navbar';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-const App = (): JSX.Element => {
+const App: () => JSX.Element = () => {
     return (
         <div>
-            <h1>My React and TypeScript App!</h1>
+            <BrowserRouter>
+                <Navigation />
+                <Switch>
+                    <Route path="/" exact component={HomePage} />
+                    <Route path="/test" exact component={TestPage} />
+                </Switch>
+            </BrowserRouter>
         </div>
     );
 };
