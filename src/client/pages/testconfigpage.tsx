@@ -1,12 +1,33 @@
 import React from 'react';
-import CustomBarInput from '../components/targetinput';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+
+import TargetInput from '../components/targetinput';
+import Slider from '../components/RangeSlider';
 
 const TestPage: () => JSX.Element = () => {
     return (
-        <div>
-            <h1>hii - test page</h1>
-            <CustomBarInput />
-        </div>
+        <Container>
+            <Row>
+                <Col>
+                    <TargetInput />
+                    <TargetInput />
+                </Col>
+                <Col>
+                    <Tabs defaultActiveKey="load-tester" className="mb-4">
+                        <Tab eventKey="load-tester" title="Load tester">
+                            <Slider />
+                        </Tab>
+                        <Tab eventKey="stress-tester" title="Stress tester">
+                            stress tester
+                        </Tab>
+                    </Tabs>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 
