@@ -6,7 +6,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 import TargetInput from '../components/targetinput';
-import Slider from '../components/RangeSlider';
+import RangeSliders from '../components/RangeSliders';
 
 const TestPage: () => JSX.Element = () => {
     return (
@@ -19,7 +19,7 @@ const TestPage: () => JSX.Element = () => {
                 <Col>
                     <Tabs defaultActiveKey="load-tester" className="mb-4">
                         <Tab eventKey="load-tester" title="Load tester">
-                            <Slider />
+                            <RangeSliders />
                         </Tab>
                         <Tab eventKey="stress-tester" title="Stress tester">
                             stress tester

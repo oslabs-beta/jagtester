@@ -39,7 +39,7 @@ const SingleSlider: (props: {
     );
 };
 
-const RangeSlider: () => JSX.Element = () => {
+const RangeSliders: () => JSX.Element = () => {
     const classes = useStyles();
     const [value, setValue] = React.useState<number[]>([20, 37]);
 
@@ -56,4 +56,4 @@ const RangeSlider: () => JSX.Element = () => {
     );
 };
 
-export default RangeSlider;
+export default RangeSliders;
