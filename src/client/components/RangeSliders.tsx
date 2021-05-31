@@ -44,21 +44,21 @@ const SingleSlider: (props: {
     );
 };
 
-const RangeSliders: () => JSX.Element = () => {
-    const [valueRPS, setValueRPS] = React.useState<number[]>([25]);
-    const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 1500]);
-    const [valueSeconds, setValueSeconds] = React.useState<number[]>([2]);
-
-    const handleChangeRPS = (event: any, newValue: number | number[]) => {
-        setValueRPS(newValue as number[]);
-    };
-    const handleChangeStartEnd = (event: any, newValue: number | number[]) => {
-        setValueStartEnd(newValue as number[]);
-    };
-    const handleChangeSeconds = (event: any, newValue: number | number[]) => {
-        setValueSeconds(newValue as number[]);
-    };
-
+const RangeSliders: (props: {
+    valueRPS: number[];
+    valueStartEnd: number[];
+    valueSeconds: number[];
+    handleChangeRPS: (event: unknown, newValue: number | number[]) => void;
+    handleChangeStartEnd: (event: unknown, newValue: number | number[]) => void;
+    handleChangeSeconds: (event: unknown, newValue: number | number[]) => void;
+}) => JSX.Element = ({
+    valueRPS,
+    valueStartEnd,
+    valueSeconds,
+    handleChangeRPS,
+    handleChangeStartEnd,
+    handleChangeSeconds,
+}) => {
     return (
         <div>
             <Container>
@@ -100,7 +100,7 @@ const RangeSliders: () => JSX.Element = () => {
             <Container className="mt-3">
                 <Row>
                     <Col>
-                        <h2>
+                        <h2 className="text-center">
                             Total test time:{' '}
                             {Math.round((valueSeconds[0] * (valueStartEnd[1] - valueStartEnd[0])) / valueRPS[0])}{' '}
                             seconds
