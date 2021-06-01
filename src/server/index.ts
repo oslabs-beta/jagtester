@@ -11,6 +11,8 @@ app.get('/', (_, res) => {
 
 app.use('/test', testRouter);
 
-app.listen(port, () => console.log(`Running on on port ${port}`));
+const server = app.listen(port, () => console.log(`Running on on port ${port}`));
 
 console.log(`Worker ${process.pid} started`);
+
+export default server;

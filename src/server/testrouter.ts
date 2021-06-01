@@ -160,4 +160,4 @@ router.get('/resetclientbackendlogs', (req, res) => {
         .catch((err) => res.send(err)); // TODO add better error handling
 });
 
-export default router;
+export default router; targetURL;
