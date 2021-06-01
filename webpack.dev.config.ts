@@ -58,7 +58,7 @@ const config: Configuration = {
         contentBase: path.join(__dirname, 'build'),
         historyApiFallback: true,
         port: 8080,
-        open: true,
+        open: false,
         hot: true,
     },
 };

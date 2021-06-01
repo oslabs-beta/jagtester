@@ -1,7 +1,14 @@
 {
     "compilerOptions": {
         "rootDir": ".",
-        "lib": ["dom", "dom.iterable", "esnext"],
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext",
+            "webworker",
+            "es6",
+            "scripthost"
+        ],
         "allowJs": true,
         "outDir": "../../dist/client",
         "allowSyntheticDefaultImports": true,
