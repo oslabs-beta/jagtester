@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction, Application } from 'express';
 import responseTime from 'response-time';
 
-function getMiddleware(app: Application) {
+type FunctionType = (app: Application) => (req: Request, res: Response, next: NextFunction) => unknown;
+
+const getMiddleware: FunctionType = (app: Application) => {
     interface CollectedData {
         [key: string]: {
             reqId: string;
@@ -126,6 +128,5 @@ function getMiddleware(app: Application) {
         }
         return responseTime({ suffix: false })(req, res, next);
     };
-}
-
+};
 module.exports = getMiddleware;
