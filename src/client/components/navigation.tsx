@@ -18,6 +18,9 @@ const Navigation: () => JSX.Element = () => {
                     <LinkContainer exact to="/test">
                         <Nav.Link>Test Page</Nav.Link>
                     </LinkContainer>
+                    <LinkContainer exact to="/results">
+                        <Nav.Link>Results</Nav.Link>
+                    </LinkContainer>
                 </Nav>
             </Navbar>
         </Container>

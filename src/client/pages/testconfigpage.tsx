@@ -5,9 +5,9 @@ import Col from 'react-bootstrap/Col';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-import Buttons from '../components/buttonsstartstop';
-import TargetInput from '../components/targetinput';
-import RangeSliders from '../components/RangeSliders';
+import Buttons from '../components/testConfigComponents/buttonsstartstop';
+import TargetInput from '../components/testConfigComponents/targetinput';
+import RangeSliders from '../components/testConfigComponents/RangeSliders';
 
 interface TestConfigData {
     rps: number;
