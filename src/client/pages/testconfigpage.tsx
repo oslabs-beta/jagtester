@@ -21,16 +21,6 @@ const TestPage: () => JSX.Element = () => {
     const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 1500]);
     const [valueSeconds, setValueSeconds] = React.useState<number[]>([2]);
 
-    const handleChangeRPS = (event: unknown, newValue: number | number[]) => {
-        setValueRPS(newValue as number[]);
-    };
-    const handleChangeStartEnd = (event: unknown, newValue: number | number[]) => {
-        setValueStartEnd(newValue as number[]);
-    };
-    const handleChangeSeconds = (event: unknown, newValue: number | number[]) => {
-        setValueSeconds(newValue as number[]);
-    };
-
     const handleStartTest = () => {
         const testConfigObj: TestConfigData = {
             rps: valueRPS[0],
@@ -55,9 +45,9 @@ const TestPage: () => JSX.Element = () => {
                                 valueRPS={valueRPS}
                                 valueStartEnd={valueStartEnd}
                                 valueSeconds={valueSeconds}
-                                handleChangeRPS={handleChangeRPS}
-                                handleChangeStartEnd={handleChangeStartEnd}
-                                handleChangeSeconds={handleChangeSeconds}
+                                setValueRPS={setValueRPS}
+                                setValueStartEnd={setValueStartEnd}
+                                setValueSeconds={setValueSeconds}
                             />
                             <Buttons handleStartTest={handleStartTest} />
                         </Tab>

@@ -9,12 +9,12 @@ const Buttons: (props: { handleStartTest: () => void }) => JSX.Element = ({ hand
         <Container>
             <Row>
                 <Col>
-                    <Button size="lg" block onClick={handleStartTest}>
+                    <Button block onClick={handleStartTest}>
                         Start testing
                     </Button>
                 </Col>
                 <Col>
-                    <Button size="lg" variant="danger" block>
+                    <Button variant="danger" block>
                         Stop and get data
                     </Button>
                 </Col>
