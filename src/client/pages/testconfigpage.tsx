@@ -13,6 +13,11 @@ interface TestConfigData {
     startRPS: number;
     endRPS: number;
     testLength: number;
+    inputsData: {
+        method: string;
+        targetURL: string;
+        percentage: number[];
+    }[];
 }
 
 //---------------------------- suppoerted http methods
@@ -46,6 +51,7 @@ const TestPage: () => JSX.Element = () => {
             startRPS: valueStartEnd[0],
             endRPS: valueStartEnd[1],
             testLength: valueSeconds[0],
+            inputsData,
         };
         console.log(testConfigObj);
     };
