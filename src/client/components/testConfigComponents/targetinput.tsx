@@ -63,10 +63,6 @@ const TartgetInput: () => JSX.Element = () => {
             method: HTTPMethods.GET,
             targetURL: 'localhost:3000',
         },
-        {
-            method: HTTPMethods.POST,
-            targetURL: 'localhost:3000/test',
-        },
     ]);
 
     const handleChangeMethod = (inputDataIndex: number, event: React.ChangeEvent<{ value: unknown }>) => {
