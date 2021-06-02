@@ -6,7 +6,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 import Buttons from '../components/testConfigComponents/buttonsstartstop';
-import TargetInput from '../components/testConfigComponents/targetinput';
+import TargetInputs from '../components/testConfigComponents/TargetInputs';
 import RangeSliders from '../components/testConfigComponents/RangeSliders';
 
 interface TestConfigData {
@@ -35,7 +35,7 @@ const TestPage: () => JSX.Element = () => {
         <Container>
             <Row>
                 <Col>
-                    <TargetInput />
+                    <TargetInputs />
                 </Col>
                 <Col>
                     <Tabs defaultActiveKey="load-tester" className="mb-4">
