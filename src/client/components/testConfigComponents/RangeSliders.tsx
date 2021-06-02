@@ -82,7 +82,7 @@ const RangeSliders: (props: {
         //calcuatiing the ending time to make sure it matches the RPS
         // let endTime = 100 + Math.round(valueStartEnd[1] / valueRPS[0]) * valueRPS[0];
         // endTime = Math.min(Math.max(valueStartEnd[0], endTime), 10000);
-        setValueStartEnd([valueStartEnd[0], Math.min(10000, valueStartEnd[0] + 10 * valueRPS[0])]);
+        setValueStartEnd([valueStartEnd[0], Math.min(10000, valueStartEnd[0] + 15 * valueRPS[0])]);
     };
     const handleChangeStartEnd = (event: unknown, newValue: number | number[]) => {
         setValueStartEnd(newValue as number[]);

@@ -36,7 +36,6 @@ const TestPage: () => JSX.Element = () => {
             <Row>
                 <Col>
                     <TargetInput />
-                    <TargetInput />
                 </Col>
                 <Col>
                     <Tabs defaultActiveKey="load-tester" className="mb-4">
