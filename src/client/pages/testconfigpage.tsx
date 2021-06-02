@@ -9,7 +9,7 @@ import TargetInputs from '../components/testConfigComponents/TargetInputs';
 import RangeSliders from '../components/testConfigComponents/RangeSliders';
 
 interface TestConfigData {
-    rps: number;
+    rpsRange: number;
     startRPS: number;
     endRPS: number;
     testLength: number;
@@ -47,7 +47,7 @@ const TestPage: () => JSX.Element = () => {
 
     const handleStartTest = () => {
         const testConfigObj: TestConfigData = {
-            rps: valueRPS[0],
+            rpsRange: valueRPS[0],
             startRPS: valueStartEnd[0],
             endRPS: valueStartEnd[1],
             testLength: valueSeconds[0],

@@ -1,14 +1,22 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import http from 'http';
+import events from 'events';
+
 import { TimeArrInterface, CollectedData, CollctedDataSingle, Jagtestercommands } from './interfaces';
 
 const router = express.Router();
-const testRequestRPS = 4500;
-const testRequestSeconds = 3;
+const testRequestRPS = 1000;
+const testRequestSeconds = 2;
 const timeArr: TimeArrInterface[] = [];
 let errorCount = 0;
 let successfulResCount = 0;
+const eventEmitter = new events.EventEmitter();
+// First listener
+eventEmitter.on('singleRPSfinished', function firstListener() {
+    console.log('test finished');
+});
+
 const agent = new http.Agent({ keepAlive: true });
 const targetURL = 'http://localhost:3030/testroute';
 
@@ -24,6 +32,9 @@ const sendRequests = (rps: number, secondsToTest: number) => {
         })
             .then((res) => {
                 successfulResCount++;
+                if (successfulResCount + errorCount >= testRequestRPS * testRequestSeconds) {
+                    eventEmitter.emit('singleRPSfinished');
+                }
                 let receivedTotalTime = 0;
                 if (res.headers.has('x-response-time')) {
                     const xResponseTime = res.headers.get('x-response-time');
@@ -34,7 +45,12 @@ const sendRequests = (rps: number, secondsToTest: number) => {
                     recordedTotalTime: Date.now() - timeBefore,
                 });
             })
-            .catch(() => errorCount++);
+            .catch(() => {
+                errorCount++;
+                if (successfulResCount + errorCount >= testRequestRPS * testRequestSeconds) {
+                    eventEmitter.emit('singleRPSfinished');
+                }
+            });
     };
 
     // outer for loop to run for every second and set timeouts for after that second
@@ -53,6 +69,7 @@ router.get('/start', (req, res) => {
         },
     })
         .then(() => {
+            // reset collected data before starting the testing
             timeArr.splice(0, timeArr.length);
             errorCount = 0;
             successfulResCount = 0;
