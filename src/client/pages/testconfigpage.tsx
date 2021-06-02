@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Tab from 'react-bootstrap/Tab';
@@ -32,31 +31,29 @@ const TestPage: () => JSX.Element = () => {
     };
 
     return (
-        <Container>
-            <Row>
-                <Col>
-                    <TargetInputs />
-                </Col>
-                <Col>
-                    <Tabs defaultActiveKey="load-tester" className="mb-4">
-                        <Tab eventKey="load-tester" title="Load tester">
-                            <RangeSliders
-                                valueRPS={valueRPS}
-                                valueStartEnd={valueStartEnd}
-                                valueSeconds={valueSeconds}
-                                setValueRPS={setValueRPS}
-                                setValueStartEnd={setValueStartEnd}
-                                setValueSeconds={setValueSeconds}
-                            />
-                            <Buttons handleStartTest={handleStartTest} />
-                        </Tab>
-                        <Tab eventKey="stress-tester" title="Stress tester">
-                            stress tester
-                        </Tab>
-                    </Tabs>
-                </Col>
-            </Row>
-        </Container>
+        <Row>
+            <Col>
+                <TargetInputs />
+            </Col>
+            <Col>
+                <Tabs defaultActiveKey="load-tester" className="mb-4">
+                    <Tab eventKey="load-tester" title="Load tester">
+                        <RangeSliders
+                            valueRPS={valueRPS}
+                            valueStartEnd={valueStartEnd}
+                            valueSeconds={valueSeconds}
+                            setValueRPS={setValueRPS}
+                            setValueStartEnd={setValueStartEnd}
+                            setValueSeconds={setValueSeconds}
+                        />
+                        <Buttons handleStartTest={handleStartTest} />
+                    </Tab>
+                    <Tab eventKey="stress-tester" title="Stress tester">
+                        stress tester
+                    </Tab>
+                </Tabs>
+            </Col>
+        </Row>
     );
 };
 
