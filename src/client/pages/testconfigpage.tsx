@@ -15,10 +15,30 @@ interface TestConfigData {
     testLength: number;
 }
 
+//---------------------------- suppoerted http methods
+const HTTPMethods = {
+    GET: 'GET',
+    POST: 'POST',
+    PUT: 'PUT',
+    DELETE: 'DELETE',
+    PATCH: 'PATCH',
+    HEAD: 'HEAD',
+    CONNECT: 'CONNECT',
+    TRACE: 'TRACE',
+};
+
 const TestPage: () => JSX.Element = () => {
     const [valueRPS, setValueRPS] = React.useState<number[]>([25]);
     const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 1500]);
     const [valueSeconds, setValueSeconds] = React.useState<number[]>([2]);
+
+    const [inputsData, setInputsData] = React.useState([
+        {
+            method: HTTPMethods.GET,
+            targetURL: 'localhost:3000',
+            percentage: [100],
+        },
+    ]);
 
     const handleStartTest = () => {
         const testConfigObj: TestConfigData = {
@@ -33,7 +53,7 @@ const TestPage: () => JSX.Element = () => {
     return (
         <Row>
             <Col>
-                <TargetInputs />
+                <TargetInputs inputsData={inputsData} setInputsData={setInputsData} HTTPMethods={HTTPMethods} />
             </Col>
             <Col>
                 <Tabs defaultActiveKey="load-tester" className="mb-4">

@@ -16,18 +16,6 @@ import Container from 'react-bootstrap/Container';
 
 import SingleSlider from './SingleSlider';
 
-//---------------------------- suppoerted http methods
-const HTTPMethods = {
-    GET: 'GET',
-    POST: 'POST',
-    PUT: 'PUT',
-    DELETE: 'DELETE',
-    PATCH: 'PATCH',
-    HEAD: 'HEAD',
-    CONNECT: 'CONNECT',
-    TRACE: 'TRACE',
-};
-
 //---------------------------- some styles
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -59,15 +47,32 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 //---------------------------- will render single targets based on the state passed down from the parent
-const TartgetInputs: () => JSX.Element = () => {
-    const [inputsData, setInputsData] = React.useState([
-        {
-            method: HTTPMethods.GET,
-            targetURL: 'localhost:3000',
-            percentage: [100],
-        },
-    ]);
-
+const TartgetInputs: (props: {
+    inputsData: {
+        method: string;
+        targetURL: string;
+        percentage: number[];
+    }[];
+    setInputsData: React.Dispatch<
+        React.SetStateAction<
+            {
+                method: string;
+                targetURL: string;
+                percentage: number[];
+            }[]
+        >
+    >;
+    HTTPMethods: {
+        GET: string;
+        POST: string;
+        PUT: string;
+        DELETE: string;
+        PATCH: string;
+        HEAD: string;
+        CONNECT: string;
+        TRACE: string;
+    };
+}) => JSX.Element = ({ inputsData, setInputsData, HTTPMethods }) => {
     const handleChangeMethod = (inputDataIndex: number, event: React.ChangeEvent<{ value: unknown }>) => {
         const copiedState = lodash.cloneDeep(inputsData);
         copiedState[inputDataIndex].method = event.target.value as string;
@@ -87,6 +92,7 @@ const TartgetInputs: () => JSX.Element = () => {
         const diffWithNextCopy = diffWithNext;
         const cur = copiedState[index].percentage;
         while (diffWithNext !== 0) {
+            //TODO add a better terminating condition
             index = index < copiedState.length - 1 ? index + 1 : 0;
             const next = copiedState[index].percentage;
 
@@ -183,6 +189,7 @@ const TartgetInputs: () => JSX.Element = () => {
                     max={100}
                     step={5}
                     marks={{ interval: 10, min: 0, max: 100 }}
+                    disabled={inputsData.length === 1}
                 />
                 <hr />
             </Container>

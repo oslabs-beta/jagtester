@@ -19,6 +19,7 @@ const SingleSlider: (props: {
         min: number;
         max: number;
     };
+    disabled?: boolean;
 }) => JSX.Element = (props) => {
     // generates marks for the sliders
     const marks = (interval: number, min: number, max: number) => {
@@ -49,9 +50,10 @@ const SingleSlider: (props: {
                 </Col>
                 <Col>
                     <Slider
+                        disabled={props.disabled === undefined ? false : props.disabled}
                         value={props.value}
                         onChange={props.onChange}
-                        valueLabelDisplay="on"
+                        valueLabelDisplay="auto"
                         aria-labelledby={props.id}
                         getAriaValueText={valuetext}
                         valueLabelFormat={valuetext}
