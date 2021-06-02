@@ -118,14 +118,18 @@ const TartgetInputs: (props: {
     };
 
     const addTargetInput = () => {
-        setInputsData([
-            ...inputsData,
-            {
-                method: HTTPMethods.GET,
-                targetURL: '',
-                percentage: [0],
-            },
-        ]);
+        const copiedState = lodash.cloneDeep(inputsData);
+        copiedState.push({
+            method: HTTPMethods.GET,
+            targetURL: '',
+            percentage: [0],
+        });
+        const percentagePerInput = Math.floor(100 / copiedState.length);
+        for (let i = 0; i < copiedState.length; i++) {
+            copiedState[i].percentage[0] = percentagePerInput;
+        }
+        if (copiedState.length > 0) copiedState[0].percentage[0] += 100 - copiedState.length * percentagePerInput;
+        setInputsData(copiedState);
     };
 
     const deleteTarget = (index: number) => {
@@ -187,7 +191,7 @@ const TartgetInputs: (props: {
                     onChange={(e, newValue) => handleChangePercentage(i, e, newValue)}
                     min={0}
                     max={100}
-                    step={5}
+                    step={1}
                     marks={{ interval: 10, min: 0, max: 100 }}
                     disabled={inputsData.length === 1}
                 />
