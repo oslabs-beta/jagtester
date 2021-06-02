@@ -19,6 +19,8 @@ export interface CollctedDataSingle {
     recordedTime?: number;
     errorCount?: number;
     requestCount?: number;
+    successfulResCount?: number;
+    RPS?: number;
     reqId?: string;
     reqRoute: string;
     middlewares: {

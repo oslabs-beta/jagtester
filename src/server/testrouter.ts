@@ -4,10 +4,11 @@ import http from 'http';
 import { TimeArrInterface, CollectedData, CollctedDataSingle, Jagtestercommands } from './interfaces';
 
 const router = express.Router();
-const testRequestRPS = 2000;
-const testRequestSeconds = 2;
+const testRequestRPS = 4500;
+const testRequestSeconds = 3;
 const timeArr: TimeArrInterface[] = [];
 let errorCount = 0;
+let successfulResCount = 0;
 const agent = new http.Agent({ keepAlive: true });
 const targetURL = 'http://localhost:3030/testroute';
 
@@ -22,6 +23,7 @@ const sendRequests = (rps: number, secondsToTest: number) => {
             },
         })
             .then((res) => {
+                successfulResCount++;
                 let receivedTotalTime = 0;
                 if (res.headers.has('x-response-time')) {
                     const xResponseTime = res.headers.get('x-response-time');
@@ -53,6 +55,7 @@ router.get('/start', (req, res) => {
         .then(() => {
             timeArr.splice(0, timeArr.length);
             errorCount = 0;
+            successfulResCount = 0;
             sendRequests(testRequestRPS, testRequestSeconds);
             res.send(`sent start request`);
         })
@@ -109,11 +112,15 @@ const processData: (data: CollectedData) => CollctedDataSingle = (data: Collecte
         });
     }
     collectedDataSingle.recordedTime =
-        Math.round((100 * averagedTimeArr.recordedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) / 100;
+        Math.round((100 * averagedTimeArr.recordedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) /
+        100;
     collectedDataSingle.receivedTime =
-        Math.round((100 * averagedTimeArr.receivedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) / 100;
+        Math.round((100 * averagedTimeArr.receivedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) /
+        100;
     collectedDataSingle.errorCount = errorCount;
+    collectedDataSingle.successfulResCount = successfulResCount;
     collectedDataSingle.requestCount = testRequestRPS * testRequestSeconds;
+    collectedDataSingle.RPS = testRequestRPS;
 
     // setting the last middleware's elapsed time to the total minus the rest
     let sumOfMiddlewareTimes = 0;
