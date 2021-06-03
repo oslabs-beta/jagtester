@@ -40,8 +40,8 @@ const HTTPMethods = {
 
 const TestPage: () => JSX.Element = () => {
     // states for rps sliders
-    const [valueRPS, setValueRPS] = React.useState<number[]>([10]);
-    const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 120]);
+    const [valueRPS, setValueRPS] = React.useState<number[]>([500]);
+    const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 100]);
     const [valueSeconds, setValueSeconds] = React.useState<number[]>([1]);
     const [isTestRunning, setIsTestRunning] = React.useState<boolean>(false);
     const [curRunningRPS, setCurRunningRPS] = React.useState<number>(0);
@@ -94,12 +94,18 @@ const TestPage: () => JSX.Element = () => {
     return (
         <Row>
             <Col>
-                <TargetInputs inputsData={inputsData} setInputsData={setInputsData} HTTPMethods={HTTPMethods} />
+                <TargetInputs
+                    isTestRunning={isTestRunning}
+                    inputsData={inputsData}
+                    setInputsData={setInputsData}
+                    HTTPMethods={HTTPMethods}
+                />
             </Col>
             <Col>
                 <Tabs defaultActiveKey="load-tester" className="mb-4">
                     <Tab eventKey="load-tester" title="Load tester">
                         <RangeSliders
+                            isTestRunning={isTestRunning}
                             valueRPS={valueRPS}
                             valueStartEnd={valueStartEnd}
                             valueSeconds={valueSeconds}

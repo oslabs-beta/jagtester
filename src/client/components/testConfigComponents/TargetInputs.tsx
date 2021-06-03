@@ -74,7 +74,8 @@ const TartgetInputs: (props: {
         CONNECT: string;
         TRACE: string;
     };
-}) => JSX.Element = ({ inputsData, setInputsData, HTTPMethods }) => {
+    isTestRunning: boolean;
+}) => JSX.Element = ({ inputsData, setInputsData, HTTPMethods, isTestRunning }) => {
     const handleChangeMethod = (inputDataIndex: number, event: React.ChangeEvent<{ value: unknown }>) => {
         const copiedState = lodash.cloneDeep(inputsData);
         copiedState[inputDataIndex].method = event.target.value as string;
@@ -175,7 +176,7 @@ const TartgetInputs: (props: {
         inputsArr.push(
             <Container key={`input${i}`} className="mb-3">
                 <Row>
-                    <FormControl className={classes.methodInput}>
+                    <FormControl disabled={isTestRunning} className={classes.methodInput}>
                         <InputLabel id={`select-http-method-label-${i}`}>Method</InputLabel>
                         <Select
                             labelId={`select-http-method-label-${i}`}
@@ -188,6 +189,7 @@ const TartgetInputs: (props: {
                     </FormControl>
                     <FormControl className={classes.methodURL}>
                         <TextField
+                            disabled={isTestRunning}
                             error={!inputsData[i].jagTesterEnabled}
                             id={`target-url-${i}`}
                             label={
@@ -202,7 +204,11 @@ const TartgetInputs: (props: {
 
                     {inputsData.length > 1 && (
                         <FormControl className="my-auto">
-                            <DeleteIcon color="action" className={classes.deleteIcon} onClick={() => deleteTarget(i)} />
+                            <DeleteIcon
+                                color="action"
+                                className={classes.deleteIcon}
+                                onClick={() => !isTestRunning && deleteTarget(i)}
+                            />
                         </FormControl>
                     )}
                 </Row>
@@ -216,7 +222,7 @@ const TartgetInputs: (props: {
                     max={100}
                     step={1}
                     marks={{ interval: 10, min: 0, max: 100 }}
-                    disabled={inputsData.length === 1}
+                    disabled={inputsData.length === 1 || isTestRunning}
                 />
                 <hr />
             </Container>

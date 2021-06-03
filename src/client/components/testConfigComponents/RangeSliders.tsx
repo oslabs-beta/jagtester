@@ -12,7 +12,16 @@ const RangeSliders: (props: {
     setValueRPS: (value: React.SetStateAction<number[]>) => void;
     setValueStartEnd: (value: React.SetStateAction<number[]>) => void;
     setValueSeconds: (value: React.SetStateAction<number[]>) => void;
-}) => JSX.Element = ({ valueRPS, valueStartEnd, valueSeconds, setValueRPS, setValueStartEnd, setValueSeconds }) => {
+    isTestRunning: boolean;
+}) => JSX.Element = ({
+    valueRPS,
+    valueStartEnd,
+    valueSeconds,
+    setValueRPS,
+    setValueStartEnd,
+    setValueSeconds,
+    isTestRunning,
+}) => {
     const handleChangeRPS = (event: unknown, newValue: number | number[]) => {
         setValueRPS(newValue as number[]);
         setValueStartEnd([valueStartEnd[0], Math.min(10000, valueStartEnd[0] + 15 * valueRPS[0])]);
@@ -39,6 +48,7 @@ const RangeSliders: (props: {
                             max={500}
                             step={10}
                             marks={{ interval: 100, min: 10, max: 500 }}
+                            disabled={isTestRunning}
                         />
                         <SingleSlider
                             text="Start / end RPS"
@@ -50,6 +60,7 @@ const RangeSliders: (props: {
                             max={10000}
                             step={valueRPS[0]}
                             marks={{ interval: 2000, min: 100, max: 10000 }}
+                            disabled={isTestRunning}
                         />
                         <SingleSlider
                             text="Time per interval (seconds)"
@@ -61,6 +72,7 @@ const RangeSliders: (props: {
                             max={10}
                             step={1}
                             marks={{ interval: 1, min: 1, max: 10 }}
+                            disabled={isTestRunning}
                         />
                     </Col>
                 </Row>

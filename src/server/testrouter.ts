@@ -2,6 +2,8 @@ import express from 'express';
 import fetch from 'node-fetch';
 import http from 'http';
 import events from 'events';
+import fs from 'fs';
+import path from 'path';
 
 import { io } from './index';
 
@@ -90,7 +92,13 @@ eventEmitter.on('allRPSfinished', () => {
         }
     }
 
-    console.log('pulledDataFromTest', pulledDataFromTest);
+    const curSavedData = JSON.parse(fs.readFileSync('./src/server/testingdata.json', { encoding: 'utf8', flag: 'r' }));
+    curSavedData.push({
+        testTime: Date.now(),
+        testData: pulledDataFromTest,
+    });
+    // console.log('pulledDataFromTest', pulledDataFromTest);
+    fs.writeFileSync('./src/server/testingdata.json', JSON.stringify(curSavedData, null, 4)); // FIXME change this to synchronous
 });
 
 const agent = new http.Agent({ keepAlive: true });
