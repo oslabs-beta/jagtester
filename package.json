@@ -6,7 +6,7 @@
     "scripts": {
         "build-front": "webpack --config webpack.prod.config.ts",
         "dev-front": "webpack serve --config webpack.dev.config.ts",
-        "dev-back": "tsc --build --watch src lib -w & nodemon ./dist/server/index.js",
+        "dev-back": "tsc --build -w src lib & nodemon ./dist/server/index.js",
         "start": "tsc --build -w src lib & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts"
     },
     "repository": {

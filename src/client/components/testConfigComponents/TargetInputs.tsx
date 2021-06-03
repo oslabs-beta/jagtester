@@ -52,6 +52,7 @@ const TartgetInputs: (props: {
         method: string;
         targetURL: string;
         percentage: number[];
+        jagTesterEnabled: boolean;
     }[];
     setInputsData: React.Dispatch<
         React.SetStateAction<
@@ -59,6 +60,7 @@ const TartgetInputs: (props: {
                 method: string;
                 targetURL: string;
                 percentage: number[];
+                jagTesterEnabled: boolean;
             }[]
         >
     >;
@@ -82,7 +84,23 @@ const TartgetInputs: (props: {
     const handleChangeURL = (inputDataIndex: number, event: React.ChangeEvent<{ value: unknown }>) => {
         const copiedState = lodash.cloneDeep(inputsData);
         copiedState[inputDataIndex].targetURL = event.target.value as string;
-        setInputsData(copiedState);
+        fetch('/api/checkjagtester', {
+            method: HTTPMethods.POST,
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify({
+                testTarget: event.target.value as string,
+                method: inputsData[inputDataIndex].method,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                copiedState[inputDataIndex].jagTesterEnabled = data.jagtester as boolean;
+                setInputsData(copiedState);
+            })
+            .catch(() => {
+                copiedState[inputDataIndex].jagTesterEnabled = false;
+                setInputsData(copiedState);
+            }); // TODO add better error handling
     };
 
     const percentageHelper = (index: number, newValue: number | number[]) => {
@@ -123,6 +141,7 @@ const TartgetInputs: (props: {
             method: HTTPMethods.GET,
             targetURL: '',
             percentage: [0],
+            jagTesterEnabled: false,
         });
         const percentagePerInput = Math.floor(100 / copiedState.length);
         for (let i = 0; i < copiedState.length; i++) {
@@ -169,8 +188,12 @@ const TartgetInputs: (props: {
                     </FormControl>
                     <FormControl className={classes.methodURL}>
                         <TextField
+                            error={!inputsData[i].jagTesterEnabled}
                             id={`target-url-${i}`}
-                            label="Target URL (localhost)"
+                            label={
+                                'Target URL (localhost).' +
+                                (inputsData[i].jagTesterEnabled ? '' : ' Jagtester not found')
+                            }
                             variant="outlined"
                             value={inputsData[i].targetURL}
                             onChange={(e) => handleChangeURL(i, e)}

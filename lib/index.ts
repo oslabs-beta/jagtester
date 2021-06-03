@@ -15,7 +15,12 @@ const getMiddleware: FunctionType = (app: Application) => {
         };
     }
 
+    interface RouteData {
+        [key: string]: CollectedData;
+    }
+
     let collectedData: CollectedData = {};
+    const routeData: RouteData = {};
     let isPrototypeChanged = false;
 
     enum Jagtestercommands {
@@ -60,13 +65,32 @@ const getMiddleware: FunctionType = (app: Application) => {
         }
 
         try {
-            const beforeFunctionCall = Date.now(),
-                fnName = this.name,
+            const fnName = this.name,
                 reqId = req.headers.jagtesterreqid ? req.headers.jagtesterreqid.toString() : undefined,
                 reqRoute = req.url;
 
             // create a data object in the collected data if it doesnt already exist
-            if (!collectedData[reqId] && reqId) {
+            if (!routeData[reqRoute]) {
+                const newCollectedData: CollectedData = {};
+                newCollectedData[reqId] = {
+                    reqId,
+                    reqRoute,
+                    middlewares: [],
+                };
+                routeData[reqRoute] = newCollectedData;
+            } else {
+                // create a data object in the collected data if it doesnt already exist
+                if (reqId && !routeData[reqRoute][reqId]) {
+                    routeData[reqRoute][reqId] = {
+                        reqId,
+                        reqRoute,
+                        middlewares: [],
+                    };
+                }
+            }
+
+            // create a data object in the collected data if it doesnt already exist
+            if (reqId && !collectedData[reqId]) {
                 collectedData[reqId] = {
                     reqId,
                     reqRoute,
@@ -76,6 +100,11 @@ const getMiddleware: FunctionType = (app: Application) => {
 
             if (reqId) {
                 // add layer information to the collectedData
+                routeData[reqRoute][reqId].middlewares.push({
+                    fnName,
+                    elapsedTime: 0,
+                });
+
                 collectedData[reqId].middlewares.push({
                     fnName,
                     elapsedTime: 0,
@@ -83,10 +112,11 @@ const getMiddleware: FunctionType = (app: Application) => {
             }
 
             // call the middleware and time it in the next function
+            const beforeFunctionCall = Date.now();
             fn(req, res, function () {
-                if (reqId && collectedData[reqId]) {
-                    const lastElIndex = collectedData[reqId].middlewares.length - 1;
-                    collectedData[reqId].middlewares[lastElIndex].elapsedTime = Date.now() - beforeFunctionCall;
+                if (reqId && routeData[reqRoute][reqId]) {
+                    const lastElIndex = routeData[reqRoute][reqId].middlewares.length - 1;
+                    routeData[reqRoute][reqId].middlewares[lastElIndex].elapsedTime = Date.now() - beforeFunctionCall;
                 }
                 next();
             });
@@ -111,11 +141,11 @@ const getMiddleware: FunctionType = (app: Application) => {
             //changing the prototype of the layer handle request
             case Jagtestercommands.updateLayer:
                 updateLayerPrototype();
-                return res.sendStatus(200);
+                return res.json({ jagtester: true });
 
             //reset the prototype and send back json data
             case Jagtestercommands.endTest:
-                res.json(collectedData);
+                res.json(routeData);
                 resetLayerPrototype();
                 return;
 

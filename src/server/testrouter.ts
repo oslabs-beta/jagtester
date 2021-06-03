@@ -6,13 +6,19 @@ import events from 'events';
 import { TimeArrInterface, CollectedData, CollctedDataSingle, Jagtestercommands } from './interfaces';
 
 const router = express.Router();
-const testRequestRPS = 1000;
-const testRequestSeconds = 2;
+const testRequestRPS = 5;
+const testRequestSeconds = 1;
 const timeArr: TimeArrInterface[] = [];
+let timeArrRoutes: {
+    route?: string;
+    rps?: number;
+    totalTime?: TimeArrInterface[];
+} = {};
+let currentInterval = 0;
 let errorCount = 0;
 let successfulResCount = 0;
+
 const eventEmitter = new events.EventEmitter();
-// First listener
 eventEmitter.on('singleRPSfinished', function firstListener() {
     console.log('test finished');
 });
@@ -61,22 +67,91 @@ const sendRequests = (rps: number, secondsToTest: number) => {
     }
 };
 
-router.get('/start', (req, res) => {
+router.post('/start', (req, res) => {
+    console.log(req.body);
     fetch(targetURL, {
         agent,
         headers: {
             jagtestercommand: Jagtestercommands.updateLayer.toString(),
         },
     })
-        .then(() => {
-            // reset collected data before starting the testing
-            timeArr.splice(0, timeArr.length);
-            errorCount = 0;
-            successfulResCount = 0;
-            sendRequests(testRequestRPS, testRequestSeconds);
-            res.send(`sent start request`);
+        .then((res) => res.json())
+        .then((data) => {
+            // if the server is jagtester enabled
+            if (data.jagtester) {
+                // reset collected data before starting the testing
+                timeArr.splice(0, timeArr.length);
+                errorCount = 0;
+                successfulResCount = 0;
+                sendRequests(testRequestRPS, testRequestSeconds);
+                res.json({ jagtester: true });
+            }
+            // if not enabled
+            else {
+                res.json({ jagtester: false });
+            }
         })
-        .catch((err) => res.send(err));
+        .catch((err) => res.send(err)); //TODO better error handling
+});
+
+router.post('/checkjagtester', (req, res) => {
+    fetch(req.body.testTarget, {
+        method: req.body.method,
+        agent,
+        headers: {
+            jagtestercommand: Jagtestercommands.updateLayer.toString(),
+        },
+    })
+        .then((res) => res.json())
+        .then((data) => res.json(data))
+        .catch(() => res.json({ jagtester: false }));
+});
+
+// const sendRequestsAtRPS = (
+//     rpsInterval: number,
+//     startRPS: number,
+//     endRPS: number,
+//     testLength: number,
+//     inputsData: {
+//         method: string;
+//         targetURL: string;
+//         percentage: number[];
+//     }[]
+// ) => {
+//     for (const target of inputsData) {
+//         fetch(target.targetURL, {
+//             agent,
+//             headers: {
+//                 jagtestercommand: Jagtestercommands.updateLayer.toString(),
+//             },
+//         })
+//             .then((res) => res.json())
+//             .then((data) => {
+//                 // if the server is jagtester enabled
+//                 if (data.jagtester) {
+//                     // reset collected data before starting the testing
+//                     // timeArr.splice(0, timeArr.length);
+//                     errorCount = 0;
+//                     successfulResCount = 0;
+//                     sendRequests(
+//                         Math.round(((startRPS + currentInterval * rpsInterval) * target.percentage[0]) / 100),
+//                         testLength
+//                     );
+//                     // res.json({ jagtester: true });
+//                 }
+//                 // if not enabled
+//                 else {
+//                     res.json({ jagtester: false });
+//                 }
+//             })
+//             .catch((err) => res.send(err)); //TODO better error handling
+//     }
+// };
+
+router.post('/startmultiple', (req, res) => {
+    timeArrRoutes = {};
+    currentInterval = 0;
+    res.sendStatus(200); //TODO add functionality to the front end to test is jagtest:true is received from the targets
 });
 
 router.get('/getlogs', (req, res) => {
@@ -88,6 +163,18 @@ router.get('/getlogs', (req, res) => {
         .then((fetchRes) => fetchRes.json())
         .then((data) => {
             return res.json(processData(data));
+        })
+        .catch((err) => res.send(err)); // TODO add better error handling
+});
+router.get('/getlogsjson', (req, res) => {
+    fetch(targetURL, {
+        headers: {
+            jagtestercommand: Jagtestercommands.endTest.toString(),
+        },
+    })
+        .then((fetchRes) => fetchRes.json())
+        .then((data) => {
+            return res.json(data);
         })
         .catch((err) => res.send(err)); // TODO add better error handling
 });

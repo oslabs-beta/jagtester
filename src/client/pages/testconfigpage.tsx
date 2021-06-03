@@ -9,7 +9,7 @@ import TargetInputs from '../components/testConfigComponents/TargetInputs';
 import RangeSliders from '../components/testConfigComponents/RangeSliders';
 
 interface TestConfigData {
-    rpsRange: number;
+    rpsInterval: number;
     startRPS: number;
     endRPS: number;
     testLength: number;
@@ -17,6 +17,7 @@ interface TestConfigData {
         method: string;
         targetURL: string;
         percentage: number[];
+        jagTesterEnabled: boolean;
     }[];
 }
 
@@ -33,27 +34,45 @@ const HTTPMethods = {
 };
 
 const TestPage: () => JSX.Element = () => {
+    // states for rps sliders
     const [valueRPS, setValueRPS] = React.useState<number[]>([25]);
     const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 1500]);
     const [valueSeconds, setValueSeconds] = React.useState<number[]>([2]);
 
+    // state for the inputs
     const [inputsData, setInputsData] = React.useState([
         {
             method: HTTPMethods.GET,
-            targetURL: 'localhost:3000',
-            percentage: [100],
+            targetURL: 'http://localhost:',
+            percentage: [20],
+            jagTesterEnabled: false,
+        },
+        {
+            method: HTTPMethods.GET,
+            targetURL: 'http://localhost:',
+            percentage: [80],
+            jagTesterEnabled: false,
         },
     ]);
 
     const handleStartTest = () => {
         const testConfigObj: TestConfigData = {
-            rpsRange: valueRPS[0],
+            rpsInterval: valueRPS[0],
             startRPS: valueStartEnd[0],
             endRPS: valueStartEnd[1],
             testLength: valueSeconds[0],
             inputsData,
         };
-        console.log(testConfigObj);
+        fetch('/api/start', {
+            method: HTTPMethods.POST,
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify(testConfigObj),
+        })
+            .then((res) => res.json())
+            .then((data) => console.log(data)) // TODO if not jagtester enabled, show error message
+            .catch((err) => console.log(err)); // TODO fix the error handling
+
+        // console.log(testConfigObj);
     };
 
     return (
@@ -72,7 +91,10 @@ const TestPage: () => JSX.Element = () => {
                             setValueStartEnd={setValueStartEnd}
                             setValueSeconds={setValueSeconds}
                         />
-                        <Buttons handleStartTest={handleStartTest} />
+                        <Buttons
+                            isDisabled={inputsData.some((target) => !target.jagTesterEnabled)}
+                            handleStartTest={handleStartTest}
+                        />
                     </Tab>
                     <Tab eventKey="stress-tester" title="Stress tester">
                         stress tester

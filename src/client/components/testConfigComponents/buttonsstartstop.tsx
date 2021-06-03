@@ -4,17 +4,20 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-const Buttons: (props: { handleStartTest: () => void }) => JSX.Element = ({ handleStartTest }) => {
+const Buttons: (props: { handleStartTest: () => void; isDisabled: boolean }) => JSX.Element = ({
+    handleStartTest,
+    isDisabled,
+}) => {
     return (
         <Container>
             <Row>
                 <Col>
-                    <Button block onClick={handleStartTest}>
+                    <Button disabled={isDisabled} block onClick={handleStartTest}>
                         Start testing
                     </Button>
                 </Col>
                 <Col>
-                    <Button variant="danger" block>
+                    <Button disabled={isDisabled} variant="danger" block>
                         Stop and get data
                     </Button>
                 </Col>

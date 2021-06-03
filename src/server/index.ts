@@ -4,12 +4,13 @@ import testRouter from './testrouter';
 
 const app = express();
 const port = 5000;
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.get('/', (_, res) => {
-    res.send(`Worker ${process.pid} responds`);
+    res.send(`Worker ${process.pid} responds`); // TODO make this serve the build folder
 });
 
-app.use('/test', testRouter);
+app.use('/api', testRouter);
 
 app.listen(port, () => console.log(`Running on on port ${port}`));
 
