@@ -14,7 +14,7 @@ export interface CollectedData {
     };
 }
 
-export interface CollctedDataSingle {
+export interface CollectedDataSingle {
     receivedTime?: number;
     recordedTime?: number;
     errorCount?: number;

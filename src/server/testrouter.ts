@@ -3,12 +3,12 @@ import fetch from 'node-fetch';
 import http from 'http';
 import events from 'events';
 
-import { TimeArrInterface, CollectedData, CollctedDataSingle, Jagtestercommands, TestConfigData } from './interfaces';
+import { CollectedData, CollectedDataSingle, Jagtestercommands, TestConfigData } from './interfaces';
 
 const router = express.Router();
-const testRequestRPS = 5;
-const testRequestSeconds = 1;
-const timeArr: TimeArrInterface[] = [];
+// const testRequestRPS = 5;
+// const testRequestSeconds = 1;
+// const timeArr: TimeArrInterface[] = [];
 let timeArrRoutes: {
     // this key is used as the route name
     [key: string]: {
@@ -18,6 +18,11 @@ let timeArrRoutes: {
             errorCount: number;
             successfulResCount: number;
         };
+    };
+} = {};
+let pulledDataFromTest: {
+    [key: string]: {
+        [key: string]: CollectedDataSingle | CollectedData;
     };
 } = {};
 let globalTestConfig: TestConfigData;
@@ -30,16 +35,28 @@ const eventEmitter = new events.EventEmitter();
 eventEmitter.on('singleRPSfinished', (rpsGroup: number) => {
     console.log(`test finished for rps group ${rpsGroup}`);
     // console.log(timeArrRoutes);
-    currentInterval++;
     const { rpsInterval, startRPS, endRPS, testLength, inputsData } = globalTestConfig;
-    sendRequestsAtRPS(rpsInterval, startRPS, endRPS, testLength, inputsData);
+
+    fetch(globalTestConfig.inputsData[0].targetURL, {
+        headers: {
+            jagtestercommand: Jagtestercommands.endTest.toString(),
+        },
+    })
+        .then((fetchRes) => fetchRes.json())
+        .then((data) => {
+            const curRPS = startRPS + currentInterval * rpsInterval;
+            pulledDataFromTest[curRPS.toString()] = data;
+            currentInterval++;
+            sendRequestsAtRPS(rpsInterval, startRPS, endRPS, testLength, inputsData);
+        })
+        .catch((err) => console.log(err)); // TODO add better error handling
 });
 
 eventEmitter.on('allRPSfinished', () => {
     console.log('all rps finished');
     isTestRunning = false;
-    // getting the average response time, since we had the total response times added together
 
+    // getting the average response time, since we had the total response times added together
     for (const route in timeArrRoutes) {
         for (const rpsGroup in timeArrRoutes[route]) {
             timeArrRoutes[route][rpsGroup].receivedTotalTime =
@@ -49,11 +66,23 @@ eventEmitter.on('allRPSfinished', () => {
                 ) / 1000;
         }
     }
-    console.log(timeArrRoutes);
+    // console.log('timeArrRoutes', timeArrRoutes);
+
+    // processing middlewares, averaging them, then combining timearrroutes
+    for (const rps in pulledDataFromTest) {
+        for (const route in pulledDataFromTest[rps]) {
+            pulledDataFromTest[rps][route] = processData(pulledDataFromTest[rps][route] as CollectedData);
+            pulledDataFromTest[rps][route].receivedTime = timeArrRoutes[route][rps].receivedTotalTime;
+            pulledDataFromTest[rps][route].errorCount = timeArrRoutes[route][rps].errorCount;
+            pulledDataFromTest[rps][route].successfulResCount = timeArrRoutes[route][rps].successfulResCount;
+        }
+    }
+
+    console.log('pulledDataFromTest', pulledDataFromTest);
 });
 
 const agent = new http.Agent({ keepAlive: true });
-const targetURL = 'http://localhost:3030/testroute';
+// const targetURL = 'http://localhost:3030/testroute';
 
 const sendRequests = (targetURL: string, rpsGroup: number, rpsActual: number, secondsToTest: number) => {
     const sendFetch = (reqId: number) => {
@@ -65,22 +94,20 @@ const sendRequests = (targetURL: string, rpsGroup: number, rpsActual: number, se
             },
         })
             .then((res) => {
-                timeArrRoutes[targetURL][rpsGroup].successfulResCount++;
+                const resRoute = new URL(targetURL).pathname;
+                timeArrRoutes[resRoute][rpsGroup].successfulResCount++;
                 successfulResCount++;
                 if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
                     eventEmitter.emit('singleRPSfinished', rpsGroup);
                 }
                 if (res.headers.has('x-response-time')) {
                     const xResponseTime = res.headers.get('x-response-time');
-                    timeArrRoutes[targetURL][rpsGroup].receivedTotalTime += xResponseTime ? +xResponseTime : 0;
+                    timeArrRoutes[resRoute][rpsGroup].receivedTotalTime += xResponseTime ? +xResponseTime : 0;
                 }
-                // timeArr.push({
-                //     receivedTotalTime,
-                //     recordedTotalTime: Date.now() - timeBefore,
-                // });
             })
             .catch(() => {
-                timeArrRoutes[targetURL][rpsGroup].errorCount++;
+                const resRoute = new URL(targetURL).pathname;
+                timeArrRoutes[resRoute][rpsGroup].errorCount++; // FIXME urgent cant access targeturl
                 errorCount++;
                 if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
                     eventEmitter.emit('singleRPSfinished', rpsGroup);
@@ -95,46 +122,6 @@ const sendRequests = (targetURL: string, rpsGroup: number, rpsActual: number, se
         }
     }
 };
-
-// router.post('/start', (req, res) => {
-//     console.log(req.body);
-//     fetch(targetURL, {
-//         agent,
-//         headers: {
-//             jagtestercommand: Jagtestercommands.updateLayer.toString(),
-//         },
-//     })
-//         .then((res) => res.json())
-//         .then((data) => {
-//             // if the server is jagtester enabled
-//             if (data.jagtester) {
-//                 // reset collected data before starting the testing
-//                 timeArr.splice(0, timeArr.length);
-//                 errorCount = 0;
-//                 successfulResCount = 0;
-//                 sendRequests(testRequestRPS, testRequestSeconds);
-//                 res.json({ jagtester: true });
-//             }
-//             // if not enabled
-//             else {
-//                 res.json({ jagtester: false });
-//             }
-//         })
-//         .catch((err) => res.send(err)); //TODO better error handling
-// });
-
-router.post('/checkjagtester', (req, res) => {
-    fetch(req.body.testTarget, {
-        method: req.body.method,
-        agent,
-        headers: {
-            jagtestercommand: Jagtestercommands.updateLayer.toString(),
-        },
-    })
-        .then((res) => res.json())
-        .then((data) => res.json(data))
-        .catch(() => res.json({ jagtester: false }));
-});
 
 const sendRequestsAtRPS = (
     rpsInterval: number,
@@ -160,16 +147,17 @@ const sendRequestsAtRPS = (
             },
         })
             .then(() => {
-                if (timeArrRoutes[target.targetURL] === undefined) {
-                    timeArrRoutes[target.targetURL] = {};
-                    timeArrRoutes[target.targetURL][curRPS.toString()] = {
+                const resRoute = new URL(target.targetURL).pathname;
+                if (timeArrRoutes[resRoute] === undefined) {
+                    timeArrRoutes[resRoute] = {};
+                    timeArrRoutes[resRoute][curRPS.toString()] = {
                         receivedTotalTime: 0,
                         errorCount: 0,
                         successfulResCount: 0,
                     };
                 } else {
-                    if (timeArrRoutes[target.targetURL][curRPS.toString()] === undefined) {
-                        timeArrRoutes[target.targetURL][curRPS.toString()] = {
+                    if (timeArrRoutes[resRoute][curRPS.toString()] === undefined) {
+                        timeArrRoutes[resRoute][curRPS.toString()] = {
                             receivedTotalTime: 0,
                             errorCount: 0,
                             successfulResCount: 0,
@@ -189,6 +177,7 @@ router.post('/startmultiple', (req, res) => {
     if (!isTestRunning) {
         isTestRunning = true;
         timeArrRoutes = {};
+        pulledDataFromTest = {};
         currentInterval = 0;
         globalTestConfig = {
             rpsInterval: req.body.rpsInterval,
@@ -203,40 +192,27 @@ router.post('/startmultiple', (req, res) => {
     }
     res.sendStatus(200); //TODO add functionality to the front end to test is jagtest:true is received from the targets
 });
-
-router.get('/getlogs', (req, res) => {
-    fetch(targetURL, {
+router.post('/checkjagtester', (req, res) => {
+    fetch(req.body.inputURL, {
+        method: req.body.method,
+        agent,
         headers: {
-            jagtestercommand: Jagtestercommands.endTest.toString(),
+            jagtestercommand: Jagtestercommands.updateLayer.toString(),
         },
     })
         .then((fetchRes) => fetchRes.json())
-        .then((data) => {
-            return res.json(processData(data));
-        })
-        .catch((err) => res.send(err)); // TODO add better error handling
-});
-router.get('/getlogsjson', (req, res) => {
-    fetch(targetURL, {
-        headers: {
-            jagtestercommand: Jagtestercommands.endTest.toString(),
-        },
-    })
-        .then((fetchRes) => fetchRes.json())
-        .then((data) => {
-            return res.json(data);
-        })
-        .catch((err) => res.send(err)); // TODO add better error handling
+        .then((data) => res.json(data))
+        .catch(() => res.json({ jagtester: false }));
 });
 
-const processData: (data: CollectedData) => CollctedDataSingle = (data: CollectedData) => {
-    const collectedDataArr: CollctedDataSingle[] = [];
+const processData: (data: CollectedData) => CollectedDataSingle = (data: CollectedData) => {
+    const collectedDataArr: CollectedDataSingle[] = [];
     for (const key in data) {
         collectedDataArr.push(data[key]);
     }
 
     // add middlewares elapsed times
-    const collectedDataSingle: CollctedDataSingle = collectedDataArr.reduce((acc, cur) => {
+    const collectedDataSingle: CollectedDataSingle = collectedDataArr.reduce((acc, cur) => {
         for (let i = 0; i < acc.middlewares.length; i++) {
             if (i < cur.middlewares.length) {
                 acc.middlewares[i].elapsedTime += cur.middlewares[i].elapsedTime;
@@ -250,38 +226,87 @@ const processData: (data: CollectedData) => CollctedDataSingle = (data: Collecte
         middleware.elapsedTime = Math.round((100 * middleware.elapsedTime) / collectedDataArr.length) / 100;
     });
 
-    let averagedTimeArr: TimeArrInterface = {
-        receivedTotalTime: 0,
-        recordedTotalTime: 0,
-    };
-    if (timeArr.length > 0) {
-        averagedTimeArr = timeArr.reduce((acc, cur) => {
-            const newAcc: TimeArrInterface = {
-                receivedTotalTime: 0,
-                recordedTotalTime: 0,
-            };
-            newAcc.receivedTotalTime = acc.receivedTotalTime + cur.receivedTotalTime;
-            newAcc.recordedTotalTime = acc.recordedTotalTime + cur.recordedTotalTime;
-            return newAcc;
-        });
-    }
-    collectedDataSingle.recordedTime =
-        Math.round((100 * averagedTimeArr.recordedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) /
-        100;
-    collectedDataSingle.receivedTime =
-        Math.round((100 * averagedTimeArr.receivedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) /
-        100;
-    collectedDataSingle.errorCount = errorCount;
-    collectedDataSingle.successfulResCount = successfulResCount;
-    collectedDataSingle.requestCount = testRequestRPS * testRequestSeconds;
-    collectedDataSingle.RPS = testRequestRPS;
-
-    // setting the last middleware's elapsed time to the total minus the rest
-    let sumOfMiddlewareTimes = 0;
-    for (const time of collectedDataSingle.middlewares) sumOfMiddlewareTimes += time.elapsedTime;
-    collectedDataSingle.middlewares[collectedDataSingle.middlewares.length - 1].elapsedTime =
-        Math.round(100 * (collectedDataSingle.receivedTime - sumOfMiddlewareTimes)) / 100;
     return collectedDataSingle;
 };
+
+// router.get('/getlogs', (req, res) => {
+//     fetch(targetURL, {
+//         headers: {
+//             jagtestercommand: Jagtestercommands.endTest.toString(),
+//         },
+//     })
+//         .then((fetchRes) => fetchRes.json())
+//         .then((data) => {
+//             return res.json(processData(data));
+//         })
+//         .catch((err) => res.send(err)); // TODO add better error handling
+// });
+// router.get('/getlogsjson', (req, res) => {
+//     fetch(targetURL, {
+//         headers: {
+//             jagtestercommand: Jagtestercommands.endTest.toString(),
+//         },
+//     })
+//         .then((fetchRes) => fetchRes.json())
+//         .then((data) => {
+//             return res.json(data);
+//         })
+//         .catch((err) => res.send(err)); // TODO add better error handling
+// });
+
+// const processData2: (data: CollectedData) => CollectedDataSingle = (data: CollectedData) => {
+//     const collectedDataArr: CollectedDataSingle[] = [];
+//     for (const key in data) {
+//         collectedDataArr.push(data[key]);
+//     }
+
+//     // add middlewares elapsed times
+//     const collectedDataSingle: CollectedDataSingle = collectedDataArr.reduce((acc, cur) => {
+//         for (let i = 0; i < acc.middlewares.length; i++) {
+//             if (i < cur.middlewares.length) {
+//                 acc.middlewares[i].elapsedTime += cur.middlewares[i].elapsedTime;
+//             }
+//         }
+//         return acc;
+//     });
+
+//     // divide by the count of requests
+//     collectedDataSingle.middlewares.forEach((middleware) => {
+//         middleware.elapsedTime = Math.round((100 * middleware.elapsedTime) / collectedDataArr.length) / 100;
+//     });
+
+//     let averagedTimeArr: TimeArrInterface = {
+//         receivedTotalTime: 0,
+//         recordedTotalTime: 0,
+//     };
+//     if (timeArr.length > 0) {
+//         averagedTimeArr = timeArr.reduce((acc, cur) => {
+//             const newAcc: TimeArrInterface = {
+//                 receivedTotalTime: 0,
+//                 recordedTotalTime: 0,
+//             };
+//             newAcc.receivedTotalTime = acc.receivedTotalTime + cur.receivedTotalTime;
+//             newAcc.recordedTotalTime = acc.recordedTotalTime + cur.recordedTotalTime;
+//             return newAcc;
+//         });
+//     }
+//     collectedDataSingle.recordedTime =
+//         Math.round((100 * averagedTimeArr.recordedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) /
+//         100;
+//     collectedDataSingle.receivedTime =
+//         Math.round((100 * averagedTimeArr.receivedTotalTime) / (testRequestRPS * testRequestSeconds - errorCount)) /
+//         100;
+//     collectedDataSingle.errorCount = errorCount;
+//     collectedDataSingle.successfulResCount = successfulResCount;
+//     collectedDataSingle.requestCount = testRequestRPS * testRequestSeconds;
+//     collectedDataSingle.RPS = testRequestRPS;
+
+//     // setting the last middleware's elapsed time to the total minus the rest
+//     let sumOfMiddlewareTimes = 0;
+//     for (const time of collectedDataSingle.middlewares) sumOfMiddlewareTimes += time.elapsedTime;
+//     collectedDataSingle.middlewares[collectedDataSingle.middlewares.length - 1].elapsedTime =
+//         Math.round(100 * (collectedDataSingle.receivedTime - sumOfMiddlewareTimes)) / 100;
+//     return collectedDataSingle;
+// };
 
 export default router;

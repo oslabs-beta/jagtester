@@ -20,7 +20,7 @@ const getMiddleware: FunctionType = (app: Application) => {
     }
 
     let collectedData: CollectedData = {};
-    const routeData: RouteData = {};
+    let routeData: RouteData = {};
     let isPrototypeChanged = false;
 
     enum Jagtestercommands {
@@ -33,12 +33,14 @@ const getMiddleware: FunctionType = (app: Application) => {
         app._router.stack[0].__proto__.handle_request = originalLayerHandleRequest;
         isPrototypeChanged = false;
         collectedData = {};
+        routeData = {};
     };
 
     const updateLayerPrototype = () => {
         app._router.stack[0].__proto__.handle_request = newLayerHandleRequest;
         isPrototypeChanged = true;
         collectedData = {};
+        routeData = {};
     };
 
     const originalLayerHandleRequest = function handle(req: Request, res: Response, next: NextFunction) {
@@ -136,13 +138,13 @@ const getMiddleware: FunctionType = (app: Application) => {
                 if (!isPrototypeChanged) {
                     updateLayerPrototype();
                 }
+                // res.header({ jagtesterRoute: req.url });
                 break;
 
             //changing the prototype of the layer handle request
             case Jagtestercommands.updateLayer:
-                if (!isPrototypeChanged) {
-                    updateLayerPrototype();
-                }
+                updateLayerPrototype();
+                // res.header({ jagtesterRoute: req.url });
                 return res.json({ jagtester: true });
 
             //reset the prototype and send back json data

@@ -88,7 +88,7 @@ const TartgetInputs: (props: {
             method: HTTPMethods.POST,
             headers: new Headers({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({
-                testTarget: event.target.value as string,
+                inputURL: event.target.value as string,
                 method: inputsData[inputDataIndex].method,
             }),
         })
@@ -195,7 +195,7 @@ const TartgetInputs: (props: {
                                 (inputsData[i].jagTesterEnabled ? '' : ' Jagtester not found')
                             }
                             variant="outlined"
-                            value={inputsData[i].targetURL}
+                            defaultValue={inputsData[i].targetURL}
                             onChange={(e) => handleChangeURL(i, e)}
                         />
                     </FormControl>

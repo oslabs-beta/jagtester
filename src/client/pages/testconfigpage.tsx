@@ -35,9 +35,9 @@ const HTTPMethods = {
 
 const TestPage: () => JSX.Element = () => {
     // states for rps sliders
-    const [valueRPS, setValueRPS] = React.useState<number[]>([25]);
-    const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 1500]);
-    const [valueSeconds, setValueSeconds] = React.useState<number[]>([2]);
+    const [valueRPS, setValueRPS] = React.useState<number[]>([10]);
+    const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 120]);
+    const [valueSeconds, setValueSeconds] = React.useState<number[]>([1]);
 
     // state for the inputs
     const [inputsData, setInputsData] = React.useState([
