@@ -53,6 +53,7 @@ const config: Configuration = {
     devServer: {
         proxy: {
             '/api': 'http://localhost:5000',
+            '/socketapi': 'http://localhost:5000',
         },
         contentBase: path.join(__dirname, 'build'),
         historyApiFallback: true,

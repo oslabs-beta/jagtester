@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Tab from 'react-bootstrap/Tab';
@@ -7,6 +7,9 @@ import Tabs from 'react-bootstrap/Tabs';
 import Buttons from '../components/testConfigComponents/buttonsstartstop';
 import TargetInputs from '../components/testConfigComponents/TargetInputs';
 import RangeSliders from '../components/testConfigComponents/RangeSliders';
+
+import { io } from 'socket.io-client';
+const ENDPOINT = '/socketapi';
 
 interface TestConfigData {
     rpsInterval: number;
@@ -34,6 +37,13 @@ const HTTPMethods = {
 };
 
 const TestPage: () => JSX.Element = () => {
+    useEffect(() => {
+        const socket = io(ENDPOINT);
+        socket.on('FromAPI', (data) => {
+            console.log(data);
+        });
+    }, []);
+
     // states for rps sliders
     const [valueRPS, setValueRPS] = React.useState<number[]>([10]);
     const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 120]);
