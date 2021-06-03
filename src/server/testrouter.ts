@@ -3,7 +3,6 @@ import fetch from 'node-fetch';
 import http from 'http';
 import events from 'events';
 import fs from 'fs';
-import path from 'path';
 
 import { io } from './index';
 
@@ -92,13 +91,13 @@ eventEmitter.on('allRPSfinished', () => {
         }
     }
 
-    const curSavedData = JSON.parse(fs.readFileSync('./src/server/testingdata.json', { encoding: 'utf8', flag: 'r' }));
+    const curSavedData = JSON.parse(fs.readFileSync('./src/server/testingdata.json', { encoding: 'utf8', flag: 'r' })); // FIXME change to async
     curSavedData.push({
         testTime: Date.now(),
         testData: pulledDataFromTest,
     });
     // console.log('pulledDataFromTest', pulledDataFromTest);
-    fs.writeFileSync('./src/server/testingdata.json', JSON.stringify(curSavedData, null, 4)); // FIXME change this to synchronous
+    fs.writeFileSync('./src/server/testingdata.json', JSON.stringify(curSavedData, null, 4)); // FIXME change this to asynchronous
 });
 
 const agent = new http.Agent({ keepAlive: true });
@@ -251,6 +250,11 @@ const processData: (data: CollectedData) => CollectedDataSingle = (data: Collect
 
 router.get('/getlogs', (req, res) => {
     res.json(pulledDataFromTest);
+});
+
+router.get('/saveddata', (req, res) => {
+    const curSavedData = JSON.parse(fs.readFileSync('./src/server/testingdata.json', { encoding: 'utf8', flag: 'r' })); // FIXME change to async
+    res.json(curSavedData);
 });
 
 export default router;
