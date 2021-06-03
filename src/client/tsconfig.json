@@ -24,8 +24,9 @@
         "jsx": "react",
         "paths": {
             "*": ["../../node_modules/*"]
-        }
+        },
+        
     },
-    "include": ["./**/*"],
+    "include": ["./**/*", ""],
     "references": [{ "path": "../server" }]
 }
