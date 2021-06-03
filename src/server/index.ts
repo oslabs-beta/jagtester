@@ -7,29 +7,15 @@ import { Server, Socket } from 'socket.io';
 
 const app = express();
 const http = createServer(app);
-const io = new Server(http, {
-    path: '/socketapi/',
-});
+const io = new Server(http);
 const port = 5000;
-let interval: NodeJS.Timeout;
 
 io.on('connection', (socket: Socket) => {
-    console.log('socket io on connection, socket is ', socket);
-    if (interval) {
-        clearInterval(interval);
-    }
-    interval = setInterval(() => getApiAndEmit(socket));
-    //Whenever someone disconnects this piece of code executed
+    console.log('socket io on connection');
     socket.on('disconnect', (reason: string) => {
         console.log('A user disconnected, reason is ', reason);
     });
 });
-
-const getApiAndEmit = (socket: Socket) => {
-    const response = new Date();
-    // Emitting a new message. Will be consumed by the client
-    socket.emit('FromAPI', response);
-};
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -42,5 +28,6 @@ app.use('/api', testRouter);
 http.listen(port, function () {
     console.log(`listening on ${port}`);
 });
+export { io };
 
 // app.listen(port, () => console.log(`Server running on http://localhost:${port}`));

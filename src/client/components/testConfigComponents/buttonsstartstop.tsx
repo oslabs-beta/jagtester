@@ -4,20 +4,21 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-const Buttons: (props: { handleStartTest: () => void; isDisabled: boolean }) => JSX.Element = ({
-    handleStartTest,
-    isDisabled,
-}) => {
+const Buttons: (props: {
+    handleStartTest: () => void;
+    jagEndabledInputs: boolean;
+    isTestRunning: boolean;
+}) => JSX.Element = ({ handleStartTest, jagEndabledInputs, isTestRunning }) => {
     return (
         <Container>
             <Row>
                 <Col>
-                    <Button disabled={isDisabled} block onClick={handleStartTest}>
+                    <Button disabled={jagEndabledInputs || isTestRunning} block onClick={handleStartTest}>
                         Start testing
                     </Button>
                 </Col>
                 <Col>
-                    <Button disabled={isDisabled} variant="danger" block>
+                    <Button disabled={jagEndabledInputs || !isTestRunning} variant="danger" block>
                         Stop and get data
                     </Button>
                 </Col>

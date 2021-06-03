@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Tab from 'react-bootstrap/Tab';
@@ -7,9 +7,11 @@ import Tabs from 'react-bootstrap/Tabs';
 import Buttons from '../components/testConfigComponents/buttonsstartstop';
 import TargetInputs from '../components/testConfigComponents/TargetInputs';
 import RangeSliders from '../components/testConfigComponents/RangeSliders';
+import TestProgrss from '../components/testConfigComponents/testProgress';
 
-import { io } from 'socket.io-client';
-const ENDPOINT = '/socketapi';
+import socketIOClient from 'socket.io-client';
+
+const socket = socketIOClient();
 
 interface TestConfigData {
     rpsInterval: number;
@@ -37,18 +39,12 @@ const HTTPMethods = {
 };
 
 const TestPage: () => JSX.Element = () => {
-    useEffect(() => {
-        const socket = io(ENDPOINT);
-        socket.on('FromAPI', (data) => {
-            console.log(data);
-        });
-    }, []);
-
     // states for rps sliders
     const [valueRPS, setValueRPS] = React.useState<number[]>([10]);
     const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 120]);
     const [valueSeconds, setValueSeconds] = React.useState<number[]>([1]);
-
+    const [isTestRunning, setIsTestRunning] = React.useState<boolean>(false);
+    const [curRunningRPS, setCurRunningRPS] = React.useState<number>(0);
     // state for the inputs
     const [inputsData, setInputsData] = React.useState([
         {
@@ -65,7 +61,18 @@ const TestPage: () => JSX.Element = () => {
         },
     ]);
 
+    // start----------------------------------- socket io funcitonality
+    socket.on('singleRPSfinished', (rps: number) => {
+        setCurRunningRPS(rps);
+    });
+    socket.on('testRunningStateChange', (isTestRunning: boolean) => {
+        setIsTestRunning(isTestRunning);
+    });
+
+    // end  ----------------------------------- socket io funcitonality
+
     const handleStartTest = () => {
+        setCurRunningRPS(0);
         const testConfigObj: TestConfigData = {
             rpsInterval: valueRPS[0],
             startRPS: valueStartEnd[0],
@@ -101,8 +108,15 @@ const TestPage: () => JSX.Element = () => {
                             setValueSeconds={setValueSeconds}
                         />
                         <Buttons
-                            isDisabled={inputsData.some((target) => !target.jagTesterEnabled)}
+                            jagEndabledInputs={inputsData.some((target) => !target.jagTesterEnabled)}
+                            isTestRunning={isTestRunning}
                             handleStartTest={handleStartTest}
+                        />
+                        <TestProgrss
+                            curRunningRPS={curRunningRPS}
+                            isTestRunning={isTestRunning}
+                            valueRPS={valueRPS}
+                            valueStartEnd={valueStartEnd}
                         />
                     </Tab>
                     <Tab eventKey="stress-tester" title="Stress tester">
