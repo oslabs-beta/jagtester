@@ -140,7 +140,9 @@ const getMiddleware: FunctionType = (app: Application) => {
 
             //changing the prototype of the layer handle request
             case Jagtestercommands.updateLayer:
-                updateLayerPrototype();
+                if (!isPrototypeChanged) {
+                    updateLayerPrototype();
+                }
                 return res.json({ jagtester: true });
 
             //reset the prototype and send back json data

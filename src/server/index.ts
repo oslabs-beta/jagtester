@@ -12,6 +12,4 @@ app.get('/', (_, res) => {
 
 app.use('/api', testRouter);
 
-app.listen(port, () => console.log(`Running on on port ${port}`));
-
-console.log(`Server running on http://localhost:${port}`);
+app.listen(port, () => console.log(`Server running on http://localhost:${port}`));

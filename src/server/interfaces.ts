@@ -34,3 +34,16 @@ export enum Jagtestercommands {
     running,
     endTest,
 }
+
+export interface TestConfigData {
+    rpsInterval: number;
+    startRPS: number;
+    endRPS: number;
+    testLength: number;
+    inputsData: {
+        method: string;
+        targetURL: string;
+        percentage: number[];
+        jagTesterEnabled: boolean;
+    }[];
+}

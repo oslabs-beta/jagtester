@@ -43,15 +43,15 @@ const TestPage: () => JSX.Element = () => {
     const [inputsData, setInputsData] = React.useState([
         {
             method: HTTPMethods.GET,
-            targetURL: 'http://localhost:',
+            targetURL: 'http://localhost:3030',
             percentage: [20],
-            jagTesterEnabled: false,
+            jagTesterEnabled: true,
         },
         {
             method: HTTPMethods.GET,
-            targetURL: 'http://localhost:',
+            targetURL: 'http://localhost:3030/testroute',
             percentage: [80],
-            jagTesterEnabled: false,
+            jagTesterEnabled: true,
         },
     ]);
 
@@ -63,13 +63,12 @@ const TestPage: () => JSX.Element = () => {
             testLength: valueSeconds[0],
             inputsData,
         };
-        fetch('/api/start', {
+        fetch('/api/startmultiple', {
             method: HTTPMethods.POST,
             headers: new Headers({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(testConfigObj),
         })
-            .then((res) => res.json())
-            .then((data) => console.log(data)) // TODO if not jagtester enabled, show error message
+            .then((res) => console.log('received response, ', res)) // TODO if not jagtester enabled, show error message
             .catch((err) => console.log(err)); // TODO fix the error handling
 
         // console.log(testConfigObj);
