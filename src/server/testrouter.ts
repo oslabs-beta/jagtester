@@ -229,18 +229,9 @@ const processData: (data: CollectedData) => CollectedDataSingle = (data: Collect
     return collectedDataSingle;
 };
 
-// router.get('/getlogs', (req, res) => {
-//     fetch(targetURL, {
-//         headers: {
-//             jagtestercommand: Jagtestercommands.endTest.toString(),
-//         },
-//     })
-//         .then((fetchRes) => fetchRes.json())
-//         .then((data) => {
-//             return res.json(processData(data));
-//         })
-//         .catch((err) => res.send(err)); // TODO add better error handling
-// });
+router.get('/getlogs', (req, res) => {
+    res.json(pulledDataFromTest);
+});
 // router.get('/getlogsjson', (req, res) => {
 //     fetch(targetURL, {
 //         headers: {
