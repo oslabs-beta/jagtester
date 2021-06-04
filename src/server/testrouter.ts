@@ -2,7 +2,6 @@ import express from 'express';
 import fetch from 'node-fetch';
 import http from 'http';
 import events from 'events';
-import fs from 'fs';
 
 import { io } from './index';
 
@@ -20,16 +19,27 @@ let timeArrRoutes: {
         };
     };
 } = {};
+
+const allPulledDataFromTest: {
+    testTime: number;
+    testData: {
+        [key: string]: {
+            [key: string]: CollectedDataSingle | CollectedData;
+        };
+    };
+}[] = [];
+
 let pulledDataFromTest: {
     [key: string]: {
         [key: string]: CollectedDataSingle | CollectedData;
     };
 } = {};
 let globalTestConfig: TestConfigData;
+
 const trackedVariables = {
     isTestRunningInternal: false,
     isTestRunningListener: (val: boolean) => {
-        io.emit('testRunningStateChange', val);
+        io.emit('testRunningStateChange', val); // TODO change io strings to enums
     },
     set isTestRunning(val: boolean) {
         this.isTestRunningInternal = val;
@@ -39,6 +49,7 @@ const trackedVariables = {
         return this.isTestRunningInternal;
     },
 };
+
 let currentInterval = 0;
 let errorCount = 0;
 let successfulResCount = 0;
@@ -91,13 +102,10 @@ eventEmitter.on('allRPSfinished', () => {
         }
     }
 
-    const curSavedData = JSON.parse(fs.readFileSync('./src/server/testingdata.json', { encoding: 'utf8', flag: 'r' })); // FIXME change to async
-    curSavedData.push({
+    allPulledDataFromTest.push({
         testTime: Date.now(),
         testData: pulledDataFromTest,
     });
-    // console.log('pulledDataFromTest', pulledDataFromTest);
-    fs.writeFileSync('./src/server/testingdata.json', JSON.stringify(curSavedData, null, 4)); // FIXME change this to asynchronous
 });
 
 const agent = new http.Agent({ keepAlive: true });
@@ -126,7 +134,7 @@ const sendRequests = (targetURL: string, rpsGroup: number, rpsActual: number, se
             })
             .catch(() => {
                 const resRoute = new URL(targetURL).pathname;
-                timeArrRoutes[resRoute][rpsGroup].errorCount++; // FIXME urgent cant access targeturl
+                timeArrRoutes[resRoute][rpsGroup].errorCount++;
                 errorCount++;
                 if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
                     eventEmitter.emit('singleRPSfinished', rpsGroup);
@@ -253,8 +261,7 @@ router.get('/getlogs', (req, res) => {
 });
 
 router.get('/saveddata', (req, res) => {
-    const curSavedData = JSON.parse(fs.readFileSync('./src/server/testingdata.json', { encoding: 'utf8', flag: 'r' })); // FIXME change to async
-    res.json(curSavedData);
+    res.json(allPulledDataFromTest);
 });
 
 export default router;
