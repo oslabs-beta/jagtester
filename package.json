@@ -6,7 +6,6 @@
     "scripts": {
         "build-front": "webpack --config webpack.prod.config.ts",
         "dev-front": "webpack serve --config webpack.dev.config.ts",
-<<<<<<< HEAD
         "dev-back": "tsc --build --watch src lib -w & nodemon ./dist/server/index.js",
         "start": "tsc --build -w src lib & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts",
         "test": "jest --detectOpenHandles"
@@ -28,10 +27,6 @@
         "testMatch": [
             "**/tests/*.+(ts|tsx|js)"
         ]
-=======
-        "dev-back": "tsc --build -w src lib & nodemon ./dist/server/index.js",
-        "start": "tsc --build -w src lib & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts"
->>>>>>> grigor/testconfig
     },
     "repository": {
         "type": "git",
@@ -45,21 +40,15 @@
     },
     "homepage": "https://github.com/oslabs-beta/jagtester#readme",
     "dependencies": {
-<<<<<<< HEAD
         "@types/jest": "^26.0.23",
         "@types/mocha": "^8.2.2",
-=======
         "@material-ui/core": "^4.11.4",
         "@material-ui/icons": "^4.11.2",
->>>>>>> grigor/testconfig
         "@types/node-fetch": "^2.5.10",
         "chart.js": "^3.3.2",
         "express": "^4.17.1",
-<<<<<<< HEAD
         "jest": "^27.0.2",
-=======
         "lodash": "^4.17.21",
->>>>>>> grigor/testconfig
         "node-fetch": "^2.6.1",
         "path": "^0.12.7",
         "react": "^17.0.2",

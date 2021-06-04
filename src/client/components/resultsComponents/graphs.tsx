@@ -148,10 +148,10 @@ const StackedBar: (props: {
         responsive: true,
         scales: {
             x: {
-                stacked: true,
+                stacked: false,
             },
             y: {
-                stacked: true,
+                stacked: false,
                 beginAtZero: false,
             },
         },
