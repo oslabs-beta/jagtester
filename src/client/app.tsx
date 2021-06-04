@@ -11,8 +11,8 @@ const App: () => JSX.Element = () => {
     return (
         <div>
             <BrowserRouter>
-                <Navigation />
-                <Container>
+                <Container fluid>
+                    <Navigation />
                     <Switch>
                         <Route path="/" exact component={HomePage} />
                         <Route path="/test" exact component={TestPage} />

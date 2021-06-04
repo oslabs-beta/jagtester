@@ -1,14 +1,7 @@
 {
     "compilerOptions": {
         "rootDir": ".",
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext",
-            "webworker",
-            "es6",
-            "scripthost"
-        ],
+        "lib": ["dom", "dom.iterable", "esnext", "webworker", "es6", "scripthost"],
         "allowJs": true,
         "outDir": "../../dist/client",
         "allowSyntheticDefaultImports": true,
@@ -26,6 +19,6 @@
             "*": ["../../node_modules/*"]
         }
     },
-    "include": ["./**/*"],
+    "include": ["./**/*", "./components/resultsComponents/data-updated.json"],
     "references": [{ "path": "../server" }]
 }

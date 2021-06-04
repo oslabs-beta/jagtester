@@ -1,0 +1,464 @@
+{
+    "100": {
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0.01 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0.03 },
+                { "fnName": "jsonParser", "elapsedTime": 0.01 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.05 },
+                { "fnName": "serveStatic", "elapsedTime": 0.32 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0.02 },
+                { "fnName": "initialize", "elapsedTime": 0.01 },
+                { "fnName": "authenticate", "elapsedTime": 0.01 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 200.48 },
+                { "fnName": "second", "elapsedTime": 100.43 },
+                { "fnName": "third", "elapsedTime": 50.6 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 352.242,
+            "errorCount": 0,
+            "successfulResCount": 160
+        },
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0.03 },
+                { "fnName": "expressInit", "elapsedTime": 0.03 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.03 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0.03 },
+                { "fnName": "_cookieSession", "elapsedTime": 0 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 0.834,
+            "errorCount": 0,
+            "successfulResCount": 40
+        }
+    },
+    "600": {
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0.01 },
+                { "fnName": "expressInit", "elapsedTime": 0.02 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0.01 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0.31 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0.02 },
+                { "fnName": "initialize", "elapsedTime": 0.02 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 200.17 },
+                { "fnName": "second", "elapsedTime": 100.34 },
+                { "fnName": "third", "elapsedTime": 50.36 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 351.393,
+            "errorCount": 0,
+            "successfulResCount": 960
+        },
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.02 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.03 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 0.959,
+            "errorCount": 0,
+            "successfulResCount": 240
+        }
+    },
+    "1100": {
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0.01 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0.37 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0.01 },
+                { "fnName": "initialize", "elapsedTime": 0.01 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 200.33 },
+                { "fnName": "second", "elapsedTime": 100.4 },
+                { "fnName": "third", "elapsedTime": 50.58 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 351.791,
+            "errorCount": 0,
+            "successfulResCount": 1760
+        },
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.03 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 1.098,
+            "errorCount": 0,
+            "successfulResCount": 440
+        }
+    },
+    "1600": {
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0.01 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 1.331,
+            "errorCount": 0,
+            "successfulResCount": 640
+        },
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0.01 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.01 },
+                { "fnName": "serveStatic", "elapsedTime": 0.4 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0 },
+                { "fnName": "initialize", "elapsedTime": 0.01 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 200.43 },
+                { "fnName": "second", "elapsedTime": 100.42 },
+                { "fnName": "third", "elapsedTime": 50.52 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 351.84,
+            "errorCount": 0,
+            "successfulResCount": 2560
+        }
+    },
+    "2100": {
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0.01 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.01 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 1.745,
+            "errorCount": 0,
+            "successfulResCount": 840
+        },
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0.01 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0.51 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0.01 },
+                { "fnName": "initialize", "elapsedTime": 0.01 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 200.45 },
+                { "fnName": "second", "elapsedTime": 100.53 },
+                { "fnName": "third", "elapsedTime": 50.59 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 352.162,
+            "errorCount": 0,
+            "successfulResCount": 3360
+        }
+    },
+    "2600": {
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0.7 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0.01 },
+                { "fnName": "initialize", "elapsedTime": 0.01 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 200.6 },
+                { "fnName": "second", "elapsedTime": 100.63 },
+                { "fnName": "third", "elapsedTime": 50.79 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 352.824,
+            "errorCount": 0,
+            "successfulResCount": 4160
+        },
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 2.341,
+            "errorCount": 0,
+            "successfulResCount": 1040
+        }
+    },
+    "3100": {
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 4.97,
+            "errorCount": 0,
+            "successfulResCount": 1240
+        },
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 1.45 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0 },
+                { "fnName": "initialize", "elapsedTime": 0.01 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 201.16 },
+                { "fnName": "second", "elapsedTime": 101.22 },
+                { "fnName": "third", "elapsedTime": 51.5 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 355.429,
+            "errorCount": 0,
+            "successfulResCount": 4960
+        }
+    },
+    "3600": {
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 17.767,
+            "errorCount": 0,
+            "successfulResCount": 1440
+        },
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 4.8 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0 },
+                { "fnName": "initialize", "elapsedTime": 0.01 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 204.26 },
+                { "fnName": "second", "elapsedTime": 104.12 },
+                { "fnName": "third", "elapsedTime": 55.06 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 368.33,
+            "errorCount": 0,
+            "successfulResCount": 5760
+        }
+    },
+    "4100": {
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 145.613,
+            "errorCount": 0,
+            "successfulResCount": 1640
+        },
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 38.78 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0.01 },
+                { "fnName": "initialize", "elapsedTime": 0 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 237.5 },
+                { "fnName": "second", "elapsedTime": 142.82 },
+                { "fnName": "third", "elapsedTime": 85 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 504.184,
+            "errorCount": 0,
+            "successfulResCount": 6560
+        }
+    },
+    "4600": {
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 232.117,
+            "errorCount": 147,
+            "successfulResCount": 1693
+        },
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 66.4 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0 },
+                { "fnName": "initialize", "elapsedTime": 0.01 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 263.58 },
+                { "fnName": "second", "elapsedTime": 172.42 },
+                { "fnName": "third", "elapsedTime": 120.69 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 573.987,
+            "errorCount": 581,
+            "successfulResCount": 6779
+        }
+    },
+    "5100": {
+        "/": {
+            "reqId": "0",
+            "reqRoute": "/",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0.01 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 0 }
+            ],
+            "receivedTime": 217.052,
+            "errorCount": 408,
+            "successfulResCount": 1632
+        },
+        "/testroute": {
+            "reqId": "0",
+            "reqRoute": "/testroute",
+            "middlewares": [
+                { "fnName": "query", "elapsedTime": 0 },
+                { "fnName": "expressInit", "elapsedTime": 0.01 },
+                { "fnName": "<anonymous>", "elapsedTime": 0.01 },
+                { "fnName": "urlencodedParser", "elapsedTime": 0 },
+                { "fnName": "jsonParser", "elapsedTime": 0 },
+                { "fnName": "_cookieSession", "elapsedTime": 0.02 },
+                { "fnName": "serveStatic", "elapsedTime": 73.88 },
+                { "fnName": "corsMiddleware", "elapsedTime": 0 },
+                { "fnName": "initialize", "elapsedTime": 0.01 },
+                { "fnName": "authenticate", "elapsedTime": 0 },
+                { "fnName": "bound dispatch", "elapsedTime": 0 },
+                { "fnName": "first", "elapsedTime": 262.61 },
+                { "fnName": "second", "elapsedTime": 175.24 },
+                { "fnName": "third", "elapsedTime": 129.8 },
+                { "fnName": "<anonymous>", "elapsedTime": 0 }
+            ],
+            "receivedTime": 511.653,
+            "errorCount": 1653,
+            "successfulResCount": 6507
+        }
+    }
+}
