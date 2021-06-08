@@ -12,6 +12,7 @@ import TestProgrss from '../components/testConfigComponents/testProgress';
 import socketIOClient from 'socket.io-client';
 
 import { useAppSelector, useAppDispatch } from '../state/hooks';
+import Actions from '../state/actions/actions';
 
 const socket = socketIOClient();
 
@@ -42,11 +43,12 @@ const HTTPMethods = {
 
 const TestPage: () => JSX.Element = () => {
     // states for rps sliders
-    const [valueRPS, setValueRPS] = React.useState<number[]>([500]);
-    const [valueStartEnd, setValueStartEnd] = React.useState<number[]>([100, 100]);
-    const [valueSeconds, setValueSeconds] = React.useState<number[]>([1]);
-    const [isTestRunning, setIsTestRunning] = React.useState<boolean>(false);
-    const [curRunningRPS, setCurRunningRPS] = React.useState<number>(0);
+    const valueRPS = useAppSelector((state) => state.valueRPS);
+    // const valueStartEnd = useAppSelector((state) => state.valueStartEnd);
+    const valueStart = useAppSelector((state) => state.valueStart);
+    const valueEnd = useAppSelector((state) => state.valueEnd);
+    const valueSeconds = useAppSelector((state) => state.valueSeconds);
+    const dispatch = useAppDispatch();
     // state for the inputs
     const [inputsData, setInputsData] = React.useState([
         {
@@ -65,21 +67,21 @@ const TestPage: () => JSX.Element = () => {
 
     // start----------------------------------- socket io funcitonality
     socket.on('singleRPSfinished', (rps: number) => {
-        setCurRunningRPS(rps);
+        dispatch(Actions.SetCurRunningRPS(rps));
     });
     socket.on('testRunningStateChange', (isTestRunning: boolean) => {
-        setIsTestRunning(isTestRunning);
+        dispatch(Actions.SetIsTestRunning(isTestRunning));
     });
 
     // end  ----------------------------------- socket io funcitonality
 
     const handleStartTest = () => {
-        setCurRunningRPS(0);
+        dispatch(Actions.SetCurRunningRPS(0));
         const testConfigObj: TestConfigData = {
-            rpsInterval: valueRPS[0],
-            startRPS: valueStartEnd[0],
-            endRPS: valueStartEnd[1],
-            testLength: valueSeconds[0],
+            rpsInterval: valueRPS,
+            startRPS: valueStart,
+            endRPS: valueEnd,
+            testLength: valueSeconds,
             inputsData,
         };
         fetch('/api/startmultiple', {
@@ -97,7 +99,6 @@ const TestPage: () => JSX.Element = () => {
         <Row>
             <Col>
                 <TargetInputs
-                    isTestRunning={isTestRunning}
                     inputsData={inputsData}
                     setInputsData={setInputsData}
                     HTTPMethods={HTTPMethods}
@@ -106,28 +107,14 @@ const TestPage: () => JSX.Element = () => {
             <Col>
                 <Tabs defaultActiveKey="load-tester" className="mb-4">
                     <Tab eventKey="load-tester" title="Load tester">
-                        <RangeSliders
-                            isTestRunning={isTestRunning}
-                            valueRPS={valueRPS}
-                            valueStartEnd={valueStartEnd}
-                            valueSeconds={valueSeconds}
-                            setValueRPS={setValueRPS}
-                            setValueStartEnd={setValueStartEnd}
-                            setValueSeconds={setValueSeconds}
-                        />
+                        <RangeSliders />
                         <Buttons
                             jagEndabledInputs={inputsData.some(
                                 (target) => !target.jagTesterEnabled
                             )}
-                            isTestRunning={isTestRunning}
                             handleStartTest={handleStartTest}
                         />
-                        <TestProgrss
-                            curRunningRPS={curRunningRPS}
-                            isTestRunning={isTestRunning}
-                            valueRPS={valueRPS}
-                            valueStartEnd={valueStartEnd}
-                        />
+                        <TestProgrss />
                     </Tab>
                     <Tab eventKey="stress-tester" title="Stress tester">
                         stress tester

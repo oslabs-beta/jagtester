@@ -16,6 +16,7 @@ import Container from 'react-bootstrap/Container';
 
 import SingleSlider from './SingleSlider';
 
+import { useAppSelector, useAppDispatch } from '../../state/hooks';
 //---------------------------- some styles
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -74,15 +75,23 @@ const TartgetInputs: (props: {
         CONNECT: string;
         TRACE: string;
     };
-    isTestRunning: boolean;
-}) => JSX.Element = ({ inputsData, setInputsData, HTTPMethods, isTestRunning }) => {
-    const handleChangeMethod = (inputDataIndex: number, event: React.ChangeEvent<{ value: unknown }>) => {
+}) => JSX.Element = ({ inputsData, setInputsData, HTTPMethods }) => {
+    const isTestRunning = useAppSelector((state) => state.isTestRunning);
+    const dispatch = useAppDispatch();
+
+    const handleChangeMethod = (
+        inputDataIndex: number,
+        event: React.ChangeEvent<{ value: unknown }>
+    ) => {
         const copiedState = lodash.cloneDeep(inputsData);
         copiedState[inputDataIndex].method = event.target.value as string;
         setInputsData(copiedState);
     };
 
-    const handleChangeURL = (inputDataIndex: number, event: React.ChangeEvent<{ value: unknown }>) => {
+    const handleChangeURL = (
+        inputDataIndex: number,
+        event: React.ChangeEvent<{ value: unknown }>
+    ) => {
         const copiedState = lodash.cloneDeep(inputsData);
         copiedState[inputDataIndex].targetURL = event.target.value as string;
         fetch('/api/checkjagtester', {
@@ -148,7 +157,8 @@ const TartgetInputs: (props: {
         for (let i = 0; i < copiedState.length; i++) {
             copiedState[i].percentage[0] = percentagePerInput;
         }
-        if (copiedState.length > 0) copiedState[0].percentage[0] += 100 - copiedState.length * percentagePerInput;
+        if (copiedState.length > 0)
+            copiedState[0].percentage[0] += 100 - copiedState.length * percentagePerInput;
         setInputsData(copiedState);
     };
 
@@ -244,10 +254,19 @@ const TartgetInputs: (props: {
                     </Select>
                 </FormControl>
                 <FormControl className={classes.methodURL}>
-                    <TextField disabled id={`target-url-${-1}`} label="Target URL (localhost)" variant="outlined" />
+                    <TextField
+                        disabled
+                        id={`target-url-${-1}`}
+                        label="Target URL (localhost)"
+                        variant="outlined"
+                    />
                 </FormControl>
                 <FormControl disabled className="my-auto">
-                    <AddCircleIcon color="primary" className={classes.addIcon} onClick={addTargetInput} />
+                    <AddCircleIcon
+                        color="primary"
+                        className={classes.addIcon}
+                        onClick={addTargetInput}
+                    />
                 </FormControl>
             </Row>
         </Container>

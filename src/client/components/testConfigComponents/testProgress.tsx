@@ -4,18 +4,24 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 
-const TestProgrss: (props: {
-    curRunningRPS: number;
-    isTestRunning: boolean;
-    valueRPS: number[];
-    valueStartEnd: number[];
-}) => JSX.Element = ({ curRunningRPS, isTestRunning, valueRPS, valueStartEnd }) => {
-    const start = valueStartEnd[0];
-    const end = valueStartEnd[1];
+import { useAppSelector } from '../../state/hooks';
+
+const TestProgrss: () => JSX.Element = () => {
+    const valueRPS = useAppSelector((state) => state.valueRPS);
+    // const valueStartEnd = useAppSelector((state) => state.valueStartEnd);
+    const valueStart = useAppSelector((state) => state.valueStart);
+    const valueEnd = useAppSelector((state) => state.valueEnd);
+    const isTestRunning = useAppSelector((state) => state.isTestRunning);
+    const curRunningRPS = useAppSelector((state) => state.curRunningRPS);
+
+    const start = valueStart;
+    const end = valueEnd;
     const range = end - start;
 
     const calculatedPercentage =
-        curRunningRPS === 0 ? 0 : Math.round((100 * (curRunningRPS + valueRPS[0] - start)) / (range + valueRPS[0]));
+        curRunningRPS === 0
+            ? 0
+            : Math.round((100 * (curRunningRPS + valueRPS - start)) / (range + valueRPS));
     return (
         <Container className="mt-5">
             <Row>

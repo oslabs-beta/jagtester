@@ -14,9 +14,11 @@ const Actions = {
  */
 // import type { RootState, AppDispatch } from '../store';
 const initialState = {
-    valueRPS: [500],
-    valueStartEnd: [100, 100],
-    valueSeconds: [1],
+    valueRPS: 500,
+    // valueStartEnd: [100, 600],
+    valueStart: 100,
+    valueEnd: 600,
+    valueSeconds: 1,
     isTestRunning: false,
     curRunningRPS: 0,
     //TODO add intial state for inputsdata
@@ -24,19 +26,25 @@ const initialState = {
 
 const configReducer = createReducer(initialState, (builder) => {
     builder
-        .addCase(Actions.SetValueRPSAction, (state, action) => {
+        .addCase(Actions.SetValueRPS, (state, action) => {
             state.valueRPS = action.payload;
         })
-        .addCase(Actions.SetValueStartEndAction, (state, action) => {
-            state.valueStartEnd = action.payload;
+        // .addCase(Actions.SetValueStartEnd, (state, action) => {
+        //     state.valueStartEnd = action.payload;
+        // })
+        .addCase(Actions.SetValueStart, (state, action) => {
+            state.valueStart = action.payload;
         })
-        .addCase(Actions.SetValueSecondsAction, (state, action) => {
+        .addCase(Actions.SetValueEnd, (state, action) => {
+            state.valueEnd = action.payload;
+        })
+        .addCase(Actions.SetValueSeconds, (state, action) => {
             state.valueSeconds = action.payload;
         })
-        .addCase(Actions.SetIsTestRunningAction, (state, action) => {
+        .addCase(Actions.SetIsTestRunning, (state, action) => {
             state.isTestRunning = action.payload;
         })
-        .addCase(Actions.SetCurRunningRPSAction, (state, action) => {
+        .addCase(Actions.SetCurRunningRPS, (state, action) => {
             state.curRunningRPS = action.payload;
         });
     //TODO add case for inputsdata
