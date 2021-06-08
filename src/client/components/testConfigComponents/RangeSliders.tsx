@@ -5,32 +5,39 @@ import Container from 'react-bootstrap/Container';
 
 import SingleSlider from './SingleSlider';
 
-const RangeSliders: (props: {
-    valueRPS: number[];
-    valueStartEnd: number[];
-    valueSeconds: number[];
-    setValueRPS: (value: React.SetStateAction<number[]>) => void;
-    setValueStartEnd: (value: React.SetStateAction<number[]>) => void;
-    setValueSeconds: (value: React.SetStateAction<number[]>) => void;
-    isTestRunning: boolean;
-}) => JSX.Element = ({
-    valueRPS,
-    valueStartEnd,
-    valueSeconds,
-    setValueRPS,
-    setValueStartEnd,
-    setValueSeconds,
-    isTestRunning,
-}) => {
+import { useAppSelector, useAppDispatch } from '../../state/hooks';
+import Actions from '../../state/actions/actions';
+
+const RangeSliders: () => JSX.Element = () => {
+    const valueRPS = useAppSelector((state) => state.valueRPS);
+    // const valueStartEnd = useAppSelector((state) => state.valueStartEnd);
+    const valueStart = useAppSelector((state) => state.valueStart);
+    const valueEnd = useAppSelector((state) => state.valueEnd);
+    const valueSeconds = useAppSelector((state) => state.valueSeconds);
+    const isTestRunning = useAppSelector((state) => state.isTestRunning);
+    const dispatch = useAppDispatch();
+
     const handleChangeRPS = (event: unknown, newValue: number | number[]) => {
-        setValueRPS(newValue as number[]);
-        setValueStartEnd([valueStartEnd[0], Math.min(10000, valueStartEnd[0] + 15 * valueRPS[0])]);
+        dispatch(Actions.SetValueRPS(newValue as number));
+        dispatch(Actions.SetValueEnd(Math.min(10000, valueStart + 15 * valueRPS)));
+        // dispatch(
+        //     Actions.SetValueStartEnd([
+        //         valueStartEnd[0],
+        //         Math.min(10000, valueStartEnd[0] + 15 * valueRPS),
+        //     ])
+        // );
     };
-    const handleChangeStartEnd = (event: unknown, newValue: number | number[]) => {
-        setValueStartEnd(newValue as number[]);
+    const handleChangeStart = (event: unknown, newValue: number | number[]) => {
+        dispatch(Actions.SetValueStart(newValue as number));
     };
+    const handleChangeEnd = (event: unknown, newValue: number | number[]) => {
+        dispatch(Actions.SetValueEnd(newValue as number));
+    };
+    // const handleChangeStartEnd = (event: unknown, newValue: number | number[]) => {
+    //     dispatch(Actions.SetValueStartEnd(newValue as number[]));
+    // };
     const handleChangeSeconds = (event: unknown, newValue: number | number[]) => {
-        setValueSeconds(newValue as number[]);
+        dispatch(Actions.SetValueSeconds(newValue as number));
     };
 
     return (
@@ -51,6 +58,34 @@ const RangeSliders: (props: {
                             disabled={isTestRunning}
                         />
                         <SingleSlider
+                            text="Start RPS"
+                            id="start-rps-slider"
+                            key="start-rps-slider"
+                            value={valueStart}
+                            onChange={handleChangeStart}
+                            min={100}
+                            max={valueEnd}
+                            step={10}
+                            // marks={{ interval: (valueEnd - 100) / 5, min: 100, max: valueEnd }}
+                            disabled={isTestRunning}
+                        />
+                        <SingleSlider
+                            text="End RPS"
+                            id="end-rps-slider"
+                            key="end-rps-slider"
+                            value={valueEnd}
+                            onChange={handleChangeEnd}
+                            min={valueStart}
+                            max={10000}
+                            step={valueRPS}
+                            // marks={{
+                            //     interval: (10000 - valueStart) / 5,
+                            //     min: valueStart,
+                            //     max: 10000,
+                            // }}
+                            disabled={isTestRunning}
+                        />
+                        {/* <SingleSlider
                             text="Start / end RPS"
                             id="start-end-slider"
                             key="start-end-slider"
@@ -58,10 +93,10 @@ const RangeSliders: (props: {
                             onChange={handleChangeStartEnd}
                             min={100}
                             max={10000}
-                            step={valueRPS[0]}
+                            step={valueRPS}
                             marks={{ interval: 2000, min: 100, max: 10000 }}
                             disabled={isTestRunning}
-                        />
+                        /> */}
                         <SingleSlider
                             text="Time per interval (seconds)"
                             id="time-per-int-slider"
@@ -83,7 +118,7 @@ const RangeSliders: (props: {
                         <h2 className="text-center">
                             Total test time:{' '}
                             {Math.round(
-                                (valueSeconds[0] * (valueStartEnd[1] + valueRPS[0] - valueStartEnd[0])) / valueRPS[0]
+                                (valueSeconds * (valueEnd + valueRPS - valueStart)) / valueRPS
                             )}{' '}
                             seconds
                         </h2>

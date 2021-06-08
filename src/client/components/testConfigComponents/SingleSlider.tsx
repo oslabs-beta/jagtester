@@ -14,7 +14,7 @@ const SingleSlider: (props: {
     min: number;
     max: number;
     step: number;
-    marks: {
+    marks?: {
         interval: number;
         min: number;
         max: number;
@@ -62,7 +62,10 @@ const SingleSlider: (props: {
                         min={props.min}
                         max={props.max}
                         step={props.step}
-                        marks={marks(props.marks.interval, props.marks.min, props.marks.max)}
+                        marks={
+                            props.marks &&
+                            marks(props.marks.interval, props.marks.min, props.marks.max)
+                        }
                     />
                 </Col>
             </Row>

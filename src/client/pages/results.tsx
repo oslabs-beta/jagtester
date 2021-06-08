@@ -5,6 +5,8 @@ import Col from 'react-bootstrap/Col';
 import StackedBar from '../components/resultsComponents/graphs';
 import * as data from '../components/resultsComponents/data-updated.json';
 
+import VerticalTabs from '../components/resultsComponents/tabs';
+
 // fetch('./jagtester/src/client/components/resultsData.json')
 
 const ResultsPage: () => JSX.Element = () => {
@@ -29,6 +31,9 @@ const ResultsPage: () => JSX.Element = () => {
                 <Col>
                     <StackedBar testData={data} />
                 </Col>
+            </Row>
+            <Row>
+                <VerticalTabs />
             </Row>
         </Container>
     );
