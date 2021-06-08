@@ -2,7 +2,6 @@ import { createAction } from '@reduxjs/toolkit';
 
 enum ActionTypes {
     setValueRPS = 'setValueRPS',
-    // setValueStartEnd = 'setValueStartEnd',
     setValueStart = 'setValueStart',
     setValueEnd = 'setValueEnd',
     setValueSeconds = 'setValueSeconds',
@@ -12,7 +11,6 @@ enum ActionTypes {
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
-// const SetValueStartEnd = createAction<number[]>(ActionTypes.setValueStartEnd);
 const SetValueStart = createAction<number>(ActionTypes.setValueStart);
 const SetValueEnd = createAction<number>(ActionTypes.setValueEnd);
 const SetValueSeconds = createAction<number>(ActionTypes.setValueSeconds);
@@ -22,7 +20,6 @@ const SetCurRunningRPS = createAction<number>(ActionTypes.setCurRunningRPS);
 
 const Actions = {
     SetValueRPS,
-    // SetValueStartEnd,
     SetValueStart,
     SetValueEnd,
     SetValueSeconds,

@@ -15,7 +15,6 @@ const Actions = {
 // import type { RootState, AppDispatch } from '../store';
 const initialState = {
     valueRPS: 500,
-    // valueStartEnd: [100, 600],
     valueStart: 100,
     valueEnd: 600,
     valueSeconds: 1,
@@ -29,9 +28,6 @@ const configReducer = createReducer(initialState, (builder) => {
         .addCase(Actions.SetValueRPS, (state, action) => {
             state.valueRPS = action.payload;
         })
-        // .addCase(Actions.SetValueStartEnd, (state, action) => {
-        //     state.valueStartEnd = action.payload;
-        // })
         .addCase(Actions.SetValueStart, (state, action) => {
             state.valueStart = action.payload;
         })
