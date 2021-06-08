@@ -11,6 +11,8 @@ import TestProgrss from '../components/testConfigComponents/testProgress';
 
 import socketIOClient from 'socket.io-client';
 
+import { useAppSelector, useAppDispatch } from '../state/hooks';
+
 const socket = socketIOClient();
 
 interface TestConfigData {
@@ -114,7 +116,9 @@ const TestPage: () => JSX.Element = () => {
                             setValueSeconds={setValueSeconds}
                         />
                         <Buttons
-                            jagEndabledInputs={inputsData.some((target) => !target.jagTesterEnabled)}
+                            jagEndabledInputs={inputsData.some(
+                                (target) => !target.jagTesterEnabled
+                            )}
                             isTestRunning={isTestRunning}
                             handleStartTest={handleStartTest}
                         />
