@@ -5,7 +5,12 @@ import events from 'events';
 
 import { io } from './index';
 
-import { CollectedData, CollectedDataSingle, Jagtestercommands, TestConfigData } from './interfaces';
+import {
+    CollectedData,
+    CollectedDataSingle,
+    Jagtestercommands,
+    TestConfigData,
+} from './interfaces';
 
 const router = express.Router();
 let timeArrRoutes: {
@@ -86,7 +91,8 @@ eventEmitter.on('allRPSfinished', () => {
             timeArrRoutes[route][rpsGroup].receivedTotalTime =
                 Math.round(
                     (1000 * timeArrRoutes[route][rpsGroup].receivedTotalTime) /
-                        (timeArrRoutes[route][rpsGroup].errorCount + timeArrRoutes[route][rpsGroup].successfulResCount)
+                        (timeArrRoutes[route][rpsGroup].errorCount +
+                            timeArrRoutes[route][rpsGroup].successfulResCount)
                 ) / 1000;
         }
     }
@@ -95,10 +101,14 @@ eventEmitter.on('allRPSfinished', () => {
     // processing middlewares, averaging them, then combining timearrroutes
     for (const rps in pulledDataFromTest) {
         for (const route in pulledDataFromTest[rps]) {
-            pulledDataFromTest[rps][route] = processData(pulledDataFromTest[rps][route] as CollectedData);
-            pulledDataFromTest[rps][route].receivedTime = timeArrRoutes[route][rps].receivedTotalTime;
+            pulledDataFromTest[rps][route] = processData(
+                pulledDataFromTest[rps][route] as CollectedData
+            );
+            pulledDataFromTest[rps][route].receivedTime =
+                timeArrRoutes[route][rps].receivedTotalTime;
             pulledDataFromTest[rps][route].errorCount = timeArrRoutes[route][rps].errorCount;
-            pulledDataFromTest[rps][route].successfulResCount = timeArrRoutes[route][rps].successfulResCount;
+            pulledDataFromTest[rps][route].successfulResCount =
+                timeArrRoutes[route][rps].successfulResCount;
         }
     }
 
@@ -111,7 +121,12 @@ eventEmitter.on('allRPSfinished', () => {
 const agent = new http.Agent({ keepAlive: true });
 // const targetURL = 'http://localhost:3030/testroute';
 
-const sendRequests = (targetURL: string, rpsGroup: number, rpsActual: number, secondsToTest: number) => {
+const sendRequests = (
+    targetURL: string,
+    rpsGroup: number,
+    rpsActual: number,
+    secondsToTest: number
+) => {
     const sendFetch = (reqId: number) => {
         fetch(targetURL, {
             agent,
@@ -129,7 +144,9 @@ const sendRequests = (targetURL: string, rpsGroup: number, rpsActual: number, se
                 }
                 if (res.headers.has('x-response-time')) {
                     const xResponseTime = res.headers.get('x-response-time');
-                    timeArrRoutes[resRoute][rpsGroup].receivedTotalTime += xResponseTime ? +xResponseTime : 0;
+                    timeArrRoutes[resRoute][rpsGroup].receivedTotalTime += xResponseTime
+                        ? +xResponseTime
+                        : 0;
                 }
             })
             .catch(() => {
@@ -145,7 +162,10 @@ const sendRequests = (targetURL: string, rpsGroup: number, rpsActual: number, se
     // outer for loop to run for every second and set timeouts for after that second
     for (let j = 0; j < secondsToTest; j++) {
         for (let i = 0; i < rpsActual; i++) {
-            setTimeout(sendFetch.bind(this, i + j * rpsActual), Math.floor(Math.random() * 1000 + 1000 * j));
+            setTimeout(
+                sendFetch.bind(this, i + j * rpsActual),
+                Math.floor(Math.random() * 1000 + 1000 * j)
+            );
         }
     }
 };
@@ -158,7 +178,7 @@ const sendRequestsAtRPS = (
     inputsData: {
         method: string;
         targetURL: string;
-        percentage: number[];
+        percentage: number;
     }[]
 ) => {
     const curRPS = startRPS + currentInterval * rpsInterval;
@@ -193,7 +213,12 @@ const sendRequestsAtRPS = (
                 }
                 errorCount = 0;
                 successfulResCount = 0;
-                sendRequests(target.targetURL, curRPS, Math.round((curRPS * target.percentage[0]) / 100), testLength);
+                sendRequests(
+                    target.targetURL,
+                    curRPS,
+                    Math.round((curRPS * target.percentage) / 100),
+                    testLength
+                );
                 // res.json({ jagtester: true });
             })
             .catch((err) => console.log(err)); //TODO better error handling
@@ -250,7 +275,8 @@ const processData: (data: CollectedData) => CollectedDataSingle = (data: Collect
 
     // divide by the count of requests
     collectedDataSingle.middlewares.forEach((middleware) => {
-        middleware.elapsedTime = Math.round((100 * middleware.elapsedTime) / collectedDataArr.length) / 100;
+        middleware.elapsedTime =
+            Math.round((100 * middleware.elapsedTime) / collectedDataArr.length) / 100;
     });
 
     return collectedDataSingle;

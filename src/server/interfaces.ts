@@ -43,7 +43,7 @@ export interface TestConfigData {
     inputsData: {
         method: string;
         targetURL: string;
-        percentage: number[];
+        percentage: number;
         jagTesterEnabled: boolean;
     }[];
 }

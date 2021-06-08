@@ -19,6 +19,7 @@ const RangeSliders: () => JSX.Element = () => {
     const handleChangeRPS = (event: unknown, newValue: number | number[]) => {
         dispatch(Actions.SetValueRPS(newValue as number));
         dispatch(Actions.SetValueEnd(Math.min(10000, valueStart + 15 * valueRPS)));
+        dispatch(Actions.SetCurRunningRPS(0));
     };
     const handleChangeSeconds = (event: unknown, newValue: number | number[]) => {
         dispatch(Actions.SetValueSeconds(newValue as number));
@@ -26,6 +27,7 @@ const RangeSliders: () => JSX.Element = () => {
     const handleChangeStartEnd = (event: unknown, newValue: number | number[]) => {
         dispatch(Actions.SetValueStart((newValue as number[])[0]));
         dispatch(Actions.SetValueEnd((newValue as number[])[1]));
+        dispatch(Actions.SetCurRunningRPS(0));
     };
 
     return (

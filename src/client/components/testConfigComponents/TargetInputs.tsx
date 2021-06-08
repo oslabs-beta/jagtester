@@ -1,5 +1,3 @@
-import lodash from 'lodash';
-
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -16,7 +14,10 @@ import Container from 'react-bootstrap/Container';
 
 import SingleSlider from './SingleSlider';
 
+import { HTTPMethods } from '../../interfaces';
+
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
+import Actions from '../../state/actions/actions';
 //---------------------------- some styles
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,52 +49,27 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 //---------------------------- will render single targets based on the state passed down from the parent
-const TartgetInputs: (props: {
-    inputsData: {
-        method: string;
-        targetURL: string;
-        percentage: number[];
-        jagTesterEnabled: boolean;
-    }[];
-    setInputsData: React.Dispatch<
-        React.SetStateAction<
-            {
-                method: string;
-                targetURL: string;
-                percentage: number[];
-                jagTesterEnabled: boolean;
-            }[]
-        >
-    >;
-    HTTPMethods: {
-        GET: string;
-        POST: string;
-        PUT: string;
-        DELETE: string;
-        PATCH: string;
-        HEAD: string;
-        CONNECT: string;
-        TRACE: string;
-    };
-}) => JSX.Element = ({ inputsData, setInputsData, HTTPMethods }) => {
+const TartgetInputs: () => JSX.Element = () => {
     const isTestRunning = useAppSelector((state) => state.isTestRunning);
+    const inputsData = useAppSelector((state) => state.inputsData);
     const dispatch = useAppDispatch();
 
-    const handleChangeMethod = (
-        inputDataIndex: number,
-        event: React.ChangeEvent<{ value: unknown }>
-    ) => {
-        const copiedState = lodash.cloneDeep(inputsData);
-        copiedState[inputDataIndex].method = event.target.value as string;
-        setInputsData(copiedState);
+    const handleChangeMethod = (index: number, event: React.ChangeEvent<{ value: unknown }>) => {
+        dispatch(
+            Actions.ChangeTargetMethod({ index: index, method: event.target.value as HTTPMethods })
+        );
     };
 
     const handleChangeURL = (
         inputDataIndex: number,
         event: React.ChangeEvent<{ value: unknown }>
     ) => {
-        const copiedState = lodash.cloneDeep(inputsData);
-        copiedState[inputDataIndex].targetURL = event.target.value as string;
+        dispatch(
+            Actions.ChangeTargetURL({
+                index: inputDataIndex,
+                newURL: event.target.value as string,
+            })
+        );
         fetch('/api/checkjagtester', {
             method: HTTPMethods.POST,
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -104,68 +80,36 @@ const TartgetInputs: (props: {
         })
             .then((res) => res.json())
             .then((data) => {
-                copiedState[inputDataIndex].jagTesterEnabled = data.jagtester as boolean;
-                setInputsData(copiedState);
+                dispatch(
+                    Actions.ChangeTargetJagEnabled({
+                        index: inputDataIndex,
+                        isEnabled: data.jagtester as boolean,
+                    })
+                );
             })
             .catch(() => {
-                copiedState[inputDataIndex].jagTesterEnabled = false;
-                setInputsData(copiedState);
+                dispatch(
+                    Actions.ChangeTargetJagEnabled({
+                        index: inputDataIndex,
+                        isEnabled: false,
+                    })
+                );
             }); // TODO add better error handling
-    };
-
-    const percentageHelper = (index: number, newValue: number | number[]) => {
-        const copiedState = lodash.cloneDeep(inputsData);
-
-        let diffWithNext = copiedState[index].percentage[0] - (newValue as number[])[0];
-        const diffWithNextCopy = diffWithNext;
-        const cur = copiedState[index].percentage;
-        while (diffWithNext !== 0) {
-            //TODO add a better terminating condition
-            index = index < copiedState.length - 1 ? index + 1 : 0;
-            const next = copiedState[index].percentage;
-
-            if (next[0] + diffWithNext > 100) {
-                diffWithNext = diffWithNext - (100 - next[0]);
-                next[0] = 100;
-            } else if (next[0] + diffWithNext < 0) {
-                diffWithNext = next[0] + diffWithNext;
-                next[0] = 0;
-            } else {
-                next[0] = next[0] + diffWithNext;
-                break;
-            }
-        }
-        cur[0] = cur[0] - diffWithNextCopy;
-        return copiedState;
     };
 
     const handleChangePercentage = (index: number, event: unknown, newValue: number | number[]) => {
         if (inputsData.length !== 1) {
-            setInputsData(percentageHelper(index, newValue));
+            dispatch(Actions.ChangeTargetPercent({ index, newValue: newValue as number }));
         }
     };
 
     const addTargetInput = () => {
-        const copiedState = lodash.cloneDeep(inputsData);
-        copiedState.push({
-            method: HTTPMethods.GET,
-            targetURL: '',
-            percentage: [0],
-            jagTesterEnabled: false,
-        });
-        const percentagePerInput = Math.floor(100 / copiedState.length);
-        for (let i = 0; i < copiedState.length; i++) {
-            copiedState[i].percentage[0] = percentagePerInput;
-        }
-        if (copiedState.length > 0)
-            copiedState[0].percentage[0] += 100 - copiedState.length * percentagePerInput;
-        setInputsData(copiedState);
+        dispatch(Actions.AddTarget());
     };
 
     const deleteTarget = (index: number) => {
-        const copiedState = percentageHelper(index, [0]);
-        copiedState.splice(index, 1);
-        setInputsData(copiedState);
+        dispatch(Actions.ChangeTargetPercent({ index, newValue: 0 }));
+        dispatch(Actions.DeleteTarget(index));
     };
 
     const classes = useStyles();

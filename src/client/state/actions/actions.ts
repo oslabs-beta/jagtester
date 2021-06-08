@@ -1,5 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 
+import { HTTPMethods } from '../../interfaces';
+
 enum ActionTypes {
     setValueRPS = 'setValueRPS',
     setValueStart = 'setValueStart',
@@ -7,7 +9,13 @@ enum ActionTypes {
     setValueSeconds = 'setValueSeconds',
     setIsTestRunning = 'setIsTestRunning',
     setCurRunningRPS = 'setCurRunningRPS',
-    setInputsData = 'setInputsData',
+
+    changeTargetMethod = 'changeTargetMethod',
+    changeTargetURL = 'changeTargetURL',
+    changeTargetJagEnabled = 'changeTargetJagEnabled',
+    changeTargetPercent = 'changeTargetPercent',
+    addTarget = 'addTarget',
+    deleteTarget = 'deleteTarget',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -16,7 +24,20 @@ const SetValueEnd = createAction<number>(ActionTypes.setValueEnd);
 const SetValueSeconds = createAction<number>(ActionTypes.setValueSeconds);
 const SetIsTestRunning = createAction<boolean>(ActionTypes.setIsTestRunning);
 const SetCurRunningRPS = createAction<number>(ActionTypes.setCurRunningRPS);
-//TODO add createACtion for SetCurRunningRPSAction
+const ChangeTargetMethod = createAction<{ index: number; method: HTTPMethods }>(
+    ActionTypes.changeTargetMethod
+);
+const ChangeTargetURL = createAction<{ index: number; newURL: string }>(
+    ActionTypes.changeTargetURL
+);
+const ChangeTargetJagEnabled = createAction<{ index: number; isEnabled: boolean }>(
+    ActionTypes.changeTargetJagEnabled
+);
+const ChangeTargetPercent = createAction<{ index: number; newValue: number }>(
+    ActionTypes.changeTargetPercent
+);
+const AddTarget = createAction(ActionTypes.addTarget);
+const DeleteTarget = createAction<number>(ActionTypes.deleteTarget);
 
 const Actions = {
     SetValueRPS,
@@ -25,7 +46,12 @@ const Actions = {
     SetValueSeconds,
     SetIsTestRunning,
     SetCurRunningRPS,
-    // TODO export SetCurRunningRPSAction
+    ChangeTargetMethod,
+    ChangeTargetURL,
+    ChangeTargetJagEnabled,
+    ChangeTargetPercent,
+    AddTarget,
+    DeleteTarget,
 };
 
 export default Actions;

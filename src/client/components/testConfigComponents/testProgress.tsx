@@ -8,7 +8,6 @@ import { useAppSelector } from '../../state/hooks';
 
 const TestProgrss: () => JSX.Element = () => {
     const valueRPS = useAppSelector((state) => state.valueRPS);
-    // const valueStartEnd = useAppSelector((state) => state.valueStartEnd);
     const valueStart = useAppSelector((state) => state.valueStart);
     const valueEnd = useAppSelector((state) => state.valueEnd);
     const isTestRunning = useAppSelector((state) => state.isTestRunning);
