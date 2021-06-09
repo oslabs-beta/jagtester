@@ -1,161 +1,176 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import { PulledDataFromTest, ChartDataSet } from '../../interfaces';
 
-interface CollectedData {
-    [key: string]: {
-        reqId: string;
-        reqRoute: string;
-        middlewares: {
-            fnName: string;
-            elapsedTime: number;
-        }[];
-    };
-}
-
-interface CollectedDataSingle {
-    receivedTime?: number;
-    recordedTime?: number;
-    errorCount?: number;
-    requestCount?: number;
-    successfulResCount?: number;
-    RPS?: number;
-    reqId?: string;
-    reqRoute: string;
-    middlewares: {
-        fnName: string;
-        elapsedTime: number;
-    }[];
-}
+const randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16);
 
 const StackedBar: (props: {
-    testData: {
-        [key: string]: {
-            [key: string]: CollectedDataSingle | CollectedData;
-        };
-    };
-}) => JSX.Element = (props) => {
-    // console.log(props.testData);
-    const [chartData, setChartData] = useState({});
-
-    interface dataSet {
-        label: string;
-        data: number[];
-        backgroundColor: string[];
-        borderWidth: number;
-    }
-
-    function createDataSet(
-        data: {
-            [key: string]: {
-                [key: string]: CollectedDataSingle | CollectedData;
-            };
-        }[]
-    ) {
-        //function definition
-        console.log(data);
-        const dataSetArray: dataSet[] = [];
-
-        // const resultObj: {route: number[]} = {};
-
-        for (const timedData of data) {
-            for (const rps in timedData.testData) {
-                for (const route in timedData.testData[rps]) {
-                }
-                // dataSetArray.push({
-                //   label: route,
-                // if (!resultObj[route]){
-                //   resultObj[route] = []
-                //   resultObj[route].push(resultObj[route][recievedTime])
-                // } else {
-                //   resultObj[route].push(resultObj[route][recievedTime])
-                // }
-            }
-        }
-
-        //then we would loop through
-    }
-    const chart = () => {
-        const rpsArr: string[] = [];
-        const routeArr: string[] = [];
-        const dataArr: number[] = [];
-        //key would = localhost3030
-
-        Object.keys(props.testData).forEach((key) => {
-            if (key != 'default') {
-                rpsArr.push(key);
-            }
-        });
-        // createDataSet(props.testData);
-
-        setChartData({
-            labels: rpsArr,
-            datasets: [
-                {
-                    type: 'bar',
-                    label: '/',
-                    data: [0.834, 0.959, 1.098, 1.331, 1.745, 2.341, 4.97, 17.767, 145.613, 232.117, 217.052],
-                    backgroundColor: ['rgba(74, 178, 152, 0.91)'],
-                    borderWidth: 0,
-                },
-                {
-                    type: 'bar',
-                    label: '/testroute',
-                    data: [
-                        352.242, 351.393, 351.791, 351.84, 352.162, 352.824, 355.429, 368.33, 504.184, 573.987, 511.653,
-                    ],
-                    backgroundColor: ['rgba(75, 192, 192, 0.6)'],
-                    borderWidth: 0,
-                },
-                {
-                    type: 'line',
-                    label: 'Error for /',
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 147, 408],
-                    backgroundColor: ['rgba(129, 178, 154, 1)'],
-                    borderColor: 'rgba(224, 122, 95, 1)',
-                    borderWidth: 2,
-                    fill: false,
-                },
-                {
-                    type: 'line',
-                    label: 'Error for /testroute',
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 581, 1653],
-                    backgroundColor: ['rgba(129, 178, 154, 1)'],
-                    borderColor: 'rgba(224, 122, 95, 1)',
-                    borderWidth: 2,
-                    fill: false,
-                },
-            ],
-        });
-    };
-
-    useEffect(() => {
-        fetch('/api/saveddata')
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(createDataSet(data));
-            })
-            .catch((err) => console.log(err)); // FIXME better error handling
-        chart();
-    }, []);
-
+    testData: PulledDataFromTest;
+    singleRoute: boolean;
+    routeName?: string;
+}) => JSX.Element = ({ testData, singleRoute, routeName }) => {
     const chartOptions = {
         plugins: {
             title: {
                 display: true,
-                text: 'JAGtester Results',
+                text: singleRoute ? routeName : 'All routes',
             },
         },
         responsive: true,
         scales: {
             x: {
-                stacked: true,
+                stacked: singleRoute,
             },
             y: {
-                stacked: true,
-                beginAtZero: false,
+                stacked: singleRoute,
+                beginAtZero: true,
             },
         },
     };
+
+    const dataSetArray: ChartDataSet[] = [];
+    const rpsArr: string[] = [];
+
+    //this object will have property of each route, with an array of recieved times
+    const resultObj: {
+        [key: string]: {
+            elapsedTimes: number[];
+            errorCounts: number[];
+        };
+    } = {};
+
+    const resultArr: {
+        fnName: string;
+        elapsedTimes: number[];
+    }[] = [];
+
+    //TODO: create an result OBJ for errors
+
+    if (singleRoute) {
+        //pushing rps to an array
+        Object.keys(testData).forEach((rps) => {
+            rpsArr.push(rps);
+        });
+
+        // pushing function names of the first rps group at routenmae
+        testData[rpsArr[0]][routeName as string].middlewares.forEach((middlewareObj) => {
+            resultArr.push({ fnName: middlewareObj.fnName, elapsedTimes: [] });
+        });
+
+        // pushing all the elapsed times for each route from the all rps groups
+        resultArr.forEach((middlewareObj, i) => {
+            Object.keys(testData).forEach((rps) => {
+                middlewareObj.elapsedTimes.push(
+                    testData[rps][routeName as string].middlewares[i].elapsedTime
+                );
+            });
+        });
+
+        for (const middlewareData of resultArr) {
+            dataSetArray.push({
+                type: 'bar',
+                label: middlewareData.fnName,
+                data: middlewareData.elapsedTimes,
+                backgroundColor: [randomColor()],
+                borderWidth: 0,
+            });
+        }
+    } else {
+        Object.keys(testData).forEach((rps) => {
+            rpsArr.push(rps);
+            // then for each key, pull the route as a label
+            //add to object as a property
+            //then grab recieved time and put in an array for value in onj
+            Object.keys(testData[rps]).forEach((route) => {
+                if (!resultObj[route]) {
+                    resultObj[route] = {
+                        elapsedTimes: [],
+                        errorCounts: [],
+                    };
+                }
+                resultObj[route].elapsedTimes.push(testData[rps][route].receivedTime as number);
+                resultObj[route].errorCounts.push(
+                    Math.round(
+                        (100 * (testData[rps][route].errorCount as number)) /
+                            (testData[rps][route].successfulResCount as number)
+                    )
+                );
+            });
+        });
+        //create a background color array?
+        //have them select color scheme? or colors per route?
+
+        //loop through the resultObj to create the dataset array on objs per route/ property
+        Object.keys(resultObj).forEach((route) => {
+            const lineColor = randomColor();
+            dataSetArray.push({
+                type: 'bar',
+                label: route,
+                data: resultObj[route].elapsedTimes,
+                backgroundColor: [lineColor],
+                borderWidth: 0,
+            });
+            dataSetArray.push({
+                type: 'line',
+                label: `Error percent for ${route}`,
+                data: resultObj[route].errorCounts,
+                backgroundColor: [lineColor],
+                borderColor: lineColor,
+                borderWidth: 4,
+                fill: false,
+            });
+        });
+    }
+
+    // setChartData({ labels: rpsArr, datasets: dataSetArray });
+    const chartData: { labels: string[]; datasets: ChartDataSet[] } = {
+        labels: rpsArr,
+        datasets: dataSetArray,
+    };
+    // };
+    // const chart = ( testData: PulledDataFromTest ) => {
+    //     const dataSetArray: ChartDataSet[] = [];
+    //     const rpsArr: string[] = [];
+    //     console.log(dataSetArray);
+
+    //     //this object will have property of each route, with an array of recieved times
+    //     const resultObj: any = {};
+
+    //     //TODO: create an result OBJ for errors
+
+    //     Object.keys(testData).forEach((key) => {
+    //         if (key != 'default') {
+    //             rpsArr.push(key);
+    //             // then for each key, pull the route as a label
+    //             //add to object as a property
+    //             //then grab recieved time and put in an array for value in onj
+    //             Object.keys(testData[key]).forEach((route) => {
+    //                 if (!resultObj[route]) {
+    //                     resultObj[route] = [];
+    //                     resultObj[route].push(testData[key][route].receivedTime);
+    //                 } else {
+    //                     resultObj[route].push(testData[key][route].receivedTime);
+    //                 }
+    //             });
+    //         }
+    //     });
+
+    //     //create a background color array?
+    //     //have them select color scheme? or colors per route?
+
+    //     //loop through the resultObj to create the dataset array on objs per route/ property
+    //     Object.keys(resultObj).forEach((route) => {
+    //         dataSetArray.push({
+    //             type: 'bar',
+    //             label: route,
+    //             data: resultObj[route],
+    //             backgroundColor: ['rgba(74, 178, 152, 0.91)'],
+    //             borderWidth: 0,
+    //         });
+    //     });
+
+    //     setChartData({ labels: rpsArr, datasets: dataSetArray });
+    // };
 
     return (
         <div className="Chart">
@@ -167,8 +182,3 @@ const StackedBar: (props: {
 };
 
 export default StackedBar;
-
-//update to TS
-
-//iterate through the array
-// for each route push jsx string with an onclick event that will show data related to the specific route

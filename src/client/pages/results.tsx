@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import StackedBar from '../components/resultsComponents/graphs';
 import * as data from '../components/resultsComponents/data-updated.json';
 
-import VerticalTabs from '../components/resultsComponents/tabs';
+import VerticalTabs from '../components/resultsComponents/verticalTabs';
 
 // fetch('./jagtester/src/client/components/resultsData.json')
 
@@ -18,20 +18,8 @@ const ResultsPage: () => JSX.Element = () => {
     //by defalut maybe show only averages
     //then by clicking
 
-    const [routeList, setRouteList] = React.useState<string[]>([]);
-
     return (
         <Container>
-            <Row>
-                <Col xs={3}>
-                    {/* pass down only the routes */}
-                    <h1>Route Results</h1>
-                    Test 1
-                </Col>
-                <Col>
-                    <StackedBar testData={data} />
-                </Col>
-            </Row>
             <Row>
                 <VerticalTabs />
             </Row>
