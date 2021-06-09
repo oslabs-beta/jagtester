@@ -12,6 +12,8 @@ import {
     TestConfigData,
 } from './interfaces';
 
+import { processData } from './helperFunctions';
+
 const router = express.Router();
 let timeArrRoutes: {
     // this key is used as the route name
@@ -181,11 +183,14 @@ const sendRequestsAtRPS = (
         percentage: number;
     }[]
 ) => {
+    // check if finished testing
     const curRPS = startRPS + currentInterval * rpsInterval;
     if (curRPS > endRPS) {
         eventEmitter.emit('allRPSfinished');
         return;
     }
+
+    // update layer first then start testing
     for (const target of inputsData) {
         fetch(target.targetURL, {
             agent,
@@ -194,6 +199,7 @@ const sendRequestsAtRPS = (
             },
         })
             .then(() => {
+                // saving the resroute into the collection object
                 const resRoute = new URL(target.targetURL).pathname;
                 if (timeArrRoutes[resRoute] === undefined) {
                     timeArrRoutes[resRoute] = {};
@@ -256,31 +262,6 @@ router.post('/checkjagtester', (req, res) => {
         .then((data) => res.json(data))
         .catch(() => res.json({ jagtester: false }));
 });
-
-const processData: (data: CollectedData) => CollectedDataSingle = (data: CollectedData) => {
-    const collectedDataArr: CollectedDataSingle[] = [];
-    for (const key in data) {
-        collectedDataArr.push(data[key]);
-    }
-
-    // add middlewares elapsed times
-    const collectedDataSingle: CollectedDataSingle = collectedDataArr.reduce((acc, cur) => {
-        for (let i = 0; i < acc.middlewares.length; i++) {
-            if (i < cur.middlewares.length) {
-                acc.middlewares[i].elapsedTime += cur.middlewares[i].elapsedTime;
-            }
-        }
-        return acc;
-    });
-
-    // divide by the count of requests
-    collectedDataSingle.middlewares.forEach((middleware) => {
-        middleware.elapsedTime =
-            Math.round((100 * middleware.elapsedTime) / collectedDataArr.length) / 100;
-    });
-
-    return collectedDataSingle;
-};
 
 router.get('/getlogs', (req, res) => {
     res.json(pulledDataFromTest);
