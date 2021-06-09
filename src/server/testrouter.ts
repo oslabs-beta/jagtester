@@ -173,6 +173,7 @@ const sendRequests = (
             .catch((error) => {
                 if (error.name === 'AbortError') {
                     if (trackedVariables.isTestRunning) {
+                        trackedVariables.isTestRunning = false;
                         eventEmitter.emit('allRPSfinished');
                     }
                 } else {
