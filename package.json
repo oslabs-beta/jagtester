@@ -25,6 +25,7 @@
         "@material-ui/icons": "^4.11.2",
         "@reduxjs/toolkit": "^1.5.1",
         "@types/node-fetch": "^2.5.10",
+        "abort-controller": "^3.0.0",
         "chart.js": "^3.3.2",
         "express": "^4.17.1",
         "node-fetch": "^2.6.1",

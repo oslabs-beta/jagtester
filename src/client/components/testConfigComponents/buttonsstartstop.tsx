@@ -10,6 +10,10 @@ const Buttons: (props: { handleStartTest: () => void; jagEndabledInputs: boolean
     ({ handleStartTest, jagEndabledInputs }) => {
         const isTestRunning = useAppSelector((state) => state.isTestRunning);
 
+        const handleStopTest = () => {
+            fetch('/api/stopTest'); // TODO add then catch
+        };
+
         return (
             <Container>
                 <Row>
@@ -27,6 +31,7 @@ const Buttons: (props: { handleStartTest: () => void; jagEndabledInputs: boolean
                             disabled={jagEndabledInputs || !isTestRunning}
                             variant="danger"
                             block
+                            onClick={handleStopTest}
                         >
                             Stop and get data
                         </Button>

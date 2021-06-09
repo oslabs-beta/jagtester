@@ -14,6 +14,9 @@ import {
 
 import { processData } from './helperFunctions';
 
+import AbortController from 'abort-controller';
+let abortController = new AbortController();
+
 const router = express.Router();
 let timeArrRoutes: {
     // this key is used as the route name
@@ -42,6 +45,7 @@ let pulledDataFromTest: {
     };
 } = {};
 let globalTestConfig: TestConfigData;
+const timeOutArray: NodeJS.Timeout[] = [];
 
 const trackedVariables = {
     isTestRunningInternal: false,
@@ -85,7 +89,19 @@ eventEmitter.on('singleRPSfinished', (rpsGroup: number) => {
 
 eventEmitter.on('allRPSfinished', () => {
     console.log('all rps finished');
+    fetch(globalTestConfig.inputsData[0].targetURL, {
+        headers: {
+            jagtestercommand: Jagtestercommands.endTest.toString(),
+        },
+    });
+    abortController = new AbortController();
     trackedVariables.isTestRunning = false;
+
+    // clear timeouts
+    for (const timeout of timeOutArray) {
+        clearTimeout(timeout);
+    }
+    timeOutArray.splice(0, timeOutArray.length);
 
     // getting the average response time, since we had the total response times added together
     for (const route in timeArrRoutes) {
@@ -114,10 +130,12 @@ eventEmitter.on('allRPSfinished', () => {
         }
     }
 
-    allPulledDataFromTest.push({
-        testTime: Date.now(),
-        testData: pulledDataFromTest,
-    });
+    if (Object.keys(pulledDataFromTest).length > 0) {
+        allPulledDataFromTest.push({
+            testTime: Date.now(),
+            testData: pulledDataFromTest,
+        });
+    }
 });
 
 const agent = new http.Agent({ keepAlive: true });
@@ -132,6 +150,7 @@ const sendRequests = (
     const sendFetch = (reqId: number) => {
         fetch(targetURL, {
             agent,
+            signal: abortController.signal,
             headers: {
                 jagtestercommand: Jagtestercommands.running.toString(),
                 jagtesterreqid: reqId.toString(),
@@ -151,12 +170,18 @@ const sendRequests = (
                         : 0;
                 }
             })
-            .catch(() => {
-                const resRoute = new URL(targetURL).pathname;
-                timeArrRoutes[resRoute][rpsGroup].errorCount++;
-                errorCount++;
-                if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
-                    eventEmitter.emit('singleRPSfinished', rpsGroup);
+            .catch((error) => {
+                if (error.name === 'AbortError') {
+                    if (trackedVariables.isTestRunning) {
+                        eventEmitter.emit('allRPSfinished');
+                    }
+                } else {
+                    const resRoute = new URL(targetURL).pathname;
+                    timeArrRoutes[resRoute][rpsGroup].errorCount++;
+                    errorCount++;
+                    if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
+                        eventEmitter.emit('singleRPSfinished', rpsGroup);
+                    }
                 }
             });
     };
@@ -164,10 +189,11 @@ const sendRequests = (
     // outer for loop to run for every second and set timeouts for after that second
     for (let j = 0; j < secondsToTest; j++) {
         for (let i = 0; i < rpsActual; i++) {
-            setTimeout(
+            const timeout = setTimeout(
                 sendFetch.bind(this, i + j * rpsActual),
                 Math.floor(Math.random() * 1000 + 1000 * j)
             );
+            timeOutArray.push(timeout);
         }
     }
 };
@@ -269,6 +295,10 @@ router.get('/getlogs', (req, res) => {
 
 router.get('/saveddata', (req, res) => {
     res.json(allPulledDataFromTest);
+});
+router.get('/stopTest', (req, res) => {
+    abortController.abort();
+    res.sendStatus(200);
 });
 
 export default router;

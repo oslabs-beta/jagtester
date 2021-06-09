@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction, Application } from 'express';
 import responseTime from 'response-time';
 
-type FunctionType = (app: Application) => (req: Request, res: Response, next: NextFunction) => unknown;
+type FunctionType = (
+    app: Application
+) => (req: Request, res: Response, next: NextFunction) => unknown;
 
 const getMiddleware: FunctionType = (app: Application) => {
     interface CollectedData {
@@ -43,7 +45,11 @@ const getMiddleware: FunctionType = (app: Application) => {
         routeData = {};
     };
 
-    const originalLayerHandleRequest = function handle(req: Request, res: Response, next: NextFunction) {
+    const originalLayerHandleRequest = function handle(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
         const fn = this.handle;
 
         if (fn.length > 3) {
@@ -68,7 +74,9 @@ const getMiddleware: FunctionType = (app: Application) => {
 
         try {
             const fnName = this.name,
-                reqId = req.headers.jagtesterreqid ? req.headers.jagtesterreqid.toString() : undefined,
+                reqId = req.headers.jagtesterreqid
+                    ? req.headers.jagtesterreqid.toString()
+                    : undefined,
                 reqRoute = req.url;
 
             // create a data object in the collected data if it doesnt already exist
@@ -116,9 +124,10 @@ const getMiddleware: FunctionType = (app: Application) => {
             // call the middleware and time it in the next function
             const beforeFunctionCall = Date.now();
             fn(req, res, function () {
-                if (reqId && routeData[reqRoute][reqId]) {
+                if (reqId && routeData[reqRoute] && routeData[reqRoute][reqId]) {
                     const lastElIndex = routeData[reqRoute][reqId].middlewares.length - 1;
-                    routeData[reqRoute][reqId].middlewares[lastElIndex].elapsedTime = Date.now() - beforeFunctionCall;
+                    routeData[reqRoute][reqId].middlewares[lastElIndex].elapsedTime =
+                        Date.now() - beforeFunctionCall;
                 }
                 next();
             });
