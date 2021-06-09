@@ -264,4 +264,10 @@ router.get('/saveddata', (req, res) => {
     res.json(allPulledDataFromTest);
 });
 
-export default router
+export {
+    timeArrRoutes, 
+    pulledDataFromTest, 
+    currentInterval, 
+    globalTestConfig
+}
+export default router;

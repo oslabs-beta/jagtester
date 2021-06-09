@@ -25,9 +25,12 @@ app.get('/', (_, res) => {
 
 app.use('/api', testRouter);
 
-http.listen(port, function () {
+const server = http.listen(port, function () {
     console.log(`listening on ${port}`);
 });
-export { io };
+
+export { io, app };
+export default server;
+
 
 // app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
