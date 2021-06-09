@@ -11,6 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import MenuItem from '@material-ui/core/MenuItem';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 //custom component imports
 import SingleSlider from './SingleSlider';
@@ -176,5 +177,33 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+const TargetInputDisabled: () => JSX.Element = () => {
+    const dispatch = useAppDispatch();
+    const classes = useStyles();
+    const addTargetInput = () => {
+        dispatch(Actions.AddTarget());
+    };
+    return (
+        <Container key={`input${-1}`} className="mb-3 ">
+            <Row>
+                <FormControl disabled className={classes.methodInput}>
+                    <InputLabel>Method</InputLabel>
+                    <Select value={HTTPMethods.GET}>{menuItems}</Select>
+                </FormControl>
+                <FormControl className={classes.methodURL}>
+                    <TextField disabled label="Target URL (localhost)" variant="outlined" />
+                </FormControl>
+                <FormControl disabled className="my-auto">
+                    <AddCircleIcon
+                        color="primary"
+                        className={classes.addIcon}
+                        onClick={addTargetInput}
+                    />
+                </FormControl>
+            </Row>
+        </Container>
+    );
+};
+
 export default TargetInputSingle;
-export { useStyles, menuItems };
+export { TargetInputDisabled };
