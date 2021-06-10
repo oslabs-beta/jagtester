@@ -178,6 +178,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const TargetInputDisabled: () => JSX.Element = () => {
+    const isTestRunning = useAppSelector((state) => state.isTestRunning);
     const dispatch = useAppDispatch();
     const classes = useStyles();
     const addTargetInput = () => {
@@ -197,7 +198,7 @@ const TargetInputDisabled: () => JSX.Element = () => {
                     <AddCircleIcon
                         color="primary"
                         className={classes.addIcon}
-                        onClick={addTargetInput}
+                        onClick={isTestRunning ? undefined : addTargetInput}
                     />
                 </FormControl>
             </Row>
