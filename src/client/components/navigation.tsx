@@ -7,7 +7,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 const Navigation: () => JSX.Element = () => {
     return (
-        <Navbar bg="dark" variant="dark" className="mb-4">
+        <Navbar bg="dark" variant="dark" className="mb-4" sticky="top">
             <Navbar.Brand>Jagtester</Navbar.Brand>
             <Nav className="mr-auto">
                 <LinkContainer exact to="/">

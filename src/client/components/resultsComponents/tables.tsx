@@ -16,13 +16,6 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(middleware: string, elapsedTimes: number[]) {
-  return [middleware, ...elapsedTimes ];
-}
-
-createData('Frozen yoghurt', [159, 6.0, 24, 4.0])
-
-
 type middlewareArray = {
   fnName: string;
   elapsedTime: number;
@@ -76,18 +69,6 @@ const DenseTable: (props: {
     for (const middlewareData of resultArr) {
       rows.push([middlewareData.fnName, ...middlewareData.elapsedTimes.map(e => e.toString())])
     }
-    
-
-
-  // const rows =[
-  //   // createData('middleware', 0,0,0,0,0,0),
-  //   // createData('interval', 0,0,0,0,0,0),
-  //   // // createData(props.routeData),
-  //   // // createData(props.routeData),
-
-
-  // ]
-
   
   return (
     <TableContainer component={Paper}>
@@ -120,32 +101,3 @@ const DenseTable: (props: {
 }
 
 export default DenseTable;
-
-// function createRows(
-  //   testData: PulledDataFromTest
-  //   ){
-  //   // const rows: {
-      
-  //   // }[] = [];
-  //   for(const interval in testData){
-  //     if(interval !== 'default'){
-  //     for(const route in testData[interval]){
-  //       const intervalArr: number[] = [];
-  //       // console.log("testing createRows", interval, testData[interval][route].middlewares
-  //       // console.log(testData[interval][route])
-  //       const test: middlewareArray = testData[interval][route].middlewares as middlewareArray;
-  //       for(const ele of test){
-  //          intervalArr.push(ele.elapsedTime)
-  //         }
-  //       // }
-  //       // console.log(intervalArr)
-  //       // console.log(Array.isArray(test))
-  //       // for(const element of test){
-  //       //   intervalArr.push(element.elapsedTime)
-  //       // }
-  //       // rows.push([createData(interval, ...intervalArr)])
-  //    }
-  //   }
-  //  }
-  //   return rows;
-  // }
