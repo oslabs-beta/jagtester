@@ -6,11 +6,10 @@ import Box from '@material-ui/core/Box';
 
 import { AllPulledDataFromTest } from '../../interfaces';
 import StackedBar from './graphs';
-import DenseTable from './tables'
+import DenseTable from './tables';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -64,7 +63,8 @@ const VerticalTabs: () => JSX.Element = () => {
     const [receivedData, setReceivedData] = React.useState<AllPulledDataFromTest[]>([]);
 
     useEffect(() => {
-        fetch('/api/data-with-timestamp')
+        // fetch('/api/data-with-timestamp')
+        fetch('/api/saveddata')
             .then((res) => res.json())
             .then((data: AllPulledDataFromTest[]) => {
                 setReceivedData(data);
@@ -92,14 +92,16 @@ const VerticalTabs: () => JSX.Element = () => {
                             singleRoute={true}
                             routeName={routeName}
                         />
-                        <DenseTable routeData={singleTest.testData} routeName={routeName}/>
+                        <DenseTable routeData={singleTest.testData} routeName={routeName} />
                     </Col>
                 );
             }
         );
         tabPanelsArr.push(
             <TabPanel value={tabValue} index={i} key={i}>
-                <StackedBar testData={singleTest.testData} singleRoute={false} key={-1} />
+                <Col key={-1}>
+                    <StackedBar testData={singleTest.testData} singleRoute={false} />
+                </Col>
                 {routeNames}
             </TabPanel>
         );

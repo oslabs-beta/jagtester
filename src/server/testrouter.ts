@@ -10,9 +10,10 @@ import {
     AllPulledDataFromTest,
     Jagtestercommands,
     TestConfigData,
+    middlewareSingle,
 } from './interfaces';
 
-import { processData } from './helperFunctions';
+import { processData, processLastMiddleware } from './helperFunctions';
 
 import AbortController from 'abort-controller';
 let abortController = new AbortController();
@@ -115,6 +116,9 @@ eventEmitter.on('allRPSfinished', () => {
             pulledDataFromTest[rps][route].errorCount = timeArrRoutes[route][rps].errorCount;
             pulledDataFromTest[rps][route].successfulResCount =
                 timeArrRoutes[route][rps].successfulResCount;
+
+            //fixing the elapsed time for the last middleware
+            processLastMiddleware(pulledDataFromTest, rps, route);
         }
     }
 
