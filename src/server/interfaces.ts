@@ -47,3 +47,25 @@ export interface TestConfigData {
         jagTesterEnabled: boolean;
     }[];
 }
+
+export interface PulledDataFromTest {
+    [key: string]: {
+        [key: string]: CollectedDataSingle | CollectedData;
+    };
+}
+
+export interface AllPulledDataFromTest {
+    testTime: number;
+    testData: PulledDataFromTest;
+}
+
+export enum HTTPMethods {
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    DELETE = 'DELETE',
+    PATCH = 'PATCH',
+    HEAD = 'HEAD',
+    CONNECT = 'CONNECT',
+    TRACE = 'TRACE',
+}

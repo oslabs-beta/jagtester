@@ -7,7 +7,24 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
 
+import socketIOClient from 'socket.io-client';
+
+import { useAppDispatch } from './state/hooks';
+import Actions from './state/actions/actions';
+
 const App: () => JSX.Element = () => {
+    const socket = socketIOClient();
+    const dispatch = useAppDispatch();
+
+    // start----------------------------------- socket io funcitonality
+    socket.on('singleRPSfinished', (rps: number) => {
+        dispatch(Actions.SetCurRunningRPS(rps));
+    });
+    socket.on('testRunningStateChange', (isTestRunning: boolean) => {
+        dispatch(Actions.SetIsTestRunning(isTestRunning));
+    });
+
+    // end  ----------------------------------- socket io funcitonality
     return (
         <div>
             <BrowserRouter>

@@ -2,12 +2,12 @@ import express from 'express';
 import fetch from 'node-fetch';
 import http from 'http';
 import events from 'events';
-
+import fs from 'fs';
 import { io } from './index';
-
 import {
     CollectedData,
-    CollectedDataSingle,
+    PulledDataFromTest,
+    AllPulledDataFromTest,
     Jagtestercommands,
     TestConfigData,
 } from './interfaces';
@@ -30,20 +30,8 @@ let timeArrRoutes: {
     };
 } = {};
 
-const allPulledDataFromTest: {
-    testTime: number;
-    testData: {
-        [key: string]: {
-            [key: string]: CollectedDataSingle | CollectedData;
-        };
-    };
-}[] = [];
-
-let pulledDataFromTest: {
-    [key: string]: {
-        [key: string]: CollectedDataSingle | CollectedData;
-    };
-} = {};
+const allPulledDataFromTest: AllPulledDataFromTest[] = [];
+let pulledDataFromTest: PulledDataFromTest = {};
 let globalTestConfig: TestConfigData;
 const timeOutArray: NodeJS.Timeout[] = [];
 
@@ -173,6 +161,7 @@ const sendRequests = (
             .catch((error) => {
                 if (error.name === 'AbortError') {
                     if (trackedVariables.isTestRunning) {
+                        trackedVariables.isTestRunning = false;
                         eventEmitter.emit('allRPSfinished');
                     }
                 } else {
@@ -299,6 +288,12 @@ router.get('/saveddata', (req, res) => {
 router.get('/stopTest', (req, res) => {
     abortController.abort();
     res.sendStatus(200);
+});
+router.get('/data-with-timestamp', (req, res) => {
+    const data = fs.readFileSync(__dirname + '/../../src/server/datatimestamps.json', {
+        encoding: 'utf-8',
+    });
+    res.json(JSON.parse(data));
 });
 
 export default router;
