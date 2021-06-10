@@ -1,8 +1,6 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 
 import Buttons from '../components/testConfigComponents/buttonsstartstop';
 import TargetInputs from '../components/testConfigComponents/TargetInputs';
@@ -16,16 +14,9 @@ const TestPage: () => JSX.Element = () => {
                 <TargetInputs />
             </Col>
             <Col>
-                <Tabs defaultActiveKey="load-tester" className="mb-4">
-                    <Tab eventKey="load-tester" title="Load tester">
-                        <RangeSliders />
-                        <Buttons />
-                        <TestProgrss />
-                    </Tab>
-                    <Tab eventKey="stress-tester" title="Stress tester">
-                        stress tester
-                    </Tab>
-                </Tabs>
+                <RangeSliders />
+                <Buttons />
+                <TestProgrss />
             </Col>
         </Row>
     );

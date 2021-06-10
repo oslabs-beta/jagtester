@@ -45,7 +45,8 @@ const Buttons: () => JSX.Element = () => {
     return (
         <Container>
             <Row>
-                <Col>
+                <Col sm={2}></Col>
+                <Col sm={4}>
                     <Button
                         disabled={jagEndabledInputs || isTestRunning}
                         block
@@ -54,7 +55,7 @@ const Buttons: () => JSX.Element = () => {
                         Start testing
                     </Button>
                 </Col>
-                <Col>
+                <Col sm={4}>
                     <Button
                         disabled={jagEndabledInputs || !isTestRunning}
                         variant="danger"
@@ -64,6 +65,7 @@ const Buttons: () => JSX.Element = () => {
                         Stop and get data
                     </Button>
                 </Col>
+                <Col sm={2}></Col>
             </Row>
         </Container>
     );

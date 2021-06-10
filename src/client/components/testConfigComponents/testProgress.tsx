@@ -1,5 +1,6 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 
 import { useAppSelector } from '../../state/hooks';
@@ -50,12 +51,16 @@ const TestProgrss: () => JSX.Element = () => {
     return (
         <Container className="mt-5" fluid>
             <Row>
-                <div className={classes.root}>
-                    <LinearProgressWithLabel
-                        value={calculatedPercentage}
-                        color={isTestRunning ? 'secondary' : 'primary'}
-                    />
-                </div>
+                <Col sm={2}></Col>
+                <Col sm={8}>
+                    <div className={classes.root}>
+                        <LinearProgressWithLabel
+                            value={calculatedPercentage}
+                            color={isTestRunning ? 'secondary' : 'primary'}
+                        />
+                    </div>
+                </Col>
+                <Col sm={2}></Col>
             </Row>
         </Container>
     );
