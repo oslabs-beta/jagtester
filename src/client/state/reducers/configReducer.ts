@@ -1,9 +1,23 @@
 import Actions from '../actions/actions';
 import { createReducer } from '@reduxjs/toolkit';
 
-import { HTTPMethods } from '../../interfaces';
+import { HTTPMethods, AllPulledDataFromTest } from '../../interfaces';
 
-const initialState = {
+const initialState: {
+    valueRPS: number;
+    valueStart: number;
+    valueEnd: number;
+    valueSeconds: number;
+    isTestRunning: boolean;
+    curRunningRPS: number;
+    inputsData: {
+        method: HTTPMethods;
+        targetURL: string;
+        percentage: number;
+        jagTesterEnabled: boolean;
+    }[];
+    receivedData: AllPulledDataFromTest[];
+} = {
     valueRPS: 500,
     valueStart: 100,
     valueEnd: 600,
@@ -24,6 +38,7 @@ const initialState = {
             jagTesterEnabled: false,
         },
     ],
+    receivedData: [],
 };
 
 const configReducer = createReducer(initialState, (builder) => {
@@ -97,6 +112,9 @@ const configReducer = createReducer(initialState, (builder) => {
         })
         .addCase(Actions.DeleteTarget, (state, action) => {
             state.inputsData.splice(action.payload, 1);
+        })
+        .addCase(Actions.SetReceivedData, (state, action) => {
+            state.receivedData = action.payload;
         });
 });
 
