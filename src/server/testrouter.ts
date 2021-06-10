@@ -72,7 +72,9 @@ eventEmitter.on('singleRPSfinished', (rpsGroup: number) => {
             currentInterval++;
             sendRequestsAtRPS(rpsInterval, startRPS, endRPS, testLength, inputsData);
         })
-        .catch((err) => console.log(err)); // TODO add better error handling
+        .catch(() => {
+            eventEmitter.emit('allRPSfinished');
+        }); // TODO add better error handling
 });
 
 eventEmitter.on('allRPSfinished', () => {
@@ -81,6 +83,8 @@ eventEmitter.on('allRPSfinished', () => {
         headers: {
             jagtestercommand: Jagtestercommands.endTest.toString(),
         },
+    }).catch((err) => {
+        io.emit('errorInfo', err.toString());
     });
     abortController = new AbortController();
     trackedVariables.isTestRunning = false;
@@ -97,8 +101,7 @@ eventEmitter.on('allRPSfinished', () => {
             timeArrRoutes[route][rpsGroup].receivedTotalTime =
                 Math.round(
                     (1000 * timeArrRoutes[route][rpsGroup].receivedTotalTime) /
-                        (timeArrRoutes[route][rpsGroup].errorCount +
-                            timeArrRoutes[route][rpsGroup].successfulResCount)
+                        timeArrRoutes[route][rpsGroup].successfulResCount
                 ) / 1000;
         }
     }
@@ -126,6 +129,7 @@ eventEmitter.on('allRPSfinished', () => {
             testTime: Date.now(),
             testData: pulledDataFromTest,
         });
+        io.emit('allRPSfinished', allPulledDataFromTest);
     }
 });
 
@@ -245,7 +249,9 @@ const sendRequestsAtRPS = (
                 );
                 // res.json({ jagtester: true });
             })
-            .catch((err) => console.log(err)); //TODO better error handling
+            .catch(() => {
+                eventEmitter.emit('allRPSfinished');
+            }); //TODO better error handling
     }
 };
 

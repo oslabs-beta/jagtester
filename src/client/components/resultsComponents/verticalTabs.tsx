@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 
-import { AllPulledDataFromTest } from '../../interfaces';
 import StackedBar from './graphs';
 import DenseTable from './tables';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useAppSelector } from '../../state/hooks';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -60,17 +60,7 @@ const VerticalTabs: () => JSX.Element = () => {
         setTabValue(newValue);
     };
 
-    const [receivedData, setReceivedData] = React.useState<AllPulledDataFromTest[]>([]);
-
-    useEffect(() => {
-        // fetch('/api/data-with-timestamp')
-        fetch('/api/saveddata')
-            .then((res) => res.json())
-            .then((data: AllPulledDataFromTest[]) => {
-                setReceivedData(data);
-            })
-            .catch((err) => console.log(err));
-    }, []);
+    const receivedData = useAppSelector((state) => state.receivedData);
 
     //pushing tab data
     const tabsArr: JSX.Element[] = [];

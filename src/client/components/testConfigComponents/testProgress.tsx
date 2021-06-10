@@ -5,32 +5,29 @@ import Container from 'react-bootstrap/Container';
 
 import { useAppSelector } from '../../state/hooks';
 
-import { makeStyles } from '@material-ui/core/styles';
-import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { makeStyles, createStyles, withStyles } from '@material-ui/core/styles';
 
-function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
-    return (
-        <Box display="flex" alignItems="center">
-            <Box width="100%" mr={1}>
-                <LinearProgress variant="determinate" {...props} />
-            </Box>
-            <Box minWidth={35}>
-                <Typography variant="body2" color="textSecondary">{`${Math.round(
-                    props.value
-                )}%`}</Typography>
-            </Box>
-        </Box>
-    );
-}
+const BorderLinearProgress = withStyles(() =>
+    createStyles({
+        root: {
+            height: 10,
+            width: '100%',
+        },
+        colorPrimary: {
+            backgroundColor: '#3D405B',
+        },
+        bar: {
+            backgroundColor: '#3D405B',
+        },
+    })
+)(LinearProgress);
 
 const useStyles = makeStyles({
     root: {
-        width: '100%',
+        flexGrow: 1,
     },
 });
-
 const TestProgrss: () => JSX.Element = () => {
     const classes = useStyles();
     const valueRPS = useAppSelector((state) => state.valueRPS);
@@ -49,18 +46,17 @@ const TestProgrss: () => JSX.Element = () => {
             : Math.round((100 * (curRunningRPS + valueRPS - start)) / (range + valueRPS));
 
     return (
-        <Container className="mt-5" fluid>
-            <Row>
-                <Col sm={2}></Col>
-                <Col sm={8}>
+        <Container className="m-0 p-0 mb-5" fluid>
+            <Row className="m-0 p-0">
+                <Col className="m-0 p-0">
                     <div className={classes.root}>
-                        <LinearProgressWithLabel
+                        <BorderLinearProgress
+                            variant="determinate"
                             value={calculatedPercentage}
                             color={isTestRunning ? 'secondary' : 'primary'}
                         />
                     </div>
                 </Col>
-                <Col sm={2}></Col>
             </Row>
         </Container>
     );

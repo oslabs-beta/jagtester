@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import { HTTPMethods } from '../../interfaces';
+import { HTTPMethods, AllPulledDataFromTest } from '../../interfaces';
 
 enum ActionTypes {
     setValueRPS = 'setValueRPS',
@@ -16,6 +16,8 @@ enum ActionTypes {
     changeTargetPercent = 'changeTargetPercent',
     addTarget = 'addTarget',
     deleteTarget = 'deleteTarget',
+
+    setReceivedData = 'setRedeceivedData',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -39,6 +41,8 @@ const ChangeTargetPercent = createAction<{ index: number; newValue: number }>(
 const AddTarget = createAction(ActionTypes.addTarget);
 const DeleteTarget = createAction<number>(ActionTypes.deleteTarget);
 
+const SetReceivedData = createAction<AllPulledDataFromTest[]>(ActionTypes.setReceivedData);
+
 const Actions = {
     SetValueRPS,
     SetValueStart,
@@ -52,6 +56,7 @@ const Actions = {
     ChangeTargetPercent,
     AddTarget,
     DeleteTarget,
+    SetReceivedData,
 };
 
 export default Actions;
