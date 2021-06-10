@@ -10,7 +10,6 @@ import {
     AllPulledDataFromTest,
     Jagtestercommands,
     TestConfigData,
-    middlewareSingle,
 } from './interfaces';
 
 import { processData, processLastMiddleware } from './helperFunctions';
