@@ -282,7 +282,7 @@ router.get('/getlogs', (req, res) => {
     res.json(pulledDataFromTest);
 });
 
-router.get('/saveddata', (req, res) => {
+router.get('/data-with-timestamp', (req, res) => {
     res.json(allPulledDataFromTest);
 });
 router.get('/stopTest', (req, res) => {

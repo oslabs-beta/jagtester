@@ -60,8 +60,18 @@ const Buttons: () => JSX.Element = () => {
                         variant="danger"
                         block
                         onClick={handleStopTest}
+                        href="/results"
                     >
                         Stop and get data
+                    </Button>
+                </Col>
+                <Col>
+                    <Button
+                        // class="btn btn-default" 
+                        block
+                        href="/results"
+                    >
+                        Get Results
                     </Button>
                 </Col>
             </Row>

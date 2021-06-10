@@ -2,6 +2,7 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { PulledDataFromTest, ChartDataSet } from '../../interfaces';
 
+
 const randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16);
 
 const StackedBar: (props: {
