@@ -108,21 +108,33 @@ const VerticalTabs: () => JSX.Element = () => {
     }
     return (
         <Container fluid>
-            <Row>
-                <Col sm={3}>
-                    <Tabs
-                        orientation="vertical"
-                        variant="standard"
-                        value={tabValue}
-                        onChange={handleChange}
-                        aria-label="Vertical tabs example"
-                        className={classes.tabs}
-                    >
-                        {tabsArr}
-                    </Tabs>
-                </Col>
-                <Col sm={9}>{tabPanelsArr}</Col>
-            </Row>
+            {receivedData.length !== 0 && (
+                <Row>
+                    <Col sm={3}>
+                        <Tabs
+                            orientation="vertical"
+                            variant="standard"
+                            value={tabValue}
+                            onChange={handleChange}
+                            aria-label="Vertical tabs example"
+                            className={classes.tabs}
+                        >
+                            {tabsArr}
+                        </Tabs>
+                    </Col>
+                    <Col sm={9}>{tabPanelsArr}</Col>
+                </Row>
+            )}
+            {receivedData.length === 0 && (
+                <Row>
+                    <Col>
+                        <h1>
+                            No test results are available! Go back to the test page to do some
+                            testing on your server
+                        </h1>{' '}
+                    </Col>
+                </Row>
+            )}
         </Container>
     );
 };

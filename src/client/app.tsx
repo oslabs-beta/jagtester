@@ -1,5 +1,4 @@
 import React from 'react';
-import HomePage from './pages/home';
 import TestPage from './pages/testconfigpage';
 import ResultsPage from './pages/results';
 import Navigation from './components/navigation';
@@ -31,8 +30,7 @@ const App: () => JSX.Element = () => {
                 <Container fluid>
                     <Navigation />
                     <Switch>
-                        <Route path="/" exact component={HomePage} />
-                        <Route path="/test" exact component={TestPage} />
+                        <Route path="/" exact component={TestPage} />
                         <Route path="/results" exact component={ResultsPage} />
                     </Switch>
                 </Container>

@@ -15,13 +15,13 @@ const initialState = {
             method: HTTPMethods.GET,
             targetURL: 'http://localhost:3030',
             percentage: 20,
-            jagTesterEnabled: true,
+            jagTesterEnabled: false,
         },
         {
             method: HTTPMethods.GET,
             targetURL: 'http://localhost:3030/testroute',
             percentage: 80,
-            jagTesterEnabled: true,
+            jagTesterEnabled: false,
         },
     ],
 };

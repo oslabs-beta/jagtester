@@ -11,10 +11,7 @@ const Navigation: () => JSX.Element = () => {
             <Navbar.Brand>Jagtester</Navbar.Brand>
             <Nav className="mr-auto">
                 <LinkContainer exact to="/">
-                    <Nav.Link>Home</Nav.Link>
-                </LinkContainer>
-                <LinkContainer exact to="/test">
-                    <Nav.Link>Test Page</Nav.Link>
+                    <Nav.Link>Test</Nav.Link>
                 </LinkContainer>
                 <LinkContainer exact to="/results">
                     <Nav.Link>Results</Nav.Link>
