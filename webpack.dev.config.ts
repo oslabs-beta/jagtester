@@ -55,10 +55,17 @@ const config: Configuration = {
     ],
     devtool: 'inline-source-map',
     devServer: {
+        proxy: {
+            '/api': 'http://localhost:5000',
+            '/socket.io/': {
+                target: 'http://localhost:5000',
+                ws: true,
+            },
+        },
         contentBase: path.join(__dirname, 'build'),
         historyApiFallback: true,
         port: 8080,
-        open: true,
+        open: false,
         hot: true,
     },
 };

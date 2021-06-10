@@ -1,16 +1,18 @@
 {
     "compilerOptions": {
+        "rootDir": ".",
         "module": "commonjs",
         "esModuleInterop": true,
         "target": "ES5",
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": false,
-        "outDir": "dist",
+        "outDir": "./",
         "baseUrl": ".",
         "paths": {
-            "*": ["node_modules/*"]
+            "*": ["../node_modules/*"]
         }
     },
-    "include": ["src/**/*"]
+    "files": ["./index.ts"],
+    "exclude": ["../node_modules/*"]
 }
