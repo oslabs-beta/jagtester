@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 import { AllPulledDataFromTest } from '../../interfaces';
@@ -14,8 +13,8 @@ import Col from 'react-bootstrap/Col';
 
 interface TabPanelProps {
     children?: React.ReactNode;
-    index: any;
-    value: any;
+    index: number;
+    value: number;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -34,7 +33,7 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-function a11yProps(index: any) {
+function a11yProps(index: number) {
     return {
         id: `vertical-tab-${index}`,
         'aria-controls': `vertical-tabpanel-${index}`,
@@ -55,10 +54,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const VerticalTabs: () => JSX.Element = () => {
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
+    const [tabValue, setTabValue] = React.useState(0);
 
     const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
-        setValue(newValue);
+        setTabValue(newValue);
     };
 
     const [receivedData, setReceivedData] = React.useState<AllPulledDataFromTest[]>([]);
@@ -96,7 +95,7 @@ const VerticalTabs: () => JSX.Element = () => {
             }
         );
         tabPanelsArr.push(
-            <TabPanel value={value} index={i} key={i}>
+            <TabPanel value={tabValue} index={i} key={i}>
                 <StackedBar testData={singleTest.testData} singleRoute={false} key={-1} />
                 {routeNames}
             </TabPanel>
@@ -109,7 +108,7 @@ const VerticalTabs: () => JSX.Element = () => {
                     <Tabs
                         orientation="vertical"
                         variant="standard"
-                        value={value}
+                        value={tabValue}
                         onChange={handleChange}
                         aria-label="Vertical tabs example"
                         className={classes.tabs}

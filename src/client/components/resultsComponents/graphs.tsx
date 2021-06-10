@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { PulledDataFromTest, ChartDataSet } from '../../interfaces';
 
@@ -127,50 +127,6 @@ const StackedBar: (props: {
         labels: rpsArr,
         datasets: dataSetArray,
     };
-    // };
-    // const chart = ( testData: PulledDataFromTest ) => {
-    //     const dataSetArray: ChartDataSet[] = [];
-    //     const rpsArr: string[] = [];
-    //     console.log(dataSetArray);
-
-    //     //this object will have property of each route, with an array of recieved times
-    //     const resultObj: any = {};
-
-    //     //TODO: create an result OBJ for errors
-
-    //     Object.keys(testData).forEach((key) => {
-    //         if (key != 'default') {
-    //             rpsArr.push(key);
-    //             // then for each key, pull the route as a label
-    //             //add to object as a property
-    //             //then grab recieved time and put in an array for value in onj
-    //             Object.keys(testData[key]).forEach((route) => {
-    //                 if (!resultObj[route]) {
-    //                     resultObj[route] = [];
-    //                     resultObj[route].push(testData[key][route].receivedTime);
-    //                 } else {
-    //                     resultObj[route].push(testData[key][route].receivedTime);
-    //                 }
-    //             });
-    //         }
-    //     });
-
-    //     //create a background color array?
-    //     //have them select color scheme? or colors per route?
-
-    //     //loop through the resultObj to create the dataset array on objs per route/ property
-    //     Object.keys(resultObj).forEach((route) => {
-    //         dataSetArray.push({
-    //             type: 'bar',
-    //             label: route,
-    //             data: resultObj[route],
-    //             backgroundColor: ['rgba(74, 178, 152, 0.91)'],
-    //             borderWidth: 0,
-    //         });
-    //     });
-
-    //     setChartData({ labels: rpsArr, datasets: dataSetArray });
-    // };
 
     return (
         <div className="Chart">
