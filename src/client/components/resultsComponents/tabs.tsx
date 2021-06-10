@@ -50,18 +50,26 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-export default function VerticalTabs() {
+
+//iterate through test results
+
+
+export default function VerticalTabs(): JSX.Element {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
-
+    
     const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
         setValue(newValue);
     };
-
+    
+    
+    
     return (
         <div className={classes.root}>
             <Tabs
                 orientation="vertical"
+                //TODO - updated back to have scroll to see all results
+                //need to figure out how to show all without scroll
                 variant="standard"
                 value={value}
                 onChange={handleChange}
@@ -77,7 +85,7 @@ export default function VerticalTabs() {
                 <Tab label="Item Seven" {...a11yProps(6)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-                Item One
+                Item 1
             </TabPanel>
             <TabPanel value={value} index={1}>
                 Item Two

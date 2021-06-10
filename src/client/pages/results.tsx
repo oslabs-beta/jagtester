@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import StackedBar from '../components/resultsComponents/graphs';
 import * as data from '../components/resultsComponents/data-updated.json';
+// import MiddlewareGraph from '../components/resultsComponents/middlewareGraph'
 
 import VerticalTabs from '../components/resultsComponents/tabs';
 
@@ -24,17 +25,19 @@ const ResultsPage: () => JSX.Element = () => {
         <Container>
             <Row>
                 <Col xs={3}>
-                    {/* pass down only the routes */}
+                    {/* pass down only the routes
                     <h1>Route Results</h1>
-                    Test 1
+                    Test 1 */}
+                     <Row>
+                        <VerticalTabs />
+                     </Row>
                 </Col>
                 <Col>
                     <StackedBar testData={data} />
+                    {/* <MiddlewareGraph testData={data} /> */}
                 </Col>
             </Row>
-            <Row>
-                <VerticalTabs />
-            </Row>
+
         </Container>
     );
 };
