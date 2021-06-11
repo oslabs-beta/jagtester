@@ -16,9 +16,10 @@ const useStyles = makeStyles({
     },
 });
 
-const DenseTable: (props: { routeData: PulledDataFromTest; routeName: string }) => JSX.Element = ({
+const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string; singleRoute: boolean }) => JSX.Element = ({
     routeData,
     routeName,
+    singleRoute
 }) => {
     const classes = useStyles();
 
@@ -29,30 +30,67 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName: string }) 
         elapsedTimes: number[];
     }[] = [];
 
+    const rows: any[][] = [];
+    let rowsHeaders: string[] = [];
+
     //pushing rps to an array
     Object.keys(routeData).forEach((rps) => {
         rpsArr.push(rps);
     });
 
-    // pushing function names of the first rps group at routenmae
-    routeData[rpsArr[0]][routeName as string].middlewares.forEach((middlewareObj) => {
-        resultArr.push({ fnName: middlewareObj.fnName, elapsedTimes: [] });
-    });
-
-    // pushing all the elapsed times for each route from the all rps groups
-    resultArr.forEach((middlewareObj, i) => {
-        Object.keys(routeData).forEach((rps) => {
-            middlewareObj.elapsedTimes.push(
-                routeData[rps][routeName as string].middlewares[i].elapsedTime
-            );
+    if(!singleRoute){
+        // pushing function names of the first rps group at routenmae
+        routeData[rpsArr[0]][routeName as string].middlewares.forEach((middlewareObj) => {
+            resultArr.push({ fnName: middlewareObj.fnName, elapsedTimes: [] });
         });
-    });
-    const rows: string[][] = [];
-    const rowsHeaders: string[] = ['Middleware of ' + routeName, ...rpsArr];
-    for (const middlewareData of resultArr) {
-        rows.push([middlewareData.fnName, ...middlewareData.elapsedTimes.map((e) => e.toString())]);
-    }
 
+        // pushing all the elapsed times for each route from the all rps groups
+        resultArr.forEach((middlewareObj, i) => {
+            Object.keys(routeData).forEach((rps) => {
+                middlewareObj.elapsedTimes.push(
+                    routeData[rps][routeName as string].middlewares[i].elapsedTime
+                );
+            });
+        });
+        rowsHeaders = ['Middleware of ' + routeName, ...rpsArr];
+        for (const middlewareData of resultArr) {
+            rows.push([middlewareData.fnName, ...middlewareData.elapsedTimes.map((e) => e.toString())]);
+        }
+    }else {
+        const resultObj: {
+            [key: string]: {
+                receivedTimes: number[];
+                successfulCounts: number[];
+                errorCounts: number[];
+            };
+        } = {};
+        
+        Object.keys(routeData).forEach((rps) => {
+            rpsArr.push(rps);
+            // then for each key, pull the route as a label
+            //add to object as a property
+            //then grab recieved time and put in an array for value in onj
+            Object.keys(routeData[rps]).forEach((route) => {
+                if (!resultObj[route]) {
+                    resultObj[route] = {
+                        receivedTimes: [],
+                        successfulCounts: [],
+                        errorCounts: [],
+                    };
+                }
+                resultObj[route].receivedTimes.push(routeData[rps][route].receivedTime as number);
+                resultObj[route].errorCounts.push(routeData[rps][route].errorCount as number);
+                resultObj[route].successfulCounts.push(routeData[rps][route].successfulResCount as number)
+            })
+          });
+
+        rowsHeaders = ['', ...rpsArr];
+        for (const route in resultObj) {
+            for(const rowData in resultObj[route]){
+                rows.push(resultObj[route as string][rowData] as number[]);
+            }
+        }
+    }
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} size="small" aria-label="a dense table">

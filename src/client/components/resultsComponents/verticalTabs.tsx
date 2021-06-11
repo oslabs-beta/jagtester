@@ -82,7 +82,7 @@ const VerticalTabs: () => JSX.Element = () => {
                             singleRoute={true}
                             routeName={routeName}
                         />
-                        <DenseTable routeData={singleTest.testData} routeName={routeName} />
+                        <DenseTable routeData={singleTest.testData} routeName={routeName} singleRoute={true} />
                     </Col>
                 );
             }
@@ -91,6 +91,7 @@ const VerticalTabs: () => JSX.Element = () => {
             <TabPanel value={tabValue} index={i} key={i}>
                 <Col key={-1}>
                     <StackedBar testData={singleTest.testData} singleRoute={false} />
+                    <DenseTable routeData={singleTest.testData} singleRoute={false} />
                 </Col>
                 {routeNames}
             </TabPanel>
