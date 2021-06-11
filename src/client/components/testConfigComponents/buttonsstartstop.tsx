@@ -66,7 +66,7 @@ const Buttons: () => JSX.Element = () => {
                         Stop and get data
                     </Button>
                 </Col>
-                <Col>
+                {/* <Col sm={4}>
                     <Button
                         // class="btn btn-default" 
                         block
@@ -74,7 +74,7 @@ const Buttons: () => JSX.Element = () => {
                     >
                         Get Results
                     </Button>
-                </Col>
+                </Col> */}
                 <Col sm={2}></Col>
             </Row>
         </Container>
