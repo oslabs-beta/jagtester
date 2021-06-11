@@ -74,7 +74,6 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
     }
     return (
         <Container>
-            <Row className='my-2'>
         <TableContainer component={Paper}>
         <Table className={classes.table} size="small" aria-label="a dense table">
             <TableHead>
@@ -106,43 +105,36 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
                 ))}
             </TableBody>
         </Table>
-
-        </TableContainer>
-        </Row>
-
-        <Row className='my-2'>
-        <TableContainer component={Paper}>
-        <Table className={classes.table} size="small" aria-label="a dense table">
-                <TableHead>
-                    <TableRow>
-                        {rowsHeaders2.map((rps, i) => (
-                            <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'}>
-                                {i === 0 ? rps : ``}
-                            </TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows2.map((row, i) => (
-                        <TableRow key={`table-${i}`}>
-                            {row.map((ele, j) => {
-                                return j === 0 ? (
-                                    <TableCell key={`cell-${j}`} component="th" scope="row">
-                                        {ele}
-                                    </TableCell>
-                                ) : (
-                                    <TableCell
-                                        align="right"
-                                        key={`cell-${j}`}
-                                    >{`${ele}`}</TableCell>
-                                );
-                            })}
+            <Table className={classes.table} size="small" aria-label="a dense table">
+                    <TableHead>
+                        <TableRow>
+                            {rowsHeaders2.map((rps, i) => (
+                                <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'} height={"30px"}>
+                                    {i === 0 ? rps : ``}
+                                </TableCell>
+                            ))}
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-        </Row>
+                    </TableHead>
+                    <TableBody>
+                        {rows2.map((row, i) => (
+                            <TableRow key={`table-${i}`}>
+                                {row.map((ele, j) => {
+                                    return j === 0 ? (
+                                        <TableCell key={`cell-${j}`} component="th" scope="row">
+                                            {ele}
+                                        </TableCell>
+                                    ) : (
+                                        <TableCell
+                                            align="right"
+                                            key={`cell-${j}`}
+                                        >{`${ele}`}</TableCell>
+                                    );
+                                })}
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </Container>
     );
 };
