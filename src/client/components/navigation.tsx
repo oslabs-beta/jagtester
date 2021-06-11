@@ -7,14 +7,11 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 const Navigation: () => JSX.Element = () => {
     return (
-        <Navbar bg="dark" variant="dark" className="mb-4">
+        <Navbar bg="dark" variant="dark" className="mb-0">
             <Navbar.Brand>Jagtester</Navbar.Brand>
             <Nav className="mr-auto">
                 <LinkContainer exact to="/">
-                    <Nav.Link>Home</Nav.Link>
-                </LinkContainer>
-                <LinkContainer exact to="/test">
-                    <Nav.Link>Test Page</Nav.Link>
+                    <Nav.Link>Test</Nav.Link>
                 </LinkContainer>
                 <LinkContainer exact to="/results">
                     <Nav.Link>Results</Nav.Link>

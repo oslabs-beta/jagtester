@@ -3,14 +3,16 @@ export interface TimeArrInterface {
     recordedTotalTime: number;
 }
 
+export interface middlewareSingle {
+    fnName: string;
+    elapsedTime: number;
+}
+
 export interface CollectedData {
     [key: string]: {
         reqId: string;
         reqRoute: string;
-        middlewares: {
-            fnName: string;
-            elapsedTime: number;
-        }[];
+        middlewares: middlewareSingle[];
     };
 }
 
@@ -23,10 +25,7 @@ export interface CollectedDataSingle {
     RPS?: number;
     reqId?: string;
     reqRoute: string;
-    middlewares: {
-        fnName: string;
-        elapsedTime: number;
-    }[];
+    middlewares: middlewareSingle[];
 }
 
 export enum Jagtestercommands {

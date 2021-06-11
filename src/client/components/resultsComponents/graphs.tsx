@@ -2,8 +2,18 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { PulledDataFromTest, ChartDataSet } from '../../interfaces';
 
-
-const randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16);
+const randomColor = (index: number, totalCount: number) => {
+    const color1 = [224, 122, 95];
+    const color2 = [61, 64, 91];
+    const finalColor = [];
+    for (let i = 0; i < 3; i++) {
+        finalColor.push(
+            Math.floor(color1[i] + (index * (color2[i] - color1[i])) / (totalCount - 1))
+        );
+    }
+    return `rgba(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]}, ${0.5 + Math.random() / 2})`;
+    // return '#' + Math.floor(Math.random() * 16777215).toString(16)
+};
 
 const StackedBar: (props: {
     testData: PulledDataFromTest;
@@ -67,12 +77,12 @@ const StackedBar: (props: {
             });
         });
 
-        for (const middlewareData of resultArr) {
+        for (let i = 0; i < resultArr.length; i++) {
             dataSetArray.push({
                 type: 'bar',
-                label: middlewareData.fnName,
-                data: middlewareData.elapsedTimes,
-                backgroundColor: [randomColor()],
+                label: resultArr[i].fnName,
+                data: resultArr[i].elapsedTimes,
+                backgroundColor: [randomColor(i, resultArr.length)],
                 borderWidth: 0,
             });
         }
@@ -102,8 +112,8 @@ const StackedBar: (props: {
         //have them select color scheme? or colors per route?
 
         //loop through the resultObj to create the dataset array on objs per route/ property
-        Object.keys(resultObj).forEach((route) => {
-            const lineColor = randomColor();
+        Object.keys(resultObj).forEach((route, i) => {
+            const lineColor = randomColor(i, Object.keys(resultObj).length);
             dataSetArray.push({
                 type: 'bar',
                 label: route,
