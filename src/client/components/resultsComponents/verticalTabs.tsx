@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 
-import { AllPulledDataFromTest } from '../../interfaces';
 import StackedBar from './graphs';
-import DenseTable from './tables'
+import DenseTable from './tables';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import { useAppSelector } from '../../state/hooks';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -61,16 +60,7 @@ const VerticalTabs: () => JSX.Element = () => {
         setTabValue(newValue);
     };
 
-    const [receivedData, setReceivedData] = React.useState<AllPulledDataFromTest[]>([]);
-
-    useEffect(() => {
-        fetch('/api/data-with-timestamp')
-            .then((res) => res.json())
-            .then((data: AllPulledDataFromTest[]) => {
-                setReceivedData(data);
-            })
-            .catch((err) => console.log(err));
-    }, []);
+    const receivedData = useAppSelector((state) => state.receivedData);
 
     //pushing tab data
     const tabsArr: JSX.Element[] = [];
@@ -92,35 +82,49 @@ const VerticalTabs: () => JSX.Element = () => {
                             singleRoute={true}
                             routeName={routeName}
                         />
-                        <DenseTable routeData={singleTest.testData} routeName={routeName}/>
+                        <DenseTable routeData={singleTest.testData} routeName={routeName} />
                     </Col>
                 );
             }
         );
         tabPanelsArr.push(
             <TabPanel value={tabValue} index={i} key={i}>
-                <StackedBar testData={singleTest.testData} singleRoute={false} key={-1} />
+                <Col key={-1}>
+                    <StackedBar testData={singleTest.testData} singleRoute={false} />
+                </Col>
                 {routeNames}
             </TabPanel>
         );
     }
     return (
         <Container fluid>
-            <Row>
-                <Col sm={3}>
-                    <Tabs
-                        orientation="vertical"
-                        variant="standard"
-                        value={tabValue}
-                        onChange={handleChange}
-                        aria-label="Vertical tabs example"
-                        className={classes.tabs}
-                    >
-                        {tabsArr}
-                    </Tabs>
-                </Col>
-                <Col sm={9}>{tabPanelsArr}</Col>
-            </Row>
+            {receivedData.length !== 0 && (
+                <Row>
+                    <Col sm={3}>
+                        <Tabs
+                            orientation="vertical"
+                            variant="standard"
+                            value={tabValue}
+                            onChange={handleChange}
+                            aria-label="Vertical tabs example"
+                            className={classes.tabs}
+                        >
+                            {tabsArr}
+                        </Tabs>
+                    </Col>
+                    <Col sm={9}>{tabPanelsArr}</Col>
+                </Row>
+            )}
+            {receivedData.length === 0 && (
+                <Row>
+                    <Col>
+                        <h1>
+                            No test results are available! Go back to the test page to do some
+                            testing on your server
+                        </h1>{' '}
+                    </Col>
+                </Row>
+            )}
         </Container>
     );
 };
