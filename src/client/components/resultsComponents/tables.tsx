@@ -1,4 +1,6 @@
 import React from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,10 +18,9 @@ const useStyles = makeStyles({
     },
 });
 
-const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string; singleRoute: boolean }) => JSX.Element = ({
+const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string }) => JSX.Element = ({
     routeData,
     routeName,
-    singleRoute
 }) => {
     const classes = useStyles();
 
@@ -30,116 +31,99 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string; s
         elapsedTimes: number[];
     }[] = [];
 
-    const rows: any[][] = [];
-    let rowsHeaders: string[] = [];
-
     //pushing rps to an array
     Object.keys(routeData).forEach((rps) => {
         rpsArr.push(rps);
     });
 
-    if(singleRoute){
-        // pushing function names of the first rps group at routenmae
-        routeData[rpsArr[0]][routeName as string].middlewares.forEach((middlewareObj) => {
-            resultArr.push({ fnName: middlewareObj.fnName, elapsedTimes: [] });
-        });
+    // pushing function names of the first rps group at routenmae
+    routeData[rpsArr[0]][routeName as string].middlewares.forEach((middlewareObj) => {
+        resultArr.push({ fnName: middlewareObj.fnName, elapsedTimes: [] });
+    });
 
-        // pushing all the elapsed times for each route from the all rps groups
-        resultArr.forEach((middlewareObj, i) => {
-            Object.keys(routeData).forEach((rps) => {
-                middlewareObj.elapsedTimes.push(
-                    routeData[rps][routeName as string].middlewares[i].elapsedTime
-                );
-            });
+    // pushing all the elapsed times for each route from the all rps groups
+    resultArr.forEach((middlewareObj, i) => {
+        Object.keys(routeData).forEach((rps) => {
+            middlewareObj.elapsedTimes.push(
+                routeData[rps][routeName as string].middlewares[i].elapsedTime
+            );
         });
-        rowsHeaders = ['Middleware of ' + routeName, ...rpsArr];
-        for (const middlewareData of resultArr) {
-            rows.push([middlewareData.fnName, ...middlewareData.elapsedTimes.map((e) => e.toString())]);
-        }
+    });
+    const rows: string[][] = [];
+    const rows2: any[][] = [[
+        'Total Response Time'
+    ],[
+        'Successful Response count'
+    ],[
+        'Error count'
+    ],[
+        'Error %'
+    ]];
+    for (const rps of rpsArr) {
+        rows2[0].push(routeData[rps][routeName as string].receivedTime + " ms");
+        rows2[1].push(routeData[rps][routeName as string].successfulResCount);
+        rows2[2].push(routeData[rps][routeName as string].errorCount);
+        const errorPercent: number = 100*(((routeData[rps][routeName as string].errorCount as number) / (routeData[rps][routeName as string].successfulResCount as number)))
+        rows2[3].push(errorPercent.toFixed(2) + "%")
     }
-    //     const resultObj: {
-    //         [key: string]: {
-    //             receivedTimes: number[];
-    //             successfulCounts: number[];
-    //             errorCounts: number[];
-    //         };
-    //     } = {};
-        
-    //     Object.keys(routeData).forEach((rps) => {
-    //         rpsArr.push(rps);
-    //         // then for each key, pull the route as a label
-    //         //add to object as a property
-    //         //then grab recieved time and put in an array for value in onj
-    //         Object.keys(routeData[rps]).forEach((route) => {
-    //             if (!resultObj[route]) {
-    //                 resultObj[route] = {
-    //                     receivedTimes: [],
-    //                     successfulCounts: [],
-    //                     errorCounts: [],
-    //                 };
-    //             }
-    //             resultObj[route].receivedTimes.push(routeData[rps][route].receivedTime as number);
-    //             resultObj[route].errorCounts.push(routeData[rps][route].errorCount as number);
-    //             resultObj[route].successfulCounts.push(routeData[rps][route].successfulResCount as number)
-    //         })
-    //       });
 
-    //     rowsHeaders = ['', ...rpsArr];
-    //     // for (const route in resultObj) {
-    //     //     for(const rowData in resultObj[route]){
-    //     //         rows.push([resultObj[route][rowData].map((e: number) => e.toString())]);
-    //     //     }
-    //     // }
-    //     return (
-    //         <TableContainer component={Paper}>
-    //             <Table className={classes.table} size="small" aria-label="a dense table">
-    //                 <TableHead>
-    //                     <TableRow></TableRow>
-    //                     <TableRow>
-    //                         {rowsHeaders.map((rps, i) => (
-    //                             <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'}>
-    //                                 {i === 0 ? rps : `Interval at ${rps} RPS`}
-    //                             </TableCell>
-    //                         ))}
-    //                     </TableRow>
-    //                 </TableHead>
-    //                 <TableBody>
-    //                     {rows.map((row, i) => (
-    //                         <TableRow key={`table-${i}`}>
-    //                             {row.map((ele, j) => {
-    //                                 return j === 0 ? (
-    //                                     <TableCell key={`cell-${j}`} component="th" scope="row">
-    //                                         {ele}
-    //                                     </TableCell>
-    //                                 ) : (
-    //                                     <TableCell
-    //                                         align="right"
-    //                                         key={`cell-${j}`}
-    //                                     >{`${ele} ms`}</TableCell>
-    //                                 );
-    //                             })}
-    //                         </TableRow>
-    //                     ))}
-    //                 </TableBody>
-    //             </Table>
-    //         </TableContainer>
-    //     );
-    // }
+    const rowsHeaders: string[] = [] = ['Middleware of ' + routeName, ...rpsArr];
+    const rowsHeaders2: string[] = [] = ['', ...rpsArr]
+    for (const middlewareData of resultArr) {
+        rows.push([middlewareData.fnName, ...middlewareData.elapsedTimes.map((e) => e.toString())]);
+    }
     return (
+        <Container>
+            <Row className='my-2'>
         <TableContainer component={Paper}>
-            <Table className={classes.table} size="small" aria-label="a dense table">
+        <Table className={classes.table} size="small" aria-label="a dense table">
+            <TableHead>
+                <TableRow>
+                    {rowsHeaders.map((rps, i) => (
+                        <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'}>
+                            {i === 0 ? rps : `RPS - ${rps} `}
+                        </TableCell>
+                    ))}
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {rows.map((row, i) => (
+                    <TableRow key={`table-${i}`}>
+                        {row.map((ele, j) => {
+                            return j === 0 ? (
+                                <TableCell key={`cell-${j}`} component="th" scope="row">
+                                    {ele}
+                                </TableCell>
+                            ) : (
+                                <TableCell
+                                    align="right"
+                                    key={`cell-${j}`}
+                                >{`${ele} ms`}</TableCell>
+                            );
+                        })}
+                    </TableRow>
+                    
+                ))}
+            </TableBody>
+        </Table>
+
+        </TableContainer>
+        </Row>
+
+        <Row className='my-2'>
+        <TableContainer component={Paper}>
+        <Table className={classes.table} size="small" aria-label="a dense table">
                 <TableHead>
-                    <TableRow></TableRow>
                     <TableRow>
-                        {rowsHeaders.map((rps, i) => (
+                        {rowsHeaders2.map((rps, i) => (
                             <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'}>
-                                {i === 0 ? rps : `Interval at ${rps} RPS`}
+                                {i === 0 ? rps : ``}
                             </TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row, i) => (
+                    {rows2.map((row, i) => (
                         <TableRow key={`table-${i}`}>
                             {row.map((ele, j) => {
                                 return j === 0 ? (
@@ -150,7 +134,7 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string; s
                                     <TableCell
                                         align="right"
                                         key={`cell-${j}`}
-                                    >{`${ele} ms`}</TableCell>
+                                    >{`${ele}`}</TableCell>
                                 );
                             })}
                         </TableRow>
@@ -158,6 +142,8 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string; s
                 </TableBody>
             </Table>
         </TableContainer>
+        </Row>
+        </Container>
     );
 };
 
