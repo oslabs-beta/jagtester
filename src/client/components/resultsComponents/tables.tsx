@@ -73,7 +73,7 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
         rows.push([middlewareData.fnName, ...middlewareData.elapsedTimes.map((e) => e.toString())]);
     }
     return (
-        <Container>
+        <Container className={'mb-5'}>
         <TableContainer component={Paper}>
         <Table className={classes.table} size="small" aria-label="a dense table">
             <TableHead>
@@ -104,8 +104,7 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
                     
                 ))}
             </TableBody>
-        </Table>
-            <Table className={classes.table} size="small" aria-label="a dense table">
+        
                     <TableHead>
                         <TableRow>
                             {rowsHeaders2.map((rps, i) => (
