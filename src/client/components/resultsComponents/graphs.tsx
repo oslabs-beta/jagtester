@@ -143,6 +143,7 @@ const StackedBar: (props: {
         <div className="Chart">
             <div>
                 <Bar type="undefined" data={chartData} options={chartOptions} />
+                
             </div>
         </div>
     );
