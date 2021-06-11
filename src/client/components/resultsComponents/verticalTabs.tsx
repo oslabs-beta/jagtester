@@ -76,7 +76,7 @@ const VerticalTabs: () => JSX.Element = () => {
         Object.keys(singleTest.testData[Object.keys(singleTest.testData)[0]]).forEach(
             (routeName, j) => {
                 routeNames.push(
-                    <Col key={`col-${j}`}>
+                    <Col key={`col-${j}`} className={"mt-5"}>
                         <StackedBar
                             testData={singleTest.testData}
                             singleRoute={true}
