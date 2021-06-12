@@ -1,13 +1,10 @@
 import React from 'react';
-
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container'
 import TestProgrss from '../components/testConfigComponents/testProgress';
 import { LinkContainer } from 'react-router-bootstrap';
-import SvgComponent from '../img/logo';
 import Asset from '../img/Asset.svg';
-import cloud from '../img/cloud.svg';
 
 const Navigation: () => JSX.Element = () => {
     return (
