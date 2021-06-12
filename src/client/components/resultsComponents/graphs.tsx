@@ -8,10 +8,10 @@ const randomColor = (index: number, totalCount: number) => {
     const finalColor = [];
     for (let i = 0; i < 3; i++) {
         finalColor.push(
-            Math.floor(color1[i] + (index * (color2[i] - color1[i])) / (totalCount - 1))
+            Math.floor(color1[i] + (index * (color2[i] - color1[i])) / (totalCount))
         );
     }
-    return `rgba(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]}, ${0.5 + Math.random() / 2})`;
+    return `rgba(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]}, 0.75)`;
     // return '#' + Math.floor(Math.random() * 16777215).toString(16)
 };
 

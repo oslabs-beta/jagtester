@@ -1,6 +1,5 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -50,7 +49,7 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
         });
     });
     const rows: string[][] = [];
-    const rows2: any[][] = [[
+    const rows2: string[][] = [[
         'Total Response Time'
     ],[
         'Successful Response count'
@@ -61,8 +60,8 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
     ]];
     for (const rps of rpsArr) {
         rows2[0].push(routeData[rps][routeName as string].receivedTime + " ms");
-        rows2[1].push(routeData[rps][routeName as string].successfulResCount);
-        rows2[2].push(routeData[rps][routeName as string].errorCount);
+        rows2[1].push((routeData[rps][routeName as string].successfulResCount as number).toString());
+        rows2[2].push((routeData[rps][routeName as string].errorCount as number).toString());
         const errorPercent: number = 100*(((routeData[rps][routeName as string].errorCount as number) / (routeData[rps][routeName as string].successfulResCount as number)))
         rows2[3].push(errorPercent.toFixed(2) + "%")
     }
