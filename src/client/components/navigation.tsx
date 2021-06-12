@@ -14,6 +14,9 @@ const Navigation: () => JSX.Element = () => {
                     <img src={Asset} 
                     width={"10%"}
                     className="d-inline-flex align-top"
+                    style={{
+                        marginBottom: 1
+                    }}
                     />
                 
                 <Nav className="ml-4 h5">
