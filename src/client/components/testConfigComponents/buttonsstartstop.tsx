@@ -37,9 +37,10 @@ const Buttons: () => JSX.Element = () => {
             method: HTTPMethods.POST,
             headers: new Headers({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(testConfigObj),
-        })
-            .then((res) => console.log('received response, ', res)) // TODO if not jagtester enabled, show error message
-            .catch((err) => console.log(err)); // TODO fix the error handling
+        }).catch((err) => {
+            dispatch(Actions.SetShowModal(true));
+            dispatch(Actions.SetModalError(err.toString()));
+        }); // TODO fix the error handling
     };
 
     return (

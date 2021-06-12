@@ -89,7 +89,7 @@ const VerticalTabs: () => JSX.Element = () => {
         );
         tabPanelsArr.push(
             <TabPanel value={tabValue} index={i} key={i}>
-                <Col key={-1} className={"mb-5"}>
+                <Col key={-1} className={'mb-5'}>
                     <StackedBar testData={singleTest.testData} singleRoute={false} />
                 </Col>
                 {routeNames}
@@ -119,15 +119,16 @@ const VerticalTabs: () => JSX.Element = () => {
                 <Row>
                     <Col>
                         <h1 className="text-center">
-                            Oops! No results are available!<br/>
+                            Oops! No results are available!
+                            <br />
                             Go back and start a test on your server.
-                            </h1>{' '}
-                            <Container fluid>
-                                <Row >
-                                <img 
-                                    src={noresults} 
+                        </h1>{' '}
+                        <Container fluid>
+                            <Row>
+                                <img
+                                    src={noresults}
                                     style={{
-                                        width: '100%',
+                                        width: '75%',
                                         height: 'auto',
                                         padding: '50px'
                                     }}/>

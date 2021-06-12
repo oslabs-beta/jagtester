@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TestPage from './pages/testconfigpage';
 import ResultsPage from './pages/results';
 import Navigation from './components/navigation';
@@ -14,9 +14,6 @@ const App: () => JSX.Element = () => {
     const socket = socketIOClient();
     const dispatch = useAppDispatch();
 
-    const [showModal, setShowModal] = useState(false);
-    const [modalError, setModalError] = useState('');
-
     // start----------------------------------- socket io funcitonality
     socket.on('singleRPSfinished', (rps: number) => {
         dispatch(Actions.SetCurRunningRPS(rps));
@@ -28,8 +25,8 @@ const App: () => JSX.Element = () => {
         dispatch(Actions.SetReceivedData(allPulledDataFromTest));
     });
     socket.on('errorInfo', (errName: string) => {
-        setShowModal(true);
-        setModalError(errName);
+        dispatch(Actions.SetShowModal(true));
+        dispatch(Actions.SetModalError(errName));
     });
 
     // end  ----------------------------------- socket io funcitonality
@@ -42,7 +39,7 @@ const App: () => JSX.Element = () => {
                         <Route path="/" exact component={TestPage} />
                         <Route path="/results" exact component={ResultsPage} />
                     </Switch>
-                    <Modal showModal={showModal} setShowModal={setShowModal} error={modalError} />
+                    <Modal />
                 </Container>
             </BrowserRouter>
         </div>

@@ -37,14 +37,14 @@ const config: Configuration = {
                 test: /\.(png|jp(e*)g|gif)$/,
                 use: [
                     {
-                    loader: 'file-loader',
-                    }
-                ]
+                        loader: 'file-loader',
+                    },
+                ],
             },
             {
                 test: /\.svg$/,
                 use: ['babel-loader', '@svgr/webpack', 'file-loader'],
-            }
+            },
         ],
     },
     resolve: {

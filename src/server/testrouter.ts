@@ -129,8 +129,8 @@ eventEmitter.on('allRPSfinished', () => {
             testTime: Date.now(),
             testData: pulledDataFromTest,
         });
-        io.emit('allRPSfinished', allPulledDataFromTest);
     }
+    io.emit('allRPSfinished', allPulledDataFromTest);
 });
 
 const agent = new http.Agent({ keepAlive: true });
@@ -296,6 +296,10 @@ router.get('/saveddata', (req, res) => {
 });
 router.get('/stopTest', (req, res) => {
     abortController.abort();
+    res.sendStatus(200);
+});
+router.delete('/saveddata', (req, res) => {
+    allPulledDataFromTest.splice(0, allPulledDataFromTest.length);
     res.sendStatus(200);
 });
 router.get('/data-with-timestamp', (req, res) => {
