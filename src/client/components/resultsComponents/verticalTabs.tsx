@@ -76,7 +76,7 @@ const VerticalTabs: () => JSX.Element = () => {
         Object.keys(singleTest.testData[Object.keys(singleTest.testData)[0]]).forEach(
             (routeName, j) => {
                 routeNames.push(
-                    <Col key={`col-${j}`} className={"mt-5"}>
+                    <Col key={`col-${j}`}>
                         <StackedBar
                             testData={singleTest.testData}
                             singleRoute={true}
@@ -89,7 +89,7 @@ const VerticalTabs: () => JSX.Element = () => {
         );
         tabPanelsArr.push(
             <TabPanel value={tabValue} index={i} key={i}>
-                <Col key={-1}>
+                <Col key={-1} className={"mb-5"}>
                     <StackedBar testData={singleTest.testData} singleRoute={false} />
                 </Col>
                 {routeNames}

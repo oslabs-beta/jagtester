@@ -33,6 +33,10 @@ const config: Configuration = {
                     },
                 },
             },
+            {
+                test: /\.svg$/,
+                use: ['babel-loader', '@svgr/webpack', 'file-loader'],
+            }
         ],
     },
     resolve: {
