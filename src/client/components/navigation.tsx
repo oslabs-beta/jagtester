@@ -13,11 +13,13 @@ const Navigation: () => JSX.Element = () => {
     return (
         <Container className="m-0 p-0 mb-5 sticky-top" fluid> 
             <Navbar variant="dark" className="mb-0 pb-0" style={{backgroundColor: "#3D405B"}}>
-            <Navbar.Brand>
-                    <img src={Asset} width={"50%"}/>
-                </Navbar.Brand>
-                <Nav className="ml">
                 
+                    <img src={Asset} 
+                    width={"10%"}
+                    className="d-inline-flex align-top"
+                    />
+                
+                <Nav className="ml-4 h5">
                     <LinkContainer exact to="/">
                         <Nav.Link>Test</Nav.Link>
                     </LinkContainer>
