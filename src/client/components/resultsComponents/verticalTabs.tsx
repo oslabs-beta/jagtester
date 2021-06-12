@@ -123,19 +123,18 @@ const VerticalTabs: () => JSX.Element = () => {
                             <br />
                             Go back and start a test on your server.
                         </h1>{' '}
-                        <Container fluid>
-                            <Row>
+                        <Container className='justify-content-center' fluid>
+                            <Row xs={12}>
                                 <img
                                     src={noresults}
                                     style={{
+                                        margin: 'auto',
                                         width: '75%',
-                                        height: 'auto',
-                                        padding: '50px'
+                                        height: '75%',
                                     }}/>
-
-                                </Row>
+                            </Row>
+                               
                             </Container>
-                        
                     </Col>
                 </Row>
             )}
