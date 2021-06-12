@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction, Application } from 'express';
 import responseTime from 'response-time';
 
+import os from 'os'
+
+
 type FunctionType = (
     app: Application
 ) => (req: Request, res: Response, next: NextFunction) => unknown;
@@ -123,11 +126,13 @@ const getMiddleware: FunctionType = (app: Application) => {
 
             // call the middleware and time it in the next function
             const beforeFunctionCall = Date.now();
+            
             fn(req, res, function () {
                 if (reqId && routeData[reqRoute] && routeData[reqRoute][reqId]) {
                     const lastElIndex = routeData[reqRoute][reqId].middlewares.length - 1;
                     routeData[reqRoute][reqId].middlewares[lastElIndex].elapsedTime =
                         Date.now() - beforeFunctionCall;
+                        console.log(os.cpus());
                 }
                 next();
             });

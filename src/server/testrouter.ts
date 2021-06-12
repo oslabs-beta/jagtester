@@ -15,6 +15,11 @@ import {
 import { processData, processLastMiddleware } from './helperFunctions';
 
 import AbortController from 'abort-controller';
+
+import os from 'os'
+
+
+
 let abortController = new AbortController();
 
 const router = express.Router();
@@ -57,6 +62,7 @@ const eventEmitter = new events.EventEmitter();
 eventEmitter.on('singleRPSfinished', (rpsGroup: number) => {
     io.emit('singleRPSfinished', rpsGroup);
     console.log(`test finished for rps group ${rpsGroup}`);
+    console.log(os.cpus());
     // console.log(timeArrRoutes);
     const { rpsInterval, startRPS, endRPS, testLength, inputsData } = globalTestConfig;
 
