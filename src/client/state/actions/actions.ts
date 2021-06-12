@@ -18,6 +18,9 @@ enum ActionTypes {
     deleteTarget = 'deleteTarget',
 
     setReceivedData = 'setRedeceivedData',
+
+    setShowModal = 'setShowModal',
+    setModalError = 'setModalError',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -43,6 +46,9 @@ const DeleteTarget = createAction<number>(ActionTypes.deleteTarget);
 
 const SetReceivedData = createAction<AllPulledDataFromTest[]>(ActionTypes.setReceivedData);
 
+const SetShowModal = createAction<boolean>(ActionTypes.setShowModal);
+const SetModalError = createAction<string>(ActionTypes.setModalError);
+
 const Actions = {
     SetValueRPS,
     SetValueStart,
@@ -57,6 +63,8 @@ const Actions = {
     AddTarget,
     DeleteTarget,
     SetReceivedData,
+    SetShowModal,
+    SetModalError,
 };
 
 export default Actions;

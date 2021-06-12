@@ -17,6 +17,8 @@ const initialState: {
         jagTesterEnabled: boolean;
     }[];
     receivedData: AllPulledDataFromTest[];
+    showModal: boolean;
+    modalError: string;
 } = {
     valueRPS: 500,
     valueStart: 100,
@@ -39,6 +41,8 @@ const initialState: {
         },
     ],
     receivedData: [],
+    showModal: false,
+    modalError: '',
 };
 
 const configReducer = createReducer(initialState, (builder) => {
@@ -115,6 +119,12 @@ const configReducer = createReducer(initialState, (builder) => {
         })
         .addCase(Actions.SetReceivedData, (state, action) => {
             state.receivedData = action.payload;
+        })
+        .addCase(Actions.SetShowModal, (state, action) => {
+            state.showModal = action.payload;
+        })
+        .addCase(Actions.SetModalError, (state, action) => {
+            state.modalError = action.payload;
         });
 });
 
