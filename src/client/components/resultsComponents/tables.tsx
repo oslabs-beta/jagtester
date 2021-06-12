@@ -104,8 +104,6 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
                     
                 ))}
             </TableBody>
-        </Table>
-            <Table className={classes.table} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
                             {rowsHeaders2.map((rps, i) => (
