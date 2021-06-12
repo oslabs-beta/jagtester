@@ -3,7 +3,6 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-
 import StackedBar from './graphs';
 import DenseTable from './tables';
 import Container from 'react-bootstrap/Container';
