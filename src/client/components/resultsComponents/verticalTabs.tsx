@@ -9,7 +9,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useAppSelector } from '../../state/hooks';
-import noresults from '../../img/noresults-r.png';
+import noresults from '../../img/noresults.png'
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -123,17 +123,18 @@ const VerticalTabs: () => JSX.Element = () => {
                             <br />
                             Go back and start a test on your server.
                         </h1>{' '}
-                        <Container fluid>
-                            <Row>
+                        <Container className='justify-content-center' fluid>
+                            <Row xs={12}>
                                 <img
                                     src={noresults}
                                     style={{
-                                        width: '100%',
-                                        height: 'auto',
-                                    }}
-                                />
+                                        margin: 'auto',
+                                        width: '75%',
+                                        height: '75%',
+                                    }}/>
                             </Row>
-                        </Container>
+                               
+                            </Container>
                     </Col>
                 </Row>
             )}
