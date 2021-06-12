@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { makeStyles } from '@material-ui/core/styles';
-import { useAppDispatch } from '../../state/hooks';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import Actions from '../../state/actions/actions';
 import { HTTPMethods } from '../../interfaces';
 
@@ -22,6 +22,8 @@ const useStyles = makeStyles(() => ({
 const TabLabels: (props: { index: number; time: number }) => JSX.Element = ({ index, time }) => {
     const classes = useStyles();
     const dispatch = useAppDispatch();
+    const receivedData = useAppSelector((state) => state.receivedData);
+
     const handleDelete = () => {
         dispatch(Actions.DeleteSingleData(index));
         dispatch(Actions.SetResultsTabValue(index));
@@ -32,16 +34,32 @@ const TabLabels: (props: { index: number; time: number }) => JSX.Element = ({ in
             dispatch(Actions.SetModalError(err.toString()));
         });
     };
+
+    const handleExport = () => {
+        const element = document.createElement('a');
+        element.setAttribute(
+            'href',
+            'data:application/json;charset=utf-8,' +
+                encodeURIComponent(JSON.stringify(receivedData[index], null, 4))
+        );
+        element.setAttribute(
+            'download',
+            `jagtester-export-single-${new Date(
+                receivedData[index].testTime
+            ).toLocaleString()}.json`
+        );
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    };
+
     return (
         <Row className="align-items-center">
             <Col>{new Date(time).toLocaleString()}</Col>
             <Col>
                 <DeleteIcon color="primary" className={classes.deleteIcon} onClick={handleDelete} />
-                <GetAppIcon
-                    color="primary"
-                    className={classes.deleteIcon}
-                    onClick={() => console.log('test')}
-                />
+                <GetAppIcon color="primary" className={classes.deleteIcon} onClick={handleExport} />
             </Col>
         </Row>
     );

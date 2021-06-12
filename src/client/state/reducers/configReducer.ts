@@ -132,7 +132,10 @@ const configReducer = createReducer(initialState, (builder) => {
             state.receivedData.splice(action.payload, 1);
         })
         .addCase(Actions.SetResultsTabValue, (state, action) => {
-            state.resultsTabValue = Math.min(action.payload, state.receivedData.length - 1);
+            state.resultsTabValue = Math.max(
+                Math.min(action.payload, state.receivedData.length - 1),
+                0
+            );
         });
 });
 
