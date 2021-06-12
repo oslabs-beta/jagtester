@@ -10,6 +10,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useAppSelector } from '../../state/hooks';
+import noresults from '../../img/noresults-r.png'
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -118,10 +119,22 @@ const VerticalTabs: () => JSX.Element = () => {
             {receivedData.length === 0 && (
                 <Row>
                     <Col>
-                        <h1>
-                            No test results are available! Go back to the test page to do some
-                            testing on your server
-                        </h1>{' '}
+                        <h1 className="text-center">
+                            Oops! No results are available!<br/>
+                            Go back and start a test on your server.
+                            </h1>{' '}
+                            <Container fluid>
+                                <Row >
+                                <img 
+                                    src={noresults} 
+                                    style={{
+                                        width: '100%',
+                                        height: 'auto'
+                                    }}/>
+
+                                </Row>
+                            </Container>
+                        
                     </Col>
                 </Row>
             )}
