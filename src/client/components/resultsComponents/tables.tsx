@@ -1,6 +1,5 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -50,64 +49,69 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
         });
     });
     const rows: string[][] = [];
-    const rows2: any[][] = [[
-        'Total Response Time'
-    ],[
-        'Successful Response count'
-    ],[
-        'Error count'
-    ],[
-        'Error %'
-    ]];
+    const rows2: string[][] = [
+        ['Total Response Time'],
+        ['Successful Response count'],
+        ['Error count'],
+        ['Error %'],
+    ];
     for (const rps of rpsArr) {
-        rows2[0].push(routeData[rps][routeName as string].receivedTime + " ms");
-        rows2[1].push(routeData[rps][routeName as string].successfulResCount);
-        rows2[2].push(routeData[rps][routeName as string].errorCount);
-        const errorPercent: number = 100*(((routeData[rps][routeName as string].errorCount as number) / (routeData[rps][routeName as string].successfulResCount as number)))
-        rows2[3].push(errorPercent.toFixed(2) + "%")
+        rows2[0].push(routeData[rps][routeName as string].receivedTime + ' ms');
+        rows2[1].push(
+            (routeData[rps][routeName as string].successfulResCount as number).toString()
+        );
+        rows2[2].push((routeData[rps][routeName as string].errorCount as number).toString());
+        const errorPercent: number =
+            100 *
+            ((routeData[rps][routeName as string].errorCount as number) /
+                (routeData[rps][routeName as string].successfulResCount as number));
+        rows2[3].push(errorPercent.toFixed(2) + '%');
     }
 
-    const rowsHeaders: string[] = [] = ['Middleware of ' + routeName, ...rpsArr];
-    const rowsHeaders2: string[] = [] = ['', ...rpsArr]
+    const rowsHeaders: string[] = ([] = ['Middleware of ' + routeName, ...rpsArr]);
+    const rowsHeaders2: string[] = ([] = ['', ...rpsArr]);
     for (const middlewareData of resultArr) {
         rows.push([middlewareData.fnName, ...middlewareData.elapsedTimes.map((e) => e.toString())]);
     }
     return (
         <Container>
-        <TableContainer component={Paper}>
-        <Table className={classes.table} size="small" aria-label="a dense table">
-            <TableHead>
-                <TableRow>
-                    {rowsHeaders.map((rps, i) => (
-                        <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'}>
-                            {i === 0 ? rps : `RPS - ${rps} `}
-                        </TableCell>
-                    ))}
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {rows.map((row, i) => (
-                    <TableRow key={`table-${i}`}>
-                        {row.map((ele, j) => {
-                            return j === 0 ? (
-                                <TableCell key={`cell-${j}`} component="th" scope="row">
-                                    {ele}
+            <TableContainer component={Paper}>
+                <Table className={classes.table} size="small" aria-label="a dense table">
+                    <TableHead>
+                        <TableRow>
+                            {rowsHeaders.map((rps, i) => (
+                                <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'}>
+                                    {i === 0 ? rps : `RPS - ${rps} `}
                                 </TableCell>
-                            ) : (
-                                <TableCell
-                                    align="right"
-                                    key={`cell-${j}`}
-                                >{`${ele} ms`}</TableCell>
-                            );
-                        })}
-                    </TableRow>
-                    
-                ))}
-            </TableBody>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row, i) => (
+                            <TableRow key={`table-${i}`}>
+                                {row.map((ele, j) => {
+                                    return j === 0 ? (
+                                        <TableCell key={`cell-${j}`} component="th" scope="row">
+                                            {ele}
+                                        </TableCell>
+                                    ) : (
+                                        <TableCell
+                                            align="right"
+                                            key={`cell-${j}`}
+                                        >{`${ele} ms`}</TableCell>
+                                    );
+                                })}
+                            </TableRow>
+                        ))}
+                    </TableBody>
                     <TableHead>
                         <TableRow>
                             {rowsHeaders2.map((rps, i) => (
-                                <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'} height={"30px"}>
+                                <TableCell
+                                    key={`rps-${i}`}
+                                    align={i === 0 ? 'left' : 'right'}
+                                    height={'30px'}
+                                >
                                     {i === 0 ? rps : ``}
                                 </TableCell>
                             ))}

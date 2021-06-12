@@ -3,14 +3,13 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-
 import StackedBar from './graphs';
 import DenseTable from './tables';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useAppSelector } from '../../state/hooks';
-import noresults from '../../img/noresults-r.png'
+import noresults from '../../img/noresults-r.png';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -90,7 +89,7 @@ const VerticalTabs: () => JSX.Element = () => {
         );
         tabPanelsArr.push(
             <TabPanel value={tabValue} index={i} key={i}>
-                <Col key={-1} className={"mb-5"}>
+                <Col key={-1} className={'mb-5'}>
                     <StackedBar testData={singleTest.testData} singleRoute={false} />
                 </Col>
                 {routeNames}
@@ -120,21 +119,21 @@ const VerticalTabs: () => JSX.Element = () => {
                 <Row>
                     <Col>
                         <h1 className="text-center">
-                            Oops! No results are available!<br/>
+                            Oops! No results are available!
+                            <br />
                             Go back and start a test on your server.
-                            </h1>{' '}
-                            <Container fluid>
-                                <Row >
-                                <img 
-                                    src={noresults} 
+                        </h1>{' '}
+                        <Container fluid>
+                            <Row>
+                                <img
+                                    src={noresults}
                                     style={{
                                         width: '100%',
-                                        height: 'auto'
-                                    }}/>
-
-                                </Row>
-                            </Container>
-                        
+                                        height: 'auto',
+                                    }}
+                                />
+                            </Row>
+                        </Container>
                     </Col>
                 </Row>
             )}
