@@ -29,6 +29,7 @@ const ResultsPage: () => JSX.Element = () => {
     };
 
     const deleteAllData = () => {
+        dispatch(Actions.SetReceivedData([]));
         fetch('/api/saveddata', {
             method: HTTPMethods.DELETE,
         }).catch((err) => {

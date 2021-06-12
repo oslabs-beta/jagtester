@@ -300,7 +300,6 @@ router.get('/stopTest', (req, res) => {
 });
 router.delete('/saveddata', (req, res) => {
     allPulledDataFromTest.splice(0, allPulledDataFromTest.length);
-    io.emit('allRPSfinished', allPulledDataFromTest);
     res.sendStatus(200);
 });
 router.get('/data-with-timestamp', (req, res) => {
