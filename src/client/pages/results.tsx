@@ -48,7 +48,7 @@ const ResultsPage: () => JSX.Element = () => {
                                 Export All
                             </Button>
                             <Button variant="danger" onClick={deleteAllData}>
-                                Delete
+                                Delete All
                             </Button>
                         </ButtonGroup>
                     </Col>
