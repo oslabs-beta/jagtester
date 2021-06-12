@@ -1,15 +1,19 @@
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import StackedBar from './graphs';
 import DenseTable from './tables';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector, useAppDispatch } from '../../state/hooks';
+import Actions from '../../state/actions/actions';
 import noresults from '../../img/noresults-r.png';
+
+import TabLabels from './verticalTabLabels';
+
+import Tab from '@material-ui/core/Tab';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -33,13 +37,6 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-function a11yProps(index: number) {
-    return {
-        id: `vertical-tab-${index}`,
-        'aria-controls': `vertical-tabpanel-${index}`,
-    };
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         flexGrow: 1,
@@ -52,12 +49,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
+const a11yProps = (index: number) => {
+    return {
+        id: `vertical-tab-${index}`,
+        'aria-controls': `vertical-tabpanel-${index}`,
+    };
+};
+
 const VerticalTabs: () => JSX.Element = () => {
     const classes = useStyles();
-    const [tabValue, setTabValue] = React.useState(0);
+    const dispatch = useAppDispatch();
+    const resultsTabValue = useAppSelector((state) => state.resultsTabValue);
 
     const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
-        setTabValue(newValue);
+        dispatch(Actions.SetResultsTabValue(newValue));
     };
 
     const receivedData = useAppSelector((state) => state.receivedData);
@@ -67,10 +72,14 @@ const VerticalTabs: () => JSX.Element = () => {
     const tabPanelsArr: JSX.Element[] = [];
     for (let i = 0; i < receivedData.length; i++) {
         const singleTest = receivedData[i];
+        // tabsArr.push(<TabLabels index={i} key={i} time={singleTest.testTime} />);
         tabsArr.push(
-            <Tab label={new Date(singleTest.testTime).toLocaleString()} {...a11yProps(i)} key={i} />
+            <Tab
+                label={<TabLabels index={i} time={singleTest.testTime} />}
+                key={i}
+                {...a11yProps(i)}
+            />
         );
-
         const routeNames: JSX.Element[] = [];
 
         Object.keys(singleTest.testData[Object.keys(singleTest.testData)[0]]).forEach(
@@ -88,7 +97,7 @@ const VerticalTabs: () => JSX.Element = () => {
             }
         );
         tabPanelsArr.push(
-            <TabPanel value={tabValue} index={i} key={i}>
+            <TabPanel value={resultsTabValue} index={i} key={i}>
                 <Col key={-1} className={'mb-5'}>
                     <StackedBar testData={singleTest.testData} singleRoute={false} />
                 </Col>
@@ -104,7 +113,7 @@ const VerticalTabs: () => JSX.Element = () => {
                         <Tabs
                             orientation="vertical"
                             variant="standard"
-                            value={tabValue}
+                            value={resultsTabValue}
                             onChange={handleChange}
                             aria-label="Vertical tabs example"
                             className={classes.tabs}

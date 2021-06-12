@@ -302,6 +302,12 @@ router.delete('/saveddata', (req, res) => {
     allPulledDataFromTest.splice(0, allPulledDataFromTest.length);
     res.sendStatus(200);
 });
+router.delete('/singledata/:index', (req, res) => {
+    if (req.params.index && Number(req.params.index) < allPulledDataFromTest.length) {
+        allPulledDataFromTest.splice(Number(req.params.index), 1);
+    }
+    res.sendStatus(200);
+});
 router.get('/data-with-timestamp', (req, res) => {
     const data = fs.readFileSync(__dirname + '/../../src/server/datatimestamps.json', {
         encoding: 'utf-8',
