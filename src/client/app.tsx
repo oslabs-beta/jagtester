@@ -17,6 +17,7 @@ const App: () => JSX.Element = () => {
     // start----------------------------------- socket io funcitonality
     socket.on('singleRPSfinished', (rps: number) => {
         dispatch(Actions.SetCurRunningRPS(rps));
+        dispatch(Actions.SetCurRPSpercent(0));
     });
     socket.on('testRunningStateChange', (isTestRunning: boolean) => {
         dispatch(Actions.SetIsTestRunning(isTestRunning));
@@ -27,6 +28,9 @@ const App: () => JSX.Element = () => {
     socket.on('errorInfo', (errName: string) => {
         dispatch(Actions.SetShowModal(true));
         dispatch(Actions.SetModalError(errName));
+    });
+    socket.on('currentRPSProgress', (percent: number) => {
+        dispatch(Actions.SetCurRPSpercent(percent));
     });
 
     // end  ----------------------------------- socket io funcitonality

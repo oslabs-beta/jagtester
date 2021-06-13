@@ -20,6 +20,7 @@ const initialState: {
     showModal: boolean;
     modalError: string;
     resultsTabValue: number;
+    curRPSpercent: number;
 } = {
     valueRPS: 500,
     valueStart: 100,
@@ -45,6 +46,7 @@ const initialState: {
     showModal: false,
     modalError: '',
     resultsTabValue: 0,
+    curRPSpercent: 0,
 };
 
 const configReducer = createReducer(initialState, (builder) => {
@@ -136,6 +138,9 @@ const configReducer = createReducer(initialState, (builder) => {
                 Math.min(action.payload, state.receivedData.length - 1),
                 0
             );
+        })
+        .addCase(Actions.SetCurRPSpercent, (state, action) => {
+            state.curRPSpercent = action.payload;
         });
 });
 

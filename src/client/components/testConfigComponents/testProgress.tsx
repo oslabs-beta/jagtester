@@ -35,15 +35,18 @@ const TestProgrss: () => JSX.Element = () => {
     const valueEnd = useAppSelector((state) => state.valueEnd);
     const isTestRunning = useAppSelector((state) => state.isTestRunning);
     const curRunningRPS = useAppSelector((state) => state.curRunningRPS);
+    const curRPSpercent = useAppSelector((state) => state.curRPSpercent);
 
     const start = valueStart;
     const end = valueEnd;
-    const range = end - start;
+    const range = (end - start) / valueRPS;
 
     const calculatedPercentage =
         curRunningRPS === 0
-            ? 0
-            : Math.round((100 * (curRunningRPS + valueRPS - start)) / (range + valueRPS));
+            ? Math.round((100 * curRPSpercent) / (range + 1))
+            : Math.round(
+                  (100 * ((curRunningRPS - start) / valueRPS + 1 + curRPSpercent)) / (range + 1)
+              );
 
     return (
         <Container className="m-0 p-0 mb-5" fluid>

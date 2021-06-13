@@ -12,7 +12,7 @@ import {
     TestConfigData,
 } from './interfaces';
 
-import { processData, processLastMiddleware } from './helperFunctions';
+import { processData, processLastMiddleware, emitPercentage } from './helperFunctions';
 
 import AbortController from 'abort-controller';
 let abortController = new AbortController();
@@ -155,6 +155,7 @@ const sendRequests = (
                 const resRoute = new URL(targetURL).pathname;
                 timeArrRoutes[resRoute][rpsGroup].successfulResCount++;
                 successfulResCount++;
+                emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
                 if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
                     eventEmitter.emit('singleRPSfinished', rpsGroup);
                 }
@@ -175,6 +176,7 @@ const sendRequests = (
                     const resRoute = new URL(targetURL).pathname;
                     timeArrRoutes[resRoute][rpsGroup].errorCount++;
                     errorCount++;
+                    emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
                     if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
                         eventEmitter.emit('singleRPSfinished', rpsGroup);
                     }
