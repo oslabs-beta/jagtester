@@ -12,10 +12,17 @@ import {
     TestConfigData,
 } from './interfaces';
 
-import { processData, processLastMiddleware } from './helperFunctions';
+import { processData, processLastMiddleware, emitPercentage } from './helperFunctions';
 
 import AbortController from 'abort-controller';
 let abortController = new AbortController();
+
+enum ioSocketCommands {
+    testRunningStateChange,
+    singleRPSfinished,
+    allRPSfinished,
+    errorInfo,
+}
 
 const router = express.Router();
 let timeArrRoutes: {
@@ -155,6 +162,7 @@ const sendRequests = (
                 const resRoute = new URL(targetURL).pathname;
                 timeArrRoutes[resRoute][rpsGroup].successfulResCount++;
                 successfulResCount++;
+                emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
                 if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
                     eventEmitter.emit('singleRPSfinished', rpsGroup);
                 }
@@ -175,6 +183,7 @@ const sendRequests = (
                     const resRoute = new URL(targetURL).pathname;
                     timeArrRoutes[resRoute][rpsGroup].errorCount++;
                     errorCount++;
+                    emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
                     if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
                         eventEmitter.emit('singleRPSfinished', rpsGroup);
                     }
@@ -300,6 +309,12 @@ router.get('/stopTest', (req, res) => {
 });
 router.delete('/saveddata', (req, res) => {
     allPulledDataFromTest.splice(0, allPulledDataFromTest.length);
+    res.sendStatus(200);
+});
+router.delete('/singledata/:index', (req, res) => {
+    if (req.params.index && Number(req.params.index) < allPulledDataFromTest.length) {
+        allPulledDataFromTest.splice(Number(req.params.index), 1);
+    }
     res.sendStatus(200);
 });
 router.get('/data-with-timestamp', (req, res) => {
