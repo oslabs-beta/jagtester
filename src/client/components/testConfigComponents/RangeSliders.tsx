@@ -14,6 +14,8 @@ const RangeSliders: () => JSX.Element = () => {
     const valueEnd = useAppSelector((state) => state.valueEnd);
     const valueSeconds = useAppSelector((state) => state.valueSeconds);
     const isTestRunning = useAppSelector((state) => state.isTestRunning);
+    const curTestTotalPercent = useAppSelector((state) => state.curTestTotalPercent);
+    const curTestStartTime = useAppSelector((state) => state.curTestStartTime);
     const dispatch = useAppDispatch();
 
     const handleChangeRPS = (event: unknown, newValue: number | number[]) => {
@@ -29,6 +31,13 @@ const RangeSliders: () => JSX.Element = () => {
         dispatch(Actions.SetValueEnd((newValue as number[])[1]));
         dispatch(Actions.SetCurRunningRPS(0));
     };
+
+    const approximateTestTime = (valueSeconds * (valueEnd + valueRPS - valueStart)) / valueRPS;
+    const curElapsedTime = (Date.now() - curTestStartTime) / 1000;
+    const estimatedTime = Math.min(
+        (curElapsedTime * (100 - curTestTotalPercent)) / curTestTotalPercent,
+        approximateTestTime * 3
+    );
 
     return (
         <div>
@@ -77,13 +86,15 @@ const RangeSliders: () => JSX.Element = () => {
             <Container className="mt-5">
                 <Row>
                     <Col>
-                        <h2 className="text-center">
-                            Total test time:{' '}
-                            {Math.round(
-                                (valueSeconds * (valueEnd + valueRPS - valueStart)) / valueRPS
-                            )}{' '}
-                            seconds
-                        </h2>
+                        {isTestRunning ? (
+                            <h2 className="text-center">
+                                Estimated time remaining: {Math.round(estimatedTime)} seconds
+                            </h2>
+                        ) : (
+                            <h2 className="text-center">
+                                Approximate test time: {Math.round(approximateTestTime)} seconds
+                            </h2>
+                        )}
                     </Col>
                 </Row>
             </Container>

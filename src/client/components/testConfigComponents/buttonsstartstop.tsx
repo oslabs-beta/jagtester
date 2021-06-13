@@ -26,6 +26,7 @@ const Buttons: () => JSX.Element = () => {
 
     const handleStartTest = () => {
         dispatch(Actions.SetCurRunningRPS(0));
+        dispatch(Actions.SetCurTestStartTime(Date.now()));
         const testConfigObj: TestConfigData = {
             rpsInterval: valueRPS,
             startRPS: valueStart,

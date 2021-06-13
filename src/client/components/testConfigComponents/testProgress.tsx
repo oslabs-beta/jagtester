@@ -30,23 +30,8 @@ const useStyles = makeStyles({
 });
 const TestProgrss: () => JSX.Element = () => {
     const classes = useStyles();
-    const valueRPS = useAppSelector((state) => state.valueRPS);
-    const valueStart = useAppSelector((state) => state.valueStart);
-    const valueEnd = useAppSelector((state) => state.valueEnd);
     const isTestRunning = useAppSelector((state) => state.isTestRunning);
-    const curRunningRPS = useAppSelector((state) => state.curRunningRPS);
-    const curRPSpercent = useAppSelector((state) => state.curRPSpercent);
-
-    const start = valueStart;
-    const end = valueEnd;
-    const range = (end - start) / valueRPS;
-
-    const calculatedPercentage =
-        curRunningRPS === 0
-            ? Math.round((100 * curRPSpercent) / (range + 1))
-            : Math.round(
-                  (100 * ((curRunningRPS - start) / valueRPS + 1 + curRPSpercent)) / (range + 1)
-              );
+    const curTestTotalPercent = useAppSelector((state) => state.curTestTotalPercent);
 
     return (
         <Container className="m-0 p-0 mb-5" fluid>
@@ -55,7 +40,7 @@ const TestProgrss: () => JSX.Element = () => {
                     <div className={classes.root}>
                         <BorderLinearProgress
                             variant="determinate"
-                            value={calculatedPercentage}
+                            value={curTestTotalPercent}
                             color={isTestRunning ? 'secondary' : 'primary'}
                         />
                     </div>
