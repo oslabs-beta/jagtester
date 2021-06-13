@@ -77,5 +77,6 @@ export interface ChartDataSet {
     backgroundColor: string[];
     borderWidth: number;
     borderColor?: string;
+    color: string;
     fill?: boolean;
 }

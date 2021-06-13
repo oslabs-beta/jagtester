@@ -17,6 +17,7 @@ const initialState: {
         jagTesterEnabled: boolean;
     }[];
     receivedData: AllPulledDataFromTest[];
+    darkMode: boolean;
 } = {
     valueRPS: 500,
     valueStart: 100,
@@ -39,6 +40,7 @@ const initialState: {
         },
     ],
     receivedData: [],
+    darkMode: false,
 };
 
 const configReducer = createReducer(initialState, (builder) => {
@@ -115,7 +117,9 @@ const configReducer = createReducer(initialState, (builder) => {
         })
         .addCase(Actions.SetReceivedData, (state, action) => {
             state.receivedData = action.payload;
-        });
+        }).addCase(Actions.SwitchDarkMode, (state, action) => {
+            state.darkMode = action.payload;
+        })
 });
 
 export default configReducer;

@@ -27,6 +27,7 @@
         "@types/node-fetch": "^2.5.10",
         "abort-controller": "^3.0.0",
         "chart.js": "^3.3.2",
+        "css-loader": "^5.2.6",
         "express": "^4.17.1",
         "file-loader": "^6.2.0",
         "node-fetch": "^2.6.1",
@@ -41,7 +42,8 @@
         "redux-persist": "^6.0.0",
         "response-time": "^2.3.2",
         "socket.io": "^4.1.2",
-        "socket.io-client": "^4.1.2"
+        "socket.io-client": "^4.1.2",
+        "style-loader": "^2.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.14.3",

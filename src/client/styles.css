@@ -1,0 +1,10 @@
+body {
+    /* padding: 25px; */
+    background-color: white;
+    color: black;
+  }
+  
+  [data-theme="dark"] {
+    background-color: #121212;
+    color: white;
+  }

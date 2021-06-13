@@ -18,6 +18,7 @@ enum ActionTypes {
     deleteTarget = 'deleteTarget',
 
     setReceivedData = 'setRedeceivedData',
+    SwitchDarkMode = 'SwitchDarkMode',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -42,6 +43,7 @@ const AddTarget = createAction(ActionTypes.addTarget);
 const DeleteTarget = createAction<number>(ActionTypes.deleteTarget);
 
 const SetReceivedData = createAction<AllPulledDataFromTest[]>(ActionTypes.setReceivedData);
+const SwitchDarkMode = createAction<boolean>(ActionTypes.SwitchDarkMode);
 
 const Actions = {
     SetValueRPS,
@@ -57,6 +59,7 @@ const Actions = {
     AddTarget,
     DeleteTarget,
     SetReceivedData,
+    SwitchDarkMode,
 };
 
 export default Actions;

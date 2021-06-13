@@ -1,6 +1,10 @@
+import { PlayCircleFilledWhite } from '@material-ui/icons';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { PulledDataFromTest, ChartDataSet } from '../../interfaces';
+import { useAppSelector } from '../../state/hooks';
+
+
 
 const randomColor = (index: number, totalCount: number) => {
     const color1 = [224, 122, 95];
@@ -20,6 +24,7 @@ const StackedBar: (props: {
     singleRoute: boolean;
     routeName?: string;
 }) => JSX.Element = ({ testData, singleRoute, routeName }) => {
+    const darkMode = useAppSelector((state) => state.darkMode);
     const chartOptions = {
         plugins: {
             title: {
@@ -28,6 +33,7 @@ const StackedBar: (props: {
             },
         },
         responsive: true,
+        backgroundColor: darkMode ? 'black' :'#white', 
         scales: {
             x: {
                 stacked: singleRoute,
@@ -39,6 +45,8 @@ const StackedBar: (props: {
         },
     };
 
+
+  
     const dataSetArray: ChartDataSet[] = [];
     const rpsArr: string[] = [];
 
@@ -84,6 +92,7 @@ const StackedBar: (props: {
                 data: resultArr[i].elapsedTimes,
                 backgroundColor: [randomColor(i, resultArr.length)],
                 borderWidth: 0,
+                color:'#FFFFFF',
             });
         }
     } else {
@@ -120,6 +129,7 @@ const StackedBar: (props: {
                 data: resultObj[route].elapsedTimes,
                 backgroundColor: [lineColor],
                 borderWidth: 0,
+                color: darkMode ? 'black' :'#FFFFFF', 
             });
             dataSetArray.push({
                 type: 'line',
@@ -128,6 +138,7 @@ const StackedBar: (props: {
                 backgroundColor: [lineColor],
                 borderColor: lineColor,
                 borderWidth: 4,
+                color: '#FFFFFF',
                 fill: false,
             });
         });

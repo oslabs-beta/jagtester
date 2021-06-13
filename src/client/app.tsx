@@ -9,6 +9,9 @@ import socketIOClient from 'socket.io-client';
 import { useAppDispatch } from './state/hooks';
 import Actions from './state/actions/actions';
 import Modal from './components/modal';
+import { useAppSelector } from './state/hooks';
+import { dark } from '@material-ui/core/styles/createPalette';
+import './styles.css'
 
 const App: () => JSX.Element = () => {
     const socket = socketIOClient();
@@ -16,6 +19,10 @@ const App: () => JSX.Element = () => {
 
     const [showModal, setShowModal] = useState(false);
     const [modalError, setModalError] = useState('');
+
+    const darkMode = useAppSelector((state) => state.darkMode);
+    const darkModeTheme = darkMode;
+
 
     // start----------------------------------- socket io funcitonality
     socket.on('singleRPSfinished', (rps: number) => {
@@ -34,7 +41,9 @@ const App: () => JSX.Element = () => {
 
     // end  ----------------------------------- socket io funcitonality
     return (
-        <div>
+        <div className="App" data-theme={darkMode ? "dark" : "dark"}
+    
+         >
             <BrowserRouter>
                 <Container fluid className="mx-0 px-0">
                     <Navigation />

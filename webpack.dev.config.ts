@@ -44,7 +44,12 @@ const config: Configuration = {
             {
                 test: /\.svg$/,
                 use: ['babel-loader', '@svgr/webpack', 'file-loader'],
-            }
+            },
+            {
+                test: /\.css$/i,
+                exclude: /node_modules/,
+                use: ['style-loader', 'css-loader']
+                }
         ],
     },
     resolve: {
