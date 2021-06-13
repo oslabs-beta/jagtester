@@ -25,6 +25,8 @@ enum ActionTypes {
     deleteSingleData = 'deleteSingleData',
     setResultsTabValue = 'setResultsTabValue',
     setCurRPSpercent = 'setCurRPSpercent',
+
+    setCurTestStartTime = 'setCurTestStartTime',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -55,6 +57,7 @@ const SetModalError = createAction<string>(ActionTypes.setModalError);
 const DeleteSingleData = createAction<number>(ActionTypes.deleteSingleData);
 const SetResultsTabValue = createAction<number>(ActionTypes.setResultsTabValue);
 const SetCurRPSpercent = createAction<number>(ActionTypes.setCurRPSpercent);
+const SetCurTestStartTime = createAction<number>(ActionTypes.setCurTestStartTime);
 
 const Actions = {
     SetValueRPS,
@@ -75,6 +78,7 @@ const Actions = {
     DeleteSingleData,
     SetResultsTabValue,
     SetCurRPSpercent,
+    SetCurTestStartTime,
 };
 
 export default Actions;
