@@ -19,6 +19,8 @@ const initialState: {
     receivedData: AllPulledDataFromTest[];
     showModal: boolean;
     modalError: string;
+    resultsTabValue: number;
+    curRPSpercent: number;
 } = {
     valueRPS: 500,
     valueStart: 100,
@@ -43,6 +45,8 @@ const initialState: {
     receivedData: [],
     showModal: false,
     modalError: '',
+    resultsTabValue: 0,
+    curRPSpercent: 0,
 };
 
 const configReducer = createReducer(initialState, (builder) => {
@@ -120,11 +124,23 @@ const configReducer = createReducer(initialState, (builder) => {
         .addCase(Actions.SetReceivedData, (state, action) => {
             state.receivedData = action.payload;
         })
-        .addCase(Actions.SetShowModal, (state, action) => {
-            state.showModal = action.payload;
+        .addCase(Actions.SetShowModal, (s, a) => {
+            s.showModal = a.payload;
         })
         .addCase(Actions.SetModalError, (state, action) => {
             state.modalError = action.payload;
+        })
+        .addCase(Actions.DeleteSingleData, (state, action) => {
+            state.receivedData.splice(action.payload, 1);
+        })
+        .addCase(Actions.SetResultsTabValue, (state, action) => {
+            state.resultsTabValue = Math.max(
+                Math.min(action.payload, state.receivedData.length - 1),
+                0
+            );
+        })
+        .addCase(Actions.SetCurRPSpercent, (state, action) => {
+            state.curRPSpercent = action.payload;
         });
 });
 

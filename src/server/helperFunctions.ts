@@ -4,6 +4,9 @@ import {
     PulledDataFromTest,
     middlewareSingle,
 } from './interfaces';
+
+import { io } from './index';
+
 const processData: (data: CollectedData) => CollectedDataSingle = (data: CollectedData) => {
     const collectedDataArr: CollectedDataSingle[] = [];
     for (const key in data) {
@@ -55,4 +58,16 @@ const processLastMiddleware: (
         ) / 100;
 };
 
-export { processData, processLastMiddleware };
+const emitPercentage: (
+    successfulResCount: number,
+    errorCount: number,
+    rpsGroup: number,
+    secondsToTest: number
+) => void = (successfulResCount, errorCount, rpsGroup, secondsToTest) => {
+    const percent = (successfulResCount + errorCount) / (rpsGroup * secondsToTest);
+    if (Math.floor(10000 * percent) % 1000 === 0) {
+        io.emit('currentRPSProgress', percent);
+    }
+};
+
+export { processData, processLastMiddleware, emitPercentage };

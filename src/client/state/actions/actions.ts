@@ -21,6 +21,10 @@ enum ActionTypes {
 
     setShowModal = 'setShowModal',
     setModalError = 'setModalError',
+
+    deleteSingleData = 'deleteSingleData',
+    setResultsTabValue = 'setResultsTabValue',
+    setCurRPSpercent = 'setCurRPSpercent',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -48,6 +52,9 @@ const SetReceivedData = createAction<AllPulledDataFromTest[]>(ActionTypes.setRec
 
 const SetShowModal = createAction<boolean>(ActionTypes.setShowModal);
 const SetModalError = createAction<string>(ActionTypes.setModalError);
+const DeleteSingleData = createAction<number>(ActionTypes.deleteSingleData);
+const SetResultsTabValue = createAction<number>(ActionTypes.setResultsTabValue);
+const SetCurRPSpercent = createAction<number>(ActionTypes.setCurRPSpercent);
 
 const Actions = {
     SetValueRPS,
@@ -65,6 +72,9 @@ const Actions = {
     SetReceivedData,
     SetShowModal,
     SetModalError,
+    DeleteSingleData,
+    SetResultsTabValue,
+    SetCurRPSpercent,
 };
 
 export default Actions;
