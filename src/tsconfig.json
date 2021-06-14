@@ -4,5 +4,5 @@
         "outDir": "../dist"
     },
     "files": [],
-    "references": [{ "path": "./client" }, { "path": "./server" }]
+    "references": [{ "path": "./client" }, { "path": "./server" }, { "path": "./middleware" }]
 }
