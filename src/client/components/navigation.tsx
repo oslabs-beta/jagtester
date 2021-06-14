@@ -7,15 +7,14 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Asset from '../img/Asset.svg';
 
 import DarkSwitch from './darkModeSwitch';
-
-import { useAppDispatch } from '../state/hooks';
-import Actions from '../state/actions/actions';
 const Navigation: () => JSX.Element = () => {
-    const dispatch = useAppDispatch();
-
     return (
         <Container className="m-0 p-0 mb-5 sticky-top" fluid>
-            <Navbar variant="dark" className="mb-0 pb-0" style={{ backgroundColor: '#3D405B' }}>
+            <Navbar
+                variant="dark"
+                className="mb-0 pb-0 align-items-center"
+                style={{ backgroundColor: '#3D405B' }}
+            >
                 <img
                     src={Asset}
                     width={'10%'}
@@ -33,7 +32,6 @@ const Navigation: () => JSX.Element = () => {
                     </LinkContainer>
                 </Nav>
                 <Nav className="ml-auto h5">
-                    <Nav.Link onClick={() => dispatch(Actions.ResetState())}>Reset state</Nav.Link>
                     <DarkSwitch />
                 </Nav>
             </Navbar>

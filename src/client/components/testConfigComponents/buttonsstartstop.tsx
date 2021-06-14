@@ -50,7 +50,6 @@ const Buttons: () => JSX.Element = () => {
     return (
         <Container>
             <Row>
-                <Col sm={2}></Col>
                 <Col sm={4}>
                     <Button
                         disabled={jagEndabledInputs || isTestRunning}
@@ -70,7 +69,15 @@ const Buttons: () => JSX.Element = () => {
                         Stop
                     </Button>
                 </Col>
-                <Col sm={2}></Col>
+                <Col sm={4}>
+                    <Button
+                        variant="secondary"
+                        block
+                        onClick={() => dispatch(Actions.ResetState())}
+                    >
+                        Reset to default
+                    </Button>
+                </Col>
             </Row>
         </Container>
     );

@@ -199,7 +199,6 @@ const configReducer = createReducer(initialState, (builder) => {
             state.curRPSpercent = initialState.curRPSpercent;
             state.curTestTotalPercent = initialState.curTestTotalPercent;
             state.curTestStartTime = initialState.curTestStartTime;
-            state.darkMode = initialState.darkMode;
         });
 });
 
