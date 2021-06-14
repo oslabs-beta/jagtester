@@ -28,7 +28,9 @@ const Navigation: () => JSX.Element = () => {
                         <Nav.Link>Results</Nav.Link>
                     </LinkContainer>
                 </Nav>
-                <DarkSwitch />
+                <Nav className="ml-auto">
+                    <DarkSwitch />
+                </Nav>
             </Navbar>
             <TestProgrss />
         </Container>

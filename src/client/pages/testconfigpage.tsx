@@ -14,14 +14,14 @@ const TestPage: () => JSX.Element = () => {
     return (
         <Row className="mx-4">
             <Col className="col-12 col-xl-6">
-                <Card raised>
+                <Card raised className="p-2">
                     <CardContent>
                         <TargetInputs />
                     </CardContent>
                 </Card>
             </Col>
             <Col className="col-12 col-xl-6">
-                <Card raised>
+                <Card raised className="p-2">
                     <CardContent>
                         <RangeSliders />
                         <Buttons />

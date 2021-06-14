@@ -186,7 +186,7 @@ const TargetInputDisabled: () => JSX.Element = () => {
         dispatch(Actions.AddTarget());
     };
     return (
-        <Container key={`input${-1}`} className="mb-3 ">
+        <Container key={`input${-1}`} className="mx-0 my-2">
             <Row>
                 <FormControl disabled className={classes.methodInput}>
                     <InputLabel>Method</InputLabel>
