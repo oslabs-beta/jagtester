@@ -9,27 +9,28 @@ import socketIOClient from 'socket.io-client';
 import { useAppDispatch } from './state/hooks';
 import Actions from './state/actions/actions';
 import Modal from './components/modal';
+import { ioSocketCommands } from '../client/interfaces';
 
 const App: () => JSX.Element = () => {
     const socket = socketIOClient();
     const dispatch = useAppDispatch();
 
     // start----------------------------------- socket io funcitonality
-    socket.on('singleRPSfinished', (rps: number) => {
+    socket.on(ioSocketCommands.singleRPSfinished, (rps: number) => {
         dispatch(Actions.SetCurRunningRPS(rps));
         dispatch(Actions.SetCurRPSpercent(0));
     });
-    socket.on('testRunningStateChange', (isTestRunning: boolean) => {
+    socket.on(ioSocketCommands.testRunningStateChange, (isTestRunning: boolean) => {
         dispatch(Actions.SetIsTestRunning(isTestRunning));
     });
-    socket.on('allRPSfinished', (allPulledDataFromTest: AllPulledDataFromTest[]) => {
+    socket.on(ioSocketCommands.allRPSfinished, (allPulledDataFromTest: AllPulledDataFromTest[]) => {
         dispatch(Actions.SetReceivedData(allPulledDataFromTest));
     });
-    socket.on('errorInfo', (errName: string) => {
+    socket.on(ioSocketCommands.errorInfo, (errName: string) => {
         dispatch(Actions.SetShowModal(true));
         dispatch(Actions.SetModalError(errName));
     });
-    socket.on('currentRPSProgress', (percent: number) => {
+    socket.on(ioSocketCommands.currentRPSProgress, (percent: number) => {
         dispatch(Actions.SetCurRPSpercent(percent));
     });
 

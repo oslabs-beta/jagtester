@@ -3,6 +3,7 @@ import {
     CollectedDataSingle,
     PulledDataFromTest,
     middlewareSingle,
+    ioSocketCommands,
 } from './interfaces';
 
 import { io } from './index';
@@ -66,7 +67,7 @@ const emitPercentage: (
 ) => void = (successfulResCount, errorCount, rpsGroup, secondsToTest) => {
     const percent = (successfulResCount + errorCount) / (rpsGroup * secondsToTest);
     if (Math.floor(10000 * percent) % 1000 === 0) {
-        io.emit('currentRPSProgress', percent);
+        io.emit(ioSocketCommands.currentRPSProgress, percent);
     }
 };
 
