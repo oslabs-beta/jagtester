@@ -9,7 +9,8 @@ const DarkModeSwitch: () => JSX.Element = () => {
         <DarkModeToggle
             onChange={(val) => dispatch(Actions.SetDarkMode(val))}
             checked={darkMode}
-            size={80}
+            size={'6rem'}
+            speed={2.5}
         />
     );
 };
