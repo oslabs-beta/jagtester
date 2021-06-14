@@ -58,8 +58,8 @@ const TabLabels: (props: { index: number; time: number }) => JSX.Element = ({ in
         <Row className="align-items-center">
             <Col>{new Date(time).toLocaleString()}</Col>
             <Col>
-                <DeleteIcon color="primary" className={classes.deleteIcon} onClick={handleDelete} />
                 <GetAppIcon color="primary" className={classes.deleteIcon} onClick={handleExport} />
+                <DeleteIcon color="secondary" className={classes.deleteIcon} onClick={handleDelete} />
             </Col>
         </Row>
     );

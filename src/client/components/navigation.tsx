@@ -18,7 +18,6 @@ const Navigation: () => JSX.Element = () => {
                         marginBottom: 1
                     }}
                     />
-                
                 <Nav className="ml-4 h5">
                     <LinkContainer exact to="/">
                         <Nav.Link>Test</Nav.Link>
