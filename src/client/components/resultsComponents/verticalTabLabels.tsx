@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
     deleteIcon: {
         fontSize: '2rem',
         '&:hover': {
-            color: '#c20045', // TODO add more consistent styling
+            color: '#c20045',
         },
     },
 }));
@@ -59,7 +59,11 @@ const TabLabels: (props: { index: number; time: number }) => JSX.Element = ({ in
             <Col>{new Date(time).toLocaleString()}</Col>
             <Col>
                 <GetAppIcon color="primary" className={classes.deleteIcon} onClick={handleExport} />
-                <DeleteIcon color="secondary" className={classes.deleteIcon} onClick={handleDelete} />
+                <DeleteIcon
+                    color="secondary"
+                    className={classes.deleteIcon}
+                    onClick={handleDelete}
+                />
             </Col>
         </Row>
     );

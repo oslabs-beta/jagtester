@@ -89,7 +89,7 @@ const TargetInputSingle: (props: { index: number }) => JSX.Element = ({ index })
                         isEnabled: false,
                     })
                 );
-            }); // TODO add better error handling
+            });
     };
 
     return (
@@ -166,13 +166,13 @@ const useStyles = makeStyles((theme: Theme) =>
         addIcon: {
             fontSize: '3rem',
             '&:hover': {
-                color: '#2c3b8f', // TODO add more consistent styling
+                color: '#2c3b8f',
             },
         },
         deleteIcon: {
             fontSize: '3rem',
             '&:hover': {
-                color: '#c20045', // TODO add more consistent styling
+                color: '#c20045',
             },
         },
     })

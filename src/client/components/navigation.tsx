@@ -8,7 +8,11 @@ import Asset from '../img/Asset.svg';
 
 import DarkSwitch from './darkModeSwitch';
 
+import { useAppDispatch } from '../state/hooks';
+import Actions from '../state/actions/actions';
 const Navigation: () => JSX.Element = () => {
+    const dispatch = useAppDispatch();
+
     return (
         <Container className="m-0 p-0 mb-5 sticky-top" fluid>
             <Navbar variant="dark" className="mb-0 pb-0" style={{ backgroundColor: '#3D405B' }}>
@@ -28,7 +32,8 @@ const Navigation: () => JSX.Element = () => {
                         <Nav.Link>Results</Nav.Link>
                     </LinkContainer>
                 </Nav>
-                <Nav className="ml-auto">
+                <Nav className="ml-auto h5">
+                    <Nav.Link onClick={() => dispatch(Actions.ResetState())}>Reset state</Nav.Link>
                     <DarkSwitch />
                 </Nav>
             </Navbar>

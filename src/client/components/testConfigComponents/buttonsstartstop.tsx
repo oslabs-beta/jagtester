@@ -21,7 +21,10 @@ const Buttons: () => JSX.Element = () => {
     const jagEndabledInputs = inputsData.some((target) => !target.jagTesterEnabled);
 
     const handleStopTest = () => {
-        fetch('/api/stopTest'); // TODO add then catch
+        fetch('/api/stopTest').catch((err) => {
+            dispatch(Actions.SetShowModal(true));
+            dispatch(Actions.SetModalError(err.toString()));
+        });
     };
 
     const handleStartTest = () => {

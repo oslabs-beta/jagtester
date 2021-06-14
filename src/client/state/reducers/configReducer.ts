@@ -3,7 +3,7 @@ import { createReducer } from '@reduxjs/toolkit';
 
 import { HTTPMethods, AllPulledDataFromTest } from '../../interfaces';
 
-const initialState: {
+interface InitialState {
     valueRPS: number;
     valueStart: number;
     valueEnd: number;
@@ -24,7 +24,9 @@ const initialState: {
     curTestTotalPercent: number;
     curTestStartTime: number;
     darkMode: boolean;
-} = {
+}
+
+const initialState: InitialState = {
     valueRPS: 500,
     valueStart: 100,
     valueEnd: 600,
@@ -34,16 +36,16 @@ const initialState: {
     inputsData: [
         {
             method: HTTPMethods.GET,
-            targetURL: 'http://localhost:3030',
-            percentage: 20,
+            targetURL: 'http://localhost:',
+            percentage: 100,
             jagTesterEnabled: false,
         },
-        {
-            method: HTTPMethods.GET,
-            targetURL: 'http://localhost:3030/testroute',
-            percentage: 80,
-            jagTesterEnabled: false,
-        },
+        // {
+        //     method: HTTPMethods.GET,
+        //     targetURL: 'http://localhost:3030/testroute',
+        //     percentage: 80,
+        //     jagTesterEnabled: false,
+        // },
     ],
     receivedData: [],
     showModal: false,
@@ -183,6 +185,21 @@ const configReducer = createReducer(initialState, (builder) => {
         })
         .addCase(Actions.SetDarkMode, (state, action) => {
             state.darkMode = action.payload;
+        })
+        .addCase(Actions.ResetState, (state) => {
+            state.valueRPS = initialState.valueRPS;
+            state.valueStart = initialState.valueStart;
+            state.valueEnd = initialState.valueEnd;
+            state.valueSeconds = initialState.valueSeconds;
+            state.isTestRunning = initialState.isTestRunning;
+            state.curRunningRPS = initialState.curRunningRPS;
+            state.showModal = initialState.showModal;
+            state.modalError = initialState.modalError;
+            state.resultsTabValue = initialState.resultsTabValue;
+            state.curRPSpercent = initialState.curRPSpercent;
+            state.curTestTotalPercent = initialState.curTestTotalPercent;
+            state.curTestStartTime = initialState.curTestStartTime;
+            state.darkMode = initialState.darkMode;
         });
 });
 

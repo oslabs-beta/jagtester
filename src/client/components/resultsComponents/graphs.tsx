@@ -105,8 +105,6 @@ const StackedBar: (props: {
         elapsedTimes: number[];
     }[] = [];
 
-    //TODO: create an result OBJ for errors
-
     if (singleRoute) {
         //pushing rps to an array
         Object.keys(testData).forEach((rps) => {
