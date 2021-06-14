@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TestPage from './pages/testconfigpage';
 import ResultsPage from './pages/results';
 import Navigation from './components/navigation';
@@ -16,7 +16,6 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 const App: () => JSX.Element = () => {
-    const socket = socketIOClient();
     const dispatch = useAppDispatch();
 
     const prefersDarkMode = useAppSelector((state) => state.darkMode);
@@ -31,24 +30,38 @@ const App: () => JSX.Element = () => {
         [prefersDarkMode]
     );
 
-    // start----------------------------------- socket io funcitonality
-    socket.on(ioSocketCommands.singleRPSfinished, (rps: number) => {
-        dispatch(Actions.SetCurRunningRPS(rps));
-        dispatch(Actions.SetCurRPSpercent(0));
-    });
-    socket.on(ioSocketCommands.testRunningStateChange, (isTestRunning: boolean) => {
-        dispatch(Actions.SetIsTestRunning(isTestRunning));
-    });
-    socket.on(ioSocketCommands.allRPSfinished, (allPulledDataFromTest: AllPulledDataFromTest[]) => {
-        dispatch(Actions.SetReceivedData(allPulledDataFromTest));
-    });
-    socket.on(ioSocketCommands.errorInfo, (errName: string) => {
-        dispatch(Actions.SetShowModal(true));
-        dispatch(Actions.SetModalError(errName));
-    });
-    socket.on(ioSocketCommands.currentRPSProgress, (percent: number) => {
-        dispatch(Actions.SetCurRPSpercent(percent));
-    });
+    useEffect(() => {
+        const socket = socketIOClient();
+        // start----------------------------------- socket io funcitonality
+        socket.on(ioSocketCommands.singleRPSfinished, (rps: number) => {
+            dispatch(Actions.SetCurRunningRPS(rps));
+            dispatch(Actions.SetCurRPSpercent(0));
+        });
+        socket.on(ioSocketCommands.testRunningStateChange, (isTestRunning: boolean) => {
+            dispatch(Actions.SetIsTestRunning(isTestRunning));
+        });
+        socket.on(
+            ioSocketCommands.allRPSfinished,
+            (allPulledDataFromTest: AllPulledDataFromTest[]) => {
+                dispatch(Actions.SetReceivedData(allPulledDataFromTest));
+            }
+        );
+        socket.on(ioSocketCommands.errorInfo, (errName: string) => {
+            dispatch(Actions.SetShowModal(true));
+            dispatch(Actions.SetModalError(errName));
+        });
+        socket.on(ioSocketCommands.currentRPSProgress, (percent: number) => {
+            dispatch(Actions.SetCurRPSpercent(percent));
+        });
+
+        return function cleanup() {
+            socket.off(ioSocketCommands.singleRPSfinished);
+            socket.off(ioSocketCommands.testRunningStateChange);
+            socket.off(ioSocketCommands.allRPSfinished);
+            socket.off(ioSocketCommands.errorInfo);
+            socket.off(ioSocketCommands.currentRPSProgress);
+        };
+    }, [dispatch]);
 
     // end  ----------------------------------- socket io funcitonality
     return (

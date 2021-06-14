@@ -11,7 +11,7 @@ const io = new Server(http);
 const port = 5000;
 
 io.on('connection', (socket: Socket) => {
-    console.log('socket io on connection');
+    console.log('socket io on connection, user count is ', io.engine.clientsCount);
     socket.on('disconnect', (reason: string) => {
         console.log('A user disconnected, reason is ', reason);
     });
