@@ -17,6 +17,14 @@ import { processData, processLastMiddleware, emitPercentage } from './helperFunc
 import AbortController from 'abort-controller';
 let abortController = new AbortController();
 
+enum ioSocketCommands {
+    testRunningStateChange,
+    singleRPSfinished,
+    allRPSfinished,
+    errorInfo,
+    currentRPSProgress
+}
+
 const router = express.Router();
 let timeArrRoutes: {
     // this key is used as the route name
@@ -38,7 +46,7 @@ const timeOutArray: NodeJS.Timeout[] = [];
 const trackedVariables = {
     isTestRunningInternal: false,
     isTestRunningListener: (val: boolean) => {
-        io.emit('testRunningStateChange', val); // TODO change io strings to enums
+        io.emit(ioSocketCommands.testRunningStateChange.toString(), val); // TODO change io strings to enums
     },
     set isTestRunning(val: boolean) {
         this.isTestRunningInternal = val;
@@ -54,8 +62,8 @@ let errorCount = 0;
 let successfulResCount = 0;
 
 const eventEmitter = new events.EventEmitter();
-eventEmitter.on('singleRPSfinished', (rpsGroup: number) => {
-    io.emit('singleRPSfinished', rpsGroup);
+eventEmitter.on(ioSocketCommands.singleRPSfinished.toString(), (rpsGroup: number) => {
+    io.emit(ioSocketCommands.singleRPSfinished.toString(), rpsGroup);
     console.log(`test finished for rps group ${rpsGroup}`);
     // console.log(timeArrRoutes);
     const { rpsInterval, startRPS, endRPS, testLength, inputsData } = globalTestConfig;
@@ -73,18 +81,18 @@ eventEmitter.on('singleRPSfinished', (rpsGroup: number) => {
             sendRequestsAtRPS(rpsInterval, startRPS, endRPS, testLength, inputsData);
         })
         .catch(() => {
-            eventEmitter.emit('allRPSfinished');
+            eventEmitter.emit(ioSocketCommands.allRPSfinished.toString());
         }); // TODO add better error handling
 });
 
-eventEmitter.on('allRPSfinished', () => {
+eventEmitter.on(ioSocketCommands.allRPSfinished.toString(), () => {
     console.log('all rps finished');
     fetch(globalTestConfig.inputsData[0].targetURL, {
         headers: {
             jagtestercommand: Jagtestercommands.endTest.toString(),
         },
     }).catch((err) => {
-        io.emit('errorInfo', err.toString());
+        io.emit(ioSocketCommands.errorInfo.toString(), err.toString());
     });
     abortController = new AbortController();
     trackedVariables.isTestRunning = false;
@@ -130,7 +138,7 @@ eventEmitter.on('allRPSfinished', () => {
             testData: pulledDataFromTest,
         });
     }
-    io.emit('allRPSfinished', allPulledDataFromTest);
+    io.emit(ioSocketCommands.allRPSfinished.toString(), allPulledDataFromTest);
 });
 
 const agent = new http.Agent({ keepAlive: true });
@@ -157,7 +165,7 @@ const sendRequests = (
                 successfulResCount++;
                 emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
                 if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
-                    eventEmitter.emit('singleRPSfinished', rpsGroup);
+                    eventEmitter.emit(ioSocketCommands.singleRPSfinished.toString(), rpsGroup);
                 }
                 if (res.headers.has('x-response-time')) {
                     const xResponseTime = res.headers.get('x-response-time');
@@ -170,7 +178,7 @@ const sendRequests = (
                 if (error.name === 'AbortError') {
                     if (trackedVariables.isTestRunning) {
                         trackedVariables.isTestRunning = false;
-                        eventEmitter.emit('allRPSfinished');
+                        eventEmitter.emit(ioSocketCommands.allRPSfinished.toString());
                     }
                 } else {
                     const resRoute = new URL(targetURL).pathname;
@@ -178,7 +186,7 @@ const sendRequests = (
                     errorCount++;
                     emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
                     if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
-                        eventEmitter.emit('singleRPSfinished', rpsGroup);
+                        eventEmitter.emit(ioSocketCommands.singleRPSfinished.toString(), rpsGroup);
                     }
                 }
             });
@@ -210,7 +218,7 @@ const sendRequestsAtRPS = (
     // check if finished testing
     const curRPS = startRPS + currentInterval * rpsInterval;
     if (curRPS > endRPS) {
-        eventEmitter.emit('allRPSfinished');
+        eventEmitter.emit(ioSocketCommands.allRPSfinished.toString());
         return;
     }
 
@@ -252,7 +260,7 @@ const sendRequestsAtRPS = (
                 // res.json({ jagtester: true });
             })
             .catch(() => {
-                eventEmitter.emit('allRPSfinished');
+                eventEmitter.emit(ioSocketCommands.allRPSfinished.toString());
             }); //TODO better error handling
     }
 };
