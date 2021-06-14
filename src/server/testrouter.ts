@@ -2,7 +2,6 @@ import express from 'express';
 import fetch from 'node-fetch';
 import http from 'http';
 import events from 'events';
-import fs from 'fs';
 import { io } from './index';
 import {
     CollectedData,
@@ -39,7 +38,7 @@ const timeOutArray: NodeJS.Timeout[] = [];
 const trackedVariables = {
     isTestRunningInternal: false,
     isTestRunningListener: (val: boolean) => {
-        io.emit(ioSocketCommands.testRunningStateChange, val); // TODO change io strings to enums
+        io.emit(ioSocketCommands.testRunningStateChange, val);
     },
     set isTestRunning(val: boolean) {
         this.isTestRunningInternal = val;
@@ -75,7 +74,7 @@ eventEmitter.on(ioSocketCommands.singleRPSfinished, (rpsGroup: number) => {
         })
         .catch(() => {
             eventEmitter.emit(ioSocketCommands.allRPSfinished);
-        }); // TODO add better error handling
+        });
 });
 
 eventEmitter.on(ioSocketCommands.allRPSfinished, () => {
@@ -254,7 +253,7 @@ const sendRequestsAtRPS = (
             })
             .catch(() => {
                 eventEmitter.emit(ioSocketCommands.allRPSfinished);
-            }); //TODO better error handling
+            });
     }
 };
 
@@ -275,7 +274,7 @@ router.post('/startmultiple', (req, res) => {
         const { rpsInterval, startRPS, endRPS, testLength, inputsData } = req.body;
         sendRequestsAtRPS(rpsInterval, startRPS, endRPS, testLength, inputsData);
     }
-    res.sendStatus(200); //TODO add functionality to the front end to test is jagtest:true is received from the targets
+    res.sendStatus(200);
 });
 router.post('/checkjagtester', (req, res) => {
     fetch(req.body.inputURL, {
@@ -290,13 +289,6 @@ router.post('/checkjagtester', (req, res) => {
         .catch(() => res.json({ jagtester: false }));
 });
 
-router.get('/getlogs', (req, res) => {
-    res.json(pulledDataFromTest);
-});
-
-router.get('/saveddata', (req, res) => {
-    res.json(allPulledDataFromTest);
-});
 router.get('/stopTest', (req, res) => {
     abortController.abort();
     res.sendStatus(200);
@@ -310,12 +302,6 @@ router.delete('/singledata/:index', (req, res) => {
         allPulledDataFromTest.splice(Number(req.params.index), 1);
     }
     res.sendStatus(200);
-});
-router.get('/data-with-timestamp', (req, res) => {
-    const data = fs.readFileSync(__dirname + '/../../src/server/datatimestamps.json', {
-        encoding: 'utf-8',
-    });
-    res.json(JSON.parse(data));
 });
 
 export default router;

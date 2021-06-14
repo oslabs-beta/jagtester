@@ -112,12 +112,9 @@ const configReducer = createReducer(initialState, (builder) => {
         .addCase(Actions.ChangeTargetPercent, (state, action) => {
             let index = action.payload.index;
             const newValue = action.payload.newValue;
-            // state.inputsData[index - 1].percentage = newValue;
-            // state.inputsData[index].percentage = 100 - newValue;
             let diffWithNext = state.inputsData[index].percentage - newValue;
             const diffWithNextCopy = diffWithNext;
-            while (diffWithNext !== 0) {
-                //TODO add a better terminating condition
+            while (diffWithNext > 0) {
                 index = index < state.inputsData.length - 1 ? index + 1 : 0;
 
                 if (state.inputsData[index].percentage + diffWithNext > 100) {

@@ -44,7 +44,7 @@ const Buttons: () => JSX.Element = () => {
         }).catch((err) => {
             dispatch(Actions.SetShowModal(true));
             dispatch(Actions.SetModalError(err.toString()));
-        }); // TODO fix the error handling
+        });
     };
 
     return (
