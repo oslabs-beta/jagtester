@@ -9,7 +9,7 @@ const config: webpack.Configuration = {
     mode: 'production',
     entry: './src/client/index.tsx',
     output: {
-        path: path.resolve(__dirname, 'build'),
+        path: path.resolve(__dirname, 'dist/clientbuild'),
         filename: '[name].[contenthash].js',
         publicPath: '',
     },
@@ -28,6 +28,18 @@ const config: webpack.Configuration = {
                         ],
                     },
                 },
+            },
+            {
+                test: /\.(png|jp(e*)g|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                    },
+                ],
+            },
+            {
+                test: /\.svg$/,
+                use: ['babel-loader', '@svgr/webpack', 'file-loader'],
             },
         ],
     },

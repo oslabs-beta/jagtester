@@ -5,9 +5,12 @@
     "main": "dist/server/index.js",
     "scripts": {
         "build-front": "webpack --config webpack.prod.config.ts",
+        "build-back": "tsc --build src lib",
+        "build": "tsc --build src lib && webpack --config webpack.prod.config.ts",
         "dev-front": "webpack serve --config webpack.dev.config.ts",
         "dev-back": "tsc --build -w src lib & nodemon ./dist/server/index.js",
-        "start": "tsc --build -w src lib & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts"
+        "dev": "tsc --build -w src lib & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts",
+        "prod": "node ./dist/server/index.js"
     },
     "repository": {
         "type": "git",

@@ -105,3 +105,6 @@ dist
 
 # MacOs specific folder files 
 .DS_Store
+
+# Webpack build folder
+build

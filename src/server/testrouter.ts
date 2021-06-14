@@ -56,8 +56,6 @@ let successfulResCount = 0;
 const eventEmitter = new events.EventEmitter();
 eventEmitter.on(ioSocketCommands.singleRPSfinished, (rpsGroup: number) => {
     io.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
-    console.log(`test finished for rps group ${rpsGroup}`);
-    // console.log(timeArrRoutes);
     const { rpsInterval, startRPS, endRPS, testLength, inputsData } = globalTestConfig;
 
     fetch(globalTestConfig.inputsData[0].targetURL, {
@@ -78,7 +76,6 @@ eventEmitter.on(ioSocketCommands.singleRPSfinished, (rpsGroup: number) => {
 });
 
 eventEmitter.on(ioSocketCommands.allRPSfinished, () => {
-    console.log('all rps finished');
     fetch(globalTestConfig.inputsData[0].targetURL, {
         headers: {
             jagtestercommand: Jagtestercommands.endTest.toString(),
@@ -105,7 +102,6 @@ eventEmitter.on(ioSocketCommands.allRPSfinished, () => {
                 ) / 1000;
         }
     }
-    // console.log('timeArrRoutes', timeArrRoutes);
 
     // processing middlewares, averaging them, then combining timearrroutes
     for (const rps in pulledDataFromTest) {
