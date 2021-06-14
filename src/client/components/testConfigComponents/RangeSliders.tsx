@@ -44,7 +44,7 @@ const RangeSliders: () => JSX.Element = () => {
 
     return (
         <div>
-            <Container>
+            <Container className="px-3 py-0">
                 <Row>
                     <Col>
                         <SingleSlider
