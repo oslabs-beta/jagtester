@@ -27,6 +27,7 @@ enum ActionTypes {
     setCurRPSpercent = 'setCurRPSpercent',
 
     setCurTestStartTime = 'setCurTestStartTime',
+    setDarkMode = 'setDarkMode',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -58,6 +59,7 @@ const DeleteSingleData = createAction<number>(ActionTypes.deleteSingleData);
 const SetResultsTabValue = createAction<number>(ActionTypes.setResultsTabValue);
 const SetCurRPSpercent = createAction<number>(ActionTypes.setCurRPSpercent);
 const SetCurTestStartTime = createAction<number>(ActionTypes.setCurTestStartTime);
+const SetDarkMode = createAction<boolean>(ActionTypes.setDarkMode);
 
 const Actions = {
     SetValueRPS,
@@ -79,6 +81,7 @@ const Actions = {
     SetResultsTabValue,
     SetCurRPSpercent,
     SetCurTestStartTime,
+    SetDarkMode,
 };
 
 export default Actions;

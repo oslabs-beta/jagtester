@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -75,70 +74,68 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
         rows.push([middlewareData.fnName, ...middlewareData.elapsedTimes.map((e) => e.toString())]);
     }
     return (
-        <Container>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} size="small" aria-label="a dense table">
-                    <TableHead>
-                        <TableRow>
-                            {rowsHeaders.map((rps, i) => (
-                                <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'}>
-                                    {i === 0 ? rps : `RPS - ${rps} `}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row, i) => (
-                            <TableRow key={`table-${i}`}>
-                                {row.map((ele, j) => {
-                                    return j === 0 ? (
-                                        <TableCell key={`cell-${j}`} component="th" scope="row">
-                                            {ele}
-                                        </TableCell>
-                                    ) : (
-                                        <TableCell
-                                            align="right"
-                                            key={`cell-${j}`}
-                                        >{`${ele} ms`}</TableCell>
-                                    );
-                                })}
-                            </TableRow>
+        <TableContainer component={Paper}>
+            <Table className={classes.table} size="small" aria-label="a dense table">
+                <TableHead>
+                    <TableRow>
+                        {rowsHeaders.map((rps, i) => (
+                            <TableCell key={`rps-${i}`} align={i === 0 ? 'left' : 'right'}>
+                                {i === 0 ? rps : `RPS - ${rps} `}
+                            </TableCell>
                         ))}
-                    </TableBody>
-                    <TableHead>
-                        <TableRow>
-                            {rowsHeaders2.map((rps, i) => (
-                                <TableCell
-                                    key={`rps-${i}`}
-                                    align={i === 0 ? 'left' : 'right'}
-                                    height={'30px'}
-                                >
-                                    {i === 0 ? rps : ``}
-                                </TableCell>
-                            ))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows.map((row, i) => (
+                        <TableRow key={`table-${i}`}>
+                            {row.map((ele, j) => {
+                                return j === 0 ? (
+                                    <TableCell key={`cell-${j}`} component="th" scope="row">
+                                        {ele}
+                                    </TableCell>
+                                ) : (
+                                    <TableCell
+                                        align="right"
+                                        key={`cell-${j}`}
+                                    >{`${ele} ms`}</TableCell>
+                                );
+                            })}
                         </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows2.map((row, i) => (
-                            <TableRow key={`table-${i}`}>
-                                {row.map((ele, j) => {
-                                    return j === 0 ? (
-                                        <TableCell key={`cell-${j}`} component="th" scope="row">
-                                            {ele}
-                                        </TableCell>
-                                    ) : (
-                                        <TableCell
-                                            align="right"
-                                            key={`cell-${j}`}
-                                        >{`${ele}`}</TableCell>
-                                    );
-                                })}
-                            </TableRow>
+                    ))}
+                </TableBody>
+                <TableHead>
+                    <TableRow>
+                        {rowsHeaders2.map((rps, i) => (
+                            <TableCell
+                                key={`rps-${i}`}
+                                align={i === 0 ? 'left' : 'right'}
+                                height={'30px'}
+                            >
+                                {i === 0 ? rps : ``}
+                            </TableCell>
                         ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Container>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows2.map((row, i) => (
+                        <TableRow key={`table-${i}`}>
+                            {row.map((ele, j) => {
+                                return j === 0 ? (
+                                    <TableCell key={`cell-${j}`} component="th" scope="row">
+                                        {ele}
+                                    </TableCell>
+                                ) : (
+                                    <TableCell
+                                        align="right"
+                                        key={`cell-${j}`}
+                                    >{`${ele}`}</TableCell>
+                                );
+                            })}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 };
 

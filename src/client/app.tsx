@@ -6,14 +6,30 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import { AllPulledDataFromTest } from './interfaces';
 import socketIOClient from 'socket.io-client';
-import { useAppDispatch } from './state/hooks';
+import { useAppDispatch, useAppSelector } from './state/hooks';
 import Actions from './state/actions/actions';
 import Modal from './components/modal';
 import { ioSocketCommands } from '../client/interfaces';
 
+//MUI imports
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 const App: () => JSX.Element = () => {
     const socket = socketIOClient();
     const dispatch = useAppDispatch();
+
+    const prefersDarkMode = useAppSelector((state) => state.darkMode);
+
+    const theme = React.useMemo(
+        () =>
+            createMuiTheme({
+                palette: {
+                    type: prefersDarkMode ? 'dark' : 'light',
+                },
+            }),
+        [prefersDarkMode]
+    );
 
     // start----------------------------------- socket io funcitonality
     socket.on(ioSocketCommands.singleRPSfinished, (rps: number) => {
@@ -36,7 +52,9 @@ const App: () => JSX.Element = () => {
 
     // end  ----------------------------------- socket io funcitonality
     return (
-        <div>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+
             <BrowserRouter>
                 <Container fluid className="mx-0 px-0">
                     <Navigation />
@@ -47,7 +65,7 @@ const App: () => JSX.Element = () => {
                     <Modal />
                 </Container>
             </BrowserRouter>
-        </div>
+        </ThemeProvider>
     );
 };
 

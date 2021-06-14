@@ -12,7 +12,8 @@ import Actions from '../../state/actions/actions';
 import noresults from '../../img/noresults.png';
 
 import TabLabels from './verticalTabLabels';
-
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Tab from '@material-ui/core/Tab';
 
 interface TabPanelProps {
@@ -86,12 +87,16 @@ const VerticalTabs: () => JSX.Element = () => {
             (routeName, j) => {
                 routeNames.push(
                     <Col key={`col-${j}`}>
-                        <StackedBar
-                            testData={singleTest.testData}
-                            singleRoute={true}
-                            routeName={routeName}
-                        />
-                        <DenseTable routeData={singleTest.testData} routeName={routeName} />
+                        <Card raised className="mb-5 mt-0">
+                            <CardContent>
+                                <StackedBar
+                                    testData={singleTest.testData}
+                                    singleRoute={true}
+                                    routeName={routeName}
+                                />
+                                <DenseTable routeData={singleTest.testData} routeName={routeName} />
+                            </CardContent>
+                        </Card>
                     </Col>
                 );
             }
@@ -99,7 +104,11 @@ const VerticalTabs: () => JSX.Element = () => {
         tabPanelsArr.push(
             <TabPanel value={resultsTabValue} index={i} key={i}>
                 <Col key={-1} className={'mb-5'}>
-                    <StackedBar testData={singleTest.testData} singleRoute={false} />
+                    <Card raised className="mb-5 mt-0">
+                        <CardContent>
+                            <StackedBar testData={singleTest.testData} singleRoute={false} />
+                        </CardContent>
+                    </Card>
                 </Col>
                 {routeNames}
             </TabPanel>

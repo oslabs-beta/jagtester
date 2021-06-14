@@ -23,6 +23,7 @@ const initialState: {
     curRPSpercent: number;
     curTestTotalPercent: number;
     curTestStartTime: number;
+    darkMode: boolean;
 } = {
     valueRPS: 500,
     valueStart: 100,
@@ -51,6 +52,7 @@ const initialState: {
     curRPSpercent: 0,
     curTestTotalPercent: 0,
     curTestStartTime: 0,
+    darkMode: false,
 };
 
 const calculateTotalTestPercent = (
@@ -178,6 +180,9 @@ const configReducer = createReducer(initialState, (builder) => {
         })
         .addCase(Actions.SetCurTestStartTime, (state, action) => {
             state.curTestStartTime = action.payload;
+        })
+        .addCase(Actions.SetDarkMode, (state, action) => {
+            state.darkMode = action.payload;
         });
 });
 

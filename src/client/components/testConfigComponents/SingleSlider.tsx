@@ -5,6 +5,8 @@ import Slider from '@material-ui/core/Slider';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import { useAppSelector } from '../../state/hooks';
+
 const SingleSlider: (props: {
     text: string;
     id: string;
@@ -21,6 +23,7 @@ const SingleSlider: (props: {
     };
     disabled?: boolean;
 }) => JSX.Element = (props) => {
+    const darkMode = useAppSelector((state) => state.darkMode);
     // generates marks for the sliders
     const marks = (interval: number, min: number, max: number) => {
         const marksArr: {
@@ -62,6 +65,7 @@ const SingleSlider: (props: {
                         min={props.min}
                         max={props.max}
                         step={props.step}
+                        color={darkMode ? 'secondary' : 'primary'}
                         marks={
                             props.marks &&
                             marks(props.marks.interval, props.marks.min, props.marks.max)

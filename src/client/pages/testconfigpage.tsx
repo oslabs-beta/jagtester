@@ -6,15 +6,27 @@ import Buttons from '../components/testConfigComponents/buttonsstartstop';
 import TargetInputs from '../components/testConfigComponents/TargetInputs';
 import RangeSliders from '../components/testConfigComponents/RangeSliders';
 
+//MUI imports
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+
 const TestPage: () => JSX.Element = () => {
     return (
         <Row className="mx-4">
             <Col>
-                <TargetInputs />
+                <Card raised>
+                    <CardContent>
+                        <TargetInputs />
+                    </CardContent>
+                </Card>
             </Col>
             <Col>
-                <RangeSliders />
-                <Buttons />
+                <Card raised>
+                    <CardContent>
+                        <RangeSliders />
+                        <Buttons />
+                    </CardContent>
+                </Card>
             </Col>
         </Row>
     );
