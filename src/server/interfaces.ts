@@ -35,11 +35,11 @@ export enum Jagtestercommands {
 }
 
 export enum ioSocketCommands {
-    testRunningStateChange,
-    singleRPSfinished,
-    allRPSfinished,
-    errorInfo,
-    currentRPSProgress
+    testRunningStateChange = 'testRunningStateChange',
+    singleRPSfinished = 'singleRPSfinished',
+    allRPSfinished = 'allRPSfinished',
+    errorInfo = 'errorInfo',
+    currentRPSProgress = 'currentRPSProgress',
 }
 
 export interface TestConfigData {

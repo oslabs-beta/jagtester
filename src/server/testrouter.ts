@@ -10,20 +10,13 @@ import {
     AllPulledDataFromTest,
     Jagtestercommands,
     TestConfigData,
+    ioSocketCommands,
 } from './interfaces';
 
 import { processData, processLastMiddleware, emitPercentage } from './helperFunctions';
 
 import AbortController from 'abort-controller';
 let abortController = new AbortController();
-
-enum ioSocketCommands {
-    testRunningStateChange,
-    singleRPSfinished,
-    allRPSfinished,
-    errorInfo,
-    currentRPSProgress
-}
 
 const router = express.Router();
 let timeArrRoutes: {
@@ -46,7 +39,7 @@ const timeOutArray: NodeJS.Timeout[] = [];
 const trackedVariables = {
     isTestRunningInternal: false,
     isTestRunningListener: (val: boolean) => {
-        io.emit(ioSocketCommands.testRunningStateChange.toString(), val); // TODO change io strings to enums
+        io.emit(ioSocketCommands.testRunningStateChange, val); // TODO change io strings to enums
     },
     set isTestRunning(val: boolean) {
         this.isTestRunningInternal = val;
@@ -62,8 +55,8 @@ let errorCount = 0;
 let successfulResCount = 0;
 
 const eventEmitter = new events.EventEmitter();
-eventEmitter.on(ioSocketCommands.singleRPSfinished.toString(), (rpsGroup: number) => {
-    io.emit(ioSocketCommands.singleRPSfinished.toString(), rpsGroup);
+eventEmitter.on(ioSocketCommands.singleRPSfinished, (rpsGroup: number) => {
+    io.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
     console.log(`test finished for rps group ${rpsGroup}`);
     // console.log(timeArrRoutes);
     const { rpsInterval, startRPS, endRPS, testLength, inputsData } = globalTestConfig;
@@ -81,18 +74,18 @@ eventEmitter.on(ioSocketCommands.singleRPSfinished.toString(), (rpsGroup: number
             sendRequestsAtRPS(rpsInterval, startRPS, endRPS, testLength, inputsData);
         })
         .catch(() => {
-            eventEmitter.emit(ioSocketCommands.allRPSfinished.toString());
+            eventEmitter.emit(ioSocketCommands.allRPSfinished);
         }); // TODO add better error handling
 });
 
-eventEmitter.on(ioSocketCommands.allRPSfinished.toString(), () => {
+eventEmitter.on(ioSocketCommands.allRPSfinished, () => {
     console.log('all rps finished');
     fetch(globalTestConfig.inputsData[0].targetURL, {
         headers: {
             jagtestercommand: Jagtestercommands.endTest.toString(),
         },
     }).catch((err) => {
-        io.emit(ioSocketCommands.errorInfo.toString(), err.toString());
+        io.emit(ioSocketCommands.errorInfo, err.toString());
     });
     abortController = new AbortController();
     trackedVariables.isTestRunning = false;
@@ -138,7 +131,7 @@ eventEmitter.on(ioSocketCommands.allRPSfinished.toString(), () => {
             testData: pulledDataFromTest,
         });
     }
-    io.emit(ioSocketCommands.allRPSfinished.toString(), allPulledDataFromTest);
+    io.emit(ioSocketCommands.allRPSfinished, allPulledDataFromTest);
 });
 
 const agent = new http.Agent({ keepAlive: true });
@@ -165,7 +158,7 @@ const sendRequests = (
                 successfulResCount++;
                 emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
                 if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
-                    eventEmitter.emit(ioSocketCommands.singleRPSfinished.toString(), rpsGroup);
+                    eventEmitter.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
                 }
                 if (res.headers.has('x-response-time')) {
                     const xResponseTime = res.headers.get('x-response-time');
@@ -178,7 +171,7 @@ const sendRequests = (
                 if (error.name === 'AbortError') {
                     if (trackedVariables.isTestRunning) {
                         trackedVariables.isTestRunning = false;
-                        eventEmitter.emit(ioSocketCommands.allRPSfinished.toString());
+                        eventEmitter.emit(ioSocketCommands.allRPSfinished);
                     }
                 } else {
                     const resRoute = new URL(targetURL).pathname;
@@ -186,7 +179,7 @@ const sendRequests = (
                     errorCount++;
                     emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
                     if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
-                        eventEmitter.emit(ioSocketCommands.singleRPSfinished.toString(), rpsGroup);
+                        eventEmitter.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
                     }
                 }
             });
@@ -218,7 +211,7 @@ const sendRequestsAtRPS = (
     // check if finished testing
     const curRPS = startRPS + currentInterval * rpsInterval;
     if (curRPS > endRPS) {
-        eventEmitter.emit(ioSocketCommands.allRPSfinished.toString());
+        eventEmitter.emit(ioSocketCommands.allRPSfinished);
         return;
     }
 
@@ -260,7 +253,7 @@ const sendRequestsAtRPS = (
                 // res.json({ jagtester: true });
             })
             .catch(() => {
-                eventEmitter.emit(ioSocketCommands.allRPSfinished.toString());
+                eventEmitter.emit(ioSocketCommands.allRPSfinished);
             }); //TODO better error handling
     }
 };
