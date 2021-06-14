@@ -1,5 +1,6 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,7 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
+import { useAppSelector } from '../../state/hooks';
 import { PulledDataFromTest } from '../../interfaces';
 
 const useStyles = makeStyles({
@@ -22,7 +23,7 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
     routeName,
 }) => {
     const classes = useStyles();
-
+    const darkMode = useAppSelector((state) => state.darkMode);
     const rpsArr: string[] = [];
 
     const resultArr: {
@@ -73,6 +74,11 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
     }
     return (
         <Container className={'mb-5'}>
+        <Card 
+            className= {darkMode ? "shadow p-3 mb-5 bg-white rounded" : "shadow p-3 mb-5 bg-grey rounded" }
+            bg={darkMode ? "light" : "dark"}>
+
+        
         <TableContainer component={Paper}>
         <Table className={classes.table} size="small" aria-label="a dense table">
             <TableHead>
@@ -132,6 +138,7 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
                     </TableBody>
                 </Table>
             </TableContainer>
+            </Card>
         </Container>
     );
 };

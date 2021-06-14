@@ -21,7 +21,7 @@ const App: () => JSX.Element = () => {
     const [modalError, setModalError] = useState('');
 
     const darkMode = useAppSelector((state) => state.darkMode);
-    const darkModeTheme = darkMode;
+    // const darkModeTheme = darkMode;
 
 
     // start----------------------------------- socket io funcitonality
@@ -41,11 +41,11 @@ const App: () => JSX.Element = () => {
 
     // end  ----------------------------------- socket io funcitonality
     return (
-        <div className="App" data-theme={darkMode ? "dark" : "dark"}
+        <div className="App" data-theme={darkMode ? "white" : "dark"}
     
          >
             <BrowserRouter>
-                <Container fluid className="mx-0 px-0">
+                <Container fluid className="mx-0 px-0 h-100">
                     <Navigation />
                     <Switch>
                         <Route path="/" exact component={TestPage} />

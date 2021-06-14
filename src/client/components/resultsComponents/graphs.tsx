@@ -3,6 +3,8 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { PulledDataFromTest, ChartDataSet } from '../../interfaces';
 import { useAppSelector } from '../../state/hooks';
+import Card from 'react-bootstrap/Card';
+import { grey } from '@material-ui/core/colors';
 
 
 
@@ -33,7 +35,11 @@ const StackedBar: (props: {
             },
         },
         responsive: true,
-        backgroundColor: darkMode ? 'black' :'#white', 
+        // backgroundColor: darkMode ? 'black' :'#white', 
+        // options: {
+        //     gridLines: darkMode ? 'white' :'#white', 
+        //     angleLines: darkMode ? 'white' :'#white', 
+        // },
         scales: {
             x: {
                 stacked: singleRoute,
@@ -153,7 +159,12 @@ const StackedBar: (props: {
     return (
         <div className="Chart">
             <div>
-                <Bar type="undefined" data={chartData} options={chartOptions} />
+                <Card 
+                    className={darkMode ? "shadow p-3 mb-5 bg-white rounded" : "default"}
+                    bg={darkMode ? 'light': 'dark'} >
+
+                    <Bar type="undefined" data={chartData} options={chartOptions} />
+                </Card>
                 
             </div>
         </div>

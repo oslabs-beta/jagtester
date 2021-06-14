@@ -1,9 +1,9 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useAppSelector } from '../../state/hooks';
 
 const SingleSlider: (props: {
     text: string;
@@ -42,11 +42,13 @@ const SingleSlider: (props: {
         return `${value}`;
     }
 
+    const darkMode = useAppSelector((state) => state.darkMode);
+
     return (
         <>
             <Row className="mt-3">
                 <Col md={3}>
-                    <Typography id={props.id}>{props.text}</Typography>
+                    <Typography color={darkMode ? 'initial' : 'inherit'} id={props.id}>{props.text}</Typography>
                 </Col>
                 <Col>
                     <Slider

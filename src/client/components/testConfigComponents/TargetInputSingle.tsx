@@ -179,6 +179,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const TargetInputDisabled: () => JSX.Element = () => {
     const isTestRunning = useAppSelector((state) => state.isTestRunning);
+    const darkMode = useAppSelector((state) => state.darkMode);
     const dispatch = useAppDispatch();
     const classes = useStyles();
     const addTargetInput = () => {
@@ -196,7 +197,7 @@ const TargetInputDisabled: () => JSX.Element = () => {
                 </FormControl>
                 <FormControl disabled className="my-auto">
                     <AddCircleIcon
-                        color="primary"
+                        color= "primary" 
                         className={classes.addIcon}
                         onClick={isTestRunning ? undefined : addTargetInput}
                     />

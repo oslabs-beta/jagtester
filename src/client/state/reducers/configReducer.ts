@@ -118,7 +118,11 @@ const configReducer = createReducer(initialState, (builder) => {
         .addCase(Actions.SetReceivedData, (state, action) => {
             state.receivedData = action.payload;
         }).addCase(Actions.SwitchDarkMode, (state, action) => {
-            state.darkMode = action.payload;
+            if (action.payload === true){
+                state.darkMode = false;
+            } else {
+                state.darkMode = true;
+            }
         })
 });
 

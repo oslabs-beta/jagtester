@@ -5,8 +5,12 @@ import Container from 'react-bootstrap/Container'
 import TestProgrss from '../components/testConfigComponents/testProgress';
 import { LinkContainer } from 'react-router-bootstrap';
 import Asset from '../img/Asset.svg';
+import Switch from './Switch'
+import { useAppSelector } from '../state/hooks'
 
 const Navigation: () => JSX.Element = () => {
+    const darkMode = useAppSelector((state) => state.darkMode);
+    
     return (
         <Container className="m-0 p-0 mb-5 sticky-top" fluid> 
             <Navbar variant="dark" className="mb-0 pb-0" style={{backgroundColor: "#3D405B"}}>
@@ -27,6 +31,7 @@ const Navigation: () => JSX.Element = () => {
                         <Nav.Link>Results</Nav.Link>
                     </LinkContainer>
                 </Nav>
+                <Switch />
             </Navbar>
             <TestProgrss/>
         </Container>

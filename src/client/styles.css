@@ -1,4 +1,4 @@
-body {
+[data-theme="light"] {
     /* padding: 25px; */
     background-color: white;
     color: black;
@@ -8,3 +8,5 @@ body {
     background-color: #121212;
     color: white;
   }
+
+
