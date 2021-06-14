@@ -64,7 +64,8 @@ const DenseTable: (props: { routeData: PulledDataFromTest; routeName?: string })
         const errorPercent: number =
             100 *
             ((routeData[rps][routeName as string].errorCount as number) /
-                (routeData[rps][routeName as string].successfulResCount as number));
+                ((routeData[rps][routeName as string].successfulResCount as number) +
+                    (routeData[rps][routeName as string].errorCount as number)));
         rows2[3].push(errorPercent.toFixed(2) + '%');
     }
 
