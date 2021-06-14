@@ -89,7 +89,7 @@ const TargetInputSingle: (props: { index: number }) => JSX.Element = ({ index })
                         isEnabled: false,
                     })
                 );
-            }); // TODO add better error handling
+            });
     };
 
     return (
@@ -142,6 +142,7 @@ const TargetInputSingle: (props: { index: number }) => JSX.Element = ({ index })
                 step={1}
                 marks={{ interval: 10, min: 0, max: 100 }}
                 disabled={inputsData.length === 1 || isTestRunning}
+                extraLabel={`${inputsData[i].percentage}%`}
             />
             <hr />
         </Container>
@@ -165,27 +166,28 @@ const useStyles = makeStyles((theme: Theme) =>
         addIcon: {
             fontSize: '3rem',
             '&:hover': {
-                color: '#2c3b8f', // TODO add more consistent styling
+                color: '#2c3b8f',
             },
         },
         deleteIcon: {
             fontSize: '3rem',
             '&:hover': {
-                color: '#c20045', // TODO add more consistent styling
+                color: '#c20045',
             },
         },
     })
 );
 
 const TargetInputDisabled: () => JSX.Element = () => {
+    const isTestRunning = useAppSelector((state) => state.isTestRunning);
     const dispatch = useAppDispatch();
     const classes = useStyles();
     const addTargetInput = () => {
         dispatch(Actions.AddTarget());
     };
     return (
-        <Container key={`input${-1}`} className="mb-3 ">
-            <Row>
+        <Container key={`input${-1}`} className="mx-0 my-2 p-0">
+            <Row className="p-0">
                 <FormControl disabled className={classes.methodInput}>
                     <InputLabel>Method</InputLabel>
                     <Select value={HTTPMethods.GET}>{menuItems}</Select>
@@ -197,7 +199,7 @@ const TargetInputDisabled: () => JSX.Element = () => {
                     <AddCircleIcon
                         color="primary"
                         className={classes.addIcon}
-                        onClick={addTargetInput}
+                        onClick={isTestRunning ? undefined : addTargetInput}
                     />
                 </FormControl>
             </Row>

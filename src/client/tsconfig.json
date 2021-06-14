@@ -19,6 +19,6 @@
             "*": ["../../node_modules/*"]
         }
     },
-    "include": ["./**/*", "./components/resultsComponents/data-updated.json"],
+    "include": ["./**/*", "../custom.d.ts"],
     "references": [{ "path": "../server" }]
 }

@@ -2,28 +2,89 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { PulledDataFromTest, ChartDataSet } from '../../interfaces';
 
-const randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16);
+import { useAppSelector } from '../../state/hooks';
+
+const shadedColor = (
+    index: number,
+    totalCount: number,
+    darkMode: boolean,
+    color1 = [255, 175, 145],
+    color2 = [30, 32, 60]
+) => {
+    const finalColor = [];
+    for (let i = 0; i < 3; i++) {
+        let color = color1[i] + (index * (color2[i] - color1[i])) / totalCount;
+        if (darkMode) color = 255 - (255 - color) * 0.8;
+        finalColor.push(Math.floor(color));
+    }
+    return `rgba(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]}, 1)`;
+    // return '#' + Math.floor(Math.random() * 16777215).toString(16)
+};
 
 const StackedBar: (props: {
     testData: PulledDataFromTest;
     singleRoute: boolean;
     routeName?: string;
 }) => JSX.Element = ({ testData, singleRoute, routeName }) => {
+    const darkMode = useAppSelector((state) => state.darkMode);
     const chartOptions = {
         plugins: {
             title: {
                 display: true,
-                text: singleRoute ? routeName : 'All routes',
+                text: singleRoute ? `Route - ${routeName}` : 'All routes',
+                color: darkMode ? 'white' : 'black',
+                font: {
+                    size: '30rem',
+                },
             },
         },
         responsive: true,
+        color: darkMode ? 'white' : 'black',
         scales: {
             x: {
+                title: {
+                    text: 'RPS',
+                    display: true,
+                    color: darkMode ? 'white' : 'black',
+                },
                 stacked: singleRoute,
+                ticks: {
+                    color: darkMode ? 'white' : 'black',
+                },
+                grid: {
+                    color: darkMode ? '#606060' : '#dddddd',
+                },
             },
             y: {
+                title: {
+                    text: 'milliseconds',
+                    display: true,
+                    color: darkMode ? 'white' : 'black',
+                },
                 stacked: singleRoute,
                 beginAtZero: true,
+                ticks: {
+                    color: darkMode ? 'white' : 'black',
+                },
+                grid: {
+                    color: darkMode ? '#606060' : '#dddddd',
+                },
+            },
+            yError: {
+                position: 'right',
+                title: {
+                    text: 'Error %',
+                    display: true,
+                    color: darkMode ? 'white' : 'black',
+                },
+                stacked: false,
+                beginAtZero: true,
+                ticks: {
+                    color: darkMode ? 'white' : 'black',
+                },
+                grid: {
+                    display: false,
+                },
             },
         },
     };
@@ -43,8 +104,6 @@ const StackedBar: (props: {
         fnName: string;
         elapsedTimes: number[];
     }[] = [];
-
-    //TODO: create an result OBJ for errors
 
     if (singleRoute) {
         //pushing rps to an array
@@ -66,12 +125,12 @@ const StackedBar: (props: {
             });
         });
 
-        for (const middlewareData of resultArr) {
+        for (let i = 0; i < resultArr.length; i++) {
             dataSetArray.push({
                 type: 'bar',
-                label: middlewareData.fnName,
-                data: middlewareData.elapsedTimes,
-                backgroundColor: [randomColor()],
+                label: resultArr[i].fnName,
+                data: resultArr[i].elapsedTimes,
+                backgroundColor: [shadedColor(i, resultArr.length, darkMode)],
                 borderWidth: 0,
             });
         }
@@ -92,7 +151,8 @@ const StackedBar: (props: {
                 resultObj[route].errorCounts.push(
                     Math.round(
                         (100 * (testData[rps][route].errorCount as number)) /
-                            (testData[rps][route].successfulResCount as number)
+                            ((testData[rps][route].successfulResCount as number) +
+                                (testData[rps][route].errorCount as number))
                     )
                 );
             });
@@ -101,8 +161,8 @@ const StackedBar: (props: {
         //have them select color scheme? or colors per route?
 
         //loop through the resultObj to create the dataset array on objs per route/ property
-        Object.keys(resultObj).forEach((route) => {
-            const lineColor = randomColor();
+        Object.keys(resultObj).forEach((route, i) => {
+            const lineColor = shadedColor(i, Object.keys(resultObj).length, darkMode);
             dataSetArray.push({
                 type: 'bar',
                 label: route,
@@ -110,12 +170,20 @@ const StackedBar: (props: {
                 backgroundColor: [lineColor],
                 borderWidth: 0,
             });
+            const lineColorRed = shadedColor(
+                i,
+                Object.keys(resultObj).length,
+                darkMode,
+                [100, 25, 25],
+                [220, 50, 50]
+            );
             dataSetArray.push({
                 type: 'line',
                 label: `Error percent for ${route}`,
+                yAxisID: 'yError',
                 data: resultObj[route].errorCounts,
-                backgroundColor: [lineColor],
-                borderColor: lineColor,
+                backgroundColor: [lineColorRed],
+                borderColor: lineColorRed,
                 borderWidth: 4,
                 fill: false,
             });
@@ -128,13 +196,7 @@ const StackedBar: (props: {
         datasets: dataSetArray,
     };
 
-    return (
-        <div className="Chart">
-            <div>
-                <Bar type="undefined" data={chartData} options={chartOptions} />
-            </div>
-        </div>
-    );
+    return <Bar type="undefined" data={chartData} options={chartOptions} />;
 };
 
 export default StackedBar;

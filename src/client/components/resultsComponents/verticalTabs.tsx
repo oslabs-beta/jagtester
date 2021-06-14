@@ -1,15 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-
-import { AllPulledDataFromTest } from '../../interfaces';
 import StackedBar from './graphs';
-
+import DenseTable from './tables';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useAppSelector, useAppDispatch } from '../../state/hooks';
+import Actions from '../../state/actions/actions';
+import noresults from '../../img/noresults.png';
+
+import TabLabels from './verticalTabLabels';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Tab from '@material-ui/core/Tab';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -33,13 +38,6 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-function a11yProps(index: number) {
-    return {
-        id: `vertical-tab-${index}`,
-        'aria-controls': `vertical-tabpanel-${index}`,
-    };
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         flexGrow: 1,
@@ -52,72 +50,112 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
+const a11yProps = (index: number) => {
+    return {
+        id: `vertical-tab-${index}`,
+        'aria-controls': `vertical-tabpanel-${index}`,
+    };
+};
+
 const VerticalTabs: () => JSX.Element = () => {
     const classes = useStyles();
-    const [tabValue, setTabValue] = React.useState(0);
+    const dispatch = useAppDispatch();
+    const resultsTabValue = useAppSelector((state) => state.resultsTabValue);
 
     const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
-        setTabValue(newValue);
+        dispatch(Actions.SetResultsTabValue(newValue));
     };
 
-    const [receivedData, setReceivedData] = React.useState<AllPulledDataFromTest[]>([]);
-
-    useEffect(() => {
-        fetch('/api/saveddata')
-            .then((res) => res.json())
-            .then((data: AllPulledDataFromTest[]) => {
-                setReceivedData(data);
-            })
-            .catch((err) => console.log(err));
-    }, []);
+    const receivedData = useAppSelector((state) => state.receivedData);
 
     //pushing tab data
     const tabsArr: JSX.Element[] = [];
     const tabPanelsArr: JSX.Element[] = [];
     for (let i = 0; i < receivedData.length; i++) {
         const singleTest = receivedData[i];
+        // tabsArr.push(<TabLabels index={i} key={i} time={singleTest.testTime} />);
         tabsArr.push(
-            <Tab label={new Date(singleTest.testTime).toLocaleString()} {...a11yProps(i)} key={i} />
+            <Tab
+                label={<TabLabels index={i} time={singleTest.testTime} />}
+                key={i}
+                {...a11yProps(i)}
+            />
         );
-
         const routeNames: JSX.Element[] = [];
 
         Object.keys(singleTest.testData[Object.keys(singleTest.testData)[0]]).forEach(
-            (routeName, i) => {
+            (routeName, j) => {
                 routeNames.push(
-                    <StackedBar
-                        testData={singleTest.testData}
-                        singleRoute={true}
-                        routeName={routeName}
-                        key={i}
-                    />
+                    <Col key={`col-${j}`}>
+                        <Card raised className="mb-5 mt-0">
+                            <CardContent>
+                                <StackedBar
+                                    testData={singleTest.testData}
+                                    singleRoute={true}
+                                    routeName={routeName}
+                                />
+                                <DenseTable routeData={singleTest.testData} routeName={routeName} />
+                            </CardContent>
+                        </Card>
+                    </Col>
                 );
             }
         );
         tabPanelsArr.push(
-            <TabPanel value={tabValue} index={i} key={i}>
-                <StackedBar testData={singleTest.testData} singleRoute={false} key={-1} />
+            <TabPanel value={resultsTabValue} index={i} key={i}>
+                <Col key={-1} className={'mb-5'}>
+                    <Card raised className="mb-5 mt-0">
+                        <CardContent>
+                            <StackedBar testData={singleTest.testData} singleRoute={false} />
+                        </CardContent>
+                    </Card>
+                </Col>
                 {routeNames}
             </TabPanel>
         );
     }
     return (
         <Container fluid>
-            <Row>
-                <Col sm={3}>
-                    <Tabs
-                        orientation="vertical"
-                        variant="standard"
-                        value={tabValue}
-                        onChange={handleChange}
-                        aria-label="Vertical tabs example"
-                        className={classes.tabs}
-                    >
-                        {tabsArr}
-                    </Tabs>
-                </Col>
-                <Col sm={9}>{tabPanelsArr}</Col>
-            </Row>
+            {receivedData.length !== 0 && (
+                <Row>
+                    <Col sm={3}>
+                        <Tabs
+                            orientation="vertical"
+                            variant="standard"
+                            value={resultsTabValue}
+                            onChange={handleChange}
+                            aria-label="Vertical tabs example"
+                            className={classes.tabs}
+                        >
+                            {tabsArr}
+                        </Tabs>
+                    </Col>
+                    <Col sm={9}>{tabPanelsArr}</Col>
+                </Row>
+            )}
+            {receivedData.length === 0 && (
+                <Row>
+                    <Col>
+                        <h1 className="text-center">
+                            Oops! No results are available!
+                            <br />
+                            Go back and start a test on your server.
+                        </h1>{' '}
+                        <Container className="justify-content-center" fluid>
+                            <Row xs={12}>
+                                <img
+                                    src={noresults}
+                                    style={{
+                                        margin: 'auto',
+                                        width: '75%',
+                                        height: '75%',
+                                    }}
+                                />
+                            </Row>
+                        </Container>
+                    </Col>
+                </Row>
+            )}
         </Container>
     );
 };

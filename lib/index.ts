@@ -77,7 +77,7 @@ const getMiddleware: FunctionType = (app: Application) => {
                 reqId = req.headers.jagtesterreqid
                     ? req.headers.jagtesterreqid.toString()
                     : undefined,
-                reqRoute = req.url;
+                reqRoute = req.originalUrl;
 
             // create a data object in the collected data if it doesnt already exist
             if (!routeData[reqRoute]) {

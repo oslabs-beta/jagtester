@@ -21,11 +21,15 @@ const Buttons: () => JSX.Element = () => {
     const jagEndabledInputs = inputsData.some((target) => !target.jagTesterEnabled);
 
     const handleStopTest = () => {
-        fetch('/api/stopTest'); // TODO add then catch
+        fetch('/api/stopTest').catch((err) => {
+            dispatch(Actions.SetShowModal(true));
+            dispatch(Actions.SetModalError(err.toString()));
+        });
     };
 
     const handleStartTest = () => {
         dispatch(Actions.SetCurRunningRPS(0));
+        dispatch(Actions.SetCurTestStartTime(Date.now()));
         const testConfigObj: TestConfigData = {
             rpsInterval: valueRPS,
             startRPS: valueStart,
@@ -37,31 +41,41 @@ const Buttons: () => JSX.Element = () => {
             method: HTTPMethods.POST,
             headers: new Headers({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(testConfigObj),
-        })
-            .then((res) => console.log('received response, ', res)) // TODO if not jagtester enabled, show error message
-            .catch((err) => console.log(err)); // TODO fix the error handling
+        }).catch((err) => {
+            dispatch(Actions.SetShowModal(true));
+            dispatch(Actions.SetModalError(err.toString()));
+        });
     };
 
     return (
         <Container>
             <Row>
-                <Col>
+                <Col sm={4}>
                     <Button
                         disabled={jagEndabledInputs || isTestRunning}
                         block
                         onClick={handleStartTest}
                     >
-                        Start testing
+                        Start Testing
                     </Button>
                 </Col>
-                <Col>
+                <Col sm={4}>
                     <Button
                         disabled={jagEndabledInputs || !isTestRunning}
                         variant="danger"
                         block
                         onClick={handleStopTest}
                     >
-                        Stop and get data
+                        Stop
+                    </Button>
+                </Col>
+                <Col sm={4}>
+                    <Button
+                        variant="secondary"
+                        block
+                        onClick={() => dispatch(Actions.ResetState())}
+                    >
+                        Reset to default
                     </Button>
                 </Col>
             </Row>

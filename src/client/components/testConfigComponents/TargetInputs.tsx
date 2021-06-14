@@ -16,7 +16,7 @@ const TartgetInputs: () => JSX.Element = () => {
     // pushing a disabled input
     inputsArr.push(<TargetInputDisabled key={-1} />);
 
-    return <Container className="m-0">{inputsArr}</Container>;
+    return <Container className="p-2">{inputsArr}</Container>;
 };
 
 export default TartgetInputs;

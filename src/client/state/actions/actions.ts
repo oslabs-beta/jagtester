@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import { HTTPMethods } from '../../interfaces';
+import { HTTPMethods, AllPulledDataFromTest } from '../../interfaces';
 
 enum ActionTypes {
     setValueRPS = 'setValueRPS',
@@ -16,6 +16,19 @@ enum ActionTypes {
     changeTargetPercent = 'changeTargetPercent',
     addTarget = 'addTarget',
     deleteTarget = 'deleteTarget',
+
+    setReceivedData = 'setRedeceivedData',
+
+    setShowModal = 'setShowModal',
+    setModalError = 'setModalError',
+
+    deleteSingleData = 'deleteSingleData',
+    setResultsTabValue = 'setResultsTabValue',
+    setCurRPSpercent = 'setCurRPSpercent',
+
+    setCurTestStartTime = 'setCurTestStartTime',
+    setDarkMode = 'setDarkMode',
+    resetState = 'resetState',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -39,6 +52,17 @@ const ChangeTargetPercent = createAction<{ index: number; newValue: number }>(
 const AddTarget = createAction(ActionTypes.addTarget);
 const DeleteTarget = createAction<number>(ActionTypes.deleteTarget);
 
+const SetReceivedData = createAction<AllPulledDataFromTest[]>(ActionTypes.setReceivedData);
+
+const SetShowModal = createAction<boolean>(ActionTypes.setShowModal);
+const SetModalError = createAction<string>(ActionTypes.setModalError);
+const DeleteSingleData = createAction<number>(ActionTypes.deleteSingleData);
+const SetResultsTabValue = createAction<number>(ActionTypes.setResultsTabValue);
+const SetCurRPSpercent = createAction<number>(ActionTypes.setCurRPSpercent);
+const SetCurTestStartTime = createAction<number>(ActionTypes.setCurTestStartTime);
+const SetDarkMode = createAction<boolean>(ActionTypes.setDarkMode);
+const ResetState = createAction(ActionTypes.resetState);
+
 const Actions = {
     SetValueRPS,
     SetValueStart,
@@ -52,6 +76,15 @@ const Actions = {
     ChangeTargetPercent,
     AddTarget,
     DeleteTarget,
+    SetReceivedData,
+    SetShowModal,
+    SetModalError,
+    DeleteSingleData,
+    SetResultsTabValue,
+    SetCurRPSpercent,
+    SetCurTestStartTime,
+    SetDarkMode,
+    ResetState,
 };
 
 export default Actions;
