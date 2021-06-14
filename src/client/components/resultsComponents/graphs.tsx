@@ -101,7 +101,8 @@ const StackedBar: (props: {
                 resultObj[route].errorCounts.push(
                     Math.round(
                         (100 * (testData[rps][route].errorCount as number)) /
-                            (testData[rps][route].successfulResCount as number)
+                            ((testData[rps][route].successfulResCount as number) +
+                                (testData[rps][route].errorCount as number))
                     )
                 );
             });

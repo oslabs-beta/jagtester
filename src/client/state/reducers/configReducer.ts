@@ -21,6 +21,8 @@ const initialState: {
     modalError: string;
     resultsTabValue: number;
     curRPSpercent: number;
+    curTestTotalPercent: number;
+    curTestStartTime: number;
 } = {
     valueRPS: 500,
     valueStart: 100,
@@ -47,6 +49,24 @@ const initialState: {
     modalError: '',
     resultsTabValue: 0,
     curRPSpercent: 0,
+    curTestTotalPercent: 0,
+    curTestStartTime: 0,
+};
+
+const calculateTotalTestPercent = (
+    valueRPS: number,
+    valueStart: number,
+    valueEnd: number,
+    curRunningRPS: number,
+    curRPSpercent: number
+) => {
+    const range = (valueEnd - valueStart) / valueRPS;
+
+    return curRunningRPS === 0
+        ? Math.round((100 * curRPSpercent) / (range + 1))
+        : Math.round(
+              (100 * ((curRunningRPS - valueStart) / valueRPS + 1 + curRPSpercent)) / (range + 1)
+          );
 };
 
 const configReducer = createReducer(initialState, (builder) => {
@@ -68,6 +88,13 @@ const configReducer = createReducer(initialState, (builder) => {
         })
         .addCase(Actions.SetCurRunningRPS, (state, action) => {
             state.curRunningRPS = action.payload;
+            state.curTestTotalPercent = calculateTotalTestPercent(
+                state.valueRPS,
+                state.valueStart,
+                state.valueEnd,
+                state.curRunningRPS,
+                state.curRPSpercent
+            );
         })
         .addCase(Actions.ChangeTargetMethod, (state, action) => {
             state.inputsData[action.payload.index].method = action.payload.method;
@@ -141,6 +168,16 @@ const configReducer = createReducer(initialState, (builder) => {
         })
         .addCase(Actions.SetCurRPSpercent, (state, action) => {
             state.curRPSpercent = action.payload;
+            state.curTestTotalPercent = calculateTotalTestPercent(
+                state.valueRPS,
+                state.valueStart,
+                state.valueEnd,
+                state.curRunningRPS,
+                state.curRPSpercent
+            );
+        })
+        .addCase(Actions.SetCurTestStartTime, (state, action) => {
+            state.curTestStartTime = action.payload;
         });
 });
 
