@@ -22,6 +22,7 @@ const SingleSlider: (props: {
         max: number;
     };
     disabled?: boolean;
+    extraLabel?: string;
 }) => JSX.Element = (props) => {
     const darkMode = useAppSelector((state) => state.darkMode);
     // generates marks for the sliders
@@ -50,6 +51,7 @@ const SingleSlider: (props: {
             <Row className="mt-3">
                 <Col md={3}>
                     <Typography id={props.id}>{props.text}</Typography>
+                    <Typography variant="caption">{props.extraLabel}</Typography>
                 </Col>
                 <Col>
                     <Slider

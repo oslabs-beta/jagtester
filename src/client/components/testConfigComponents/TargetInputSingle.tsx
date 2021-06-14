@@ -142,6 +142,7 @@ const TargetInputSingle: (props: { index: number }) => JSX.Element = ({ index })
                 step={1}
                 marks={{ interval: 10, min: 0, max: 100 }}
                 disabled={inputsData.length === 1 || isTestRunning}
+                extraLabel={`${inputsData[i].percentage}%`}
             />
             <hr />
         </Container>

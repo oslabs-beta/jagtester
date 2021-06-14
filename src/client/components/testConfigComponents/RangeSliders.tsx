@@ -58,6 +58,7 @@ const RangeSliders: () => JSX.Element = () => {
                             step={10}
                             marks={{ interval: 100, min: 10, max: MAXRPS }}
                             disabled={isTestRunning}
+                            extraLabel={`${valueRPS} request per second`}
                         />
                         <SingleSlider
                             text="Start / end RPS"
@@ -68,11 +69,12 @@ const RangeSliders: () => JSX.Element = () => {
                             min={100}
                             max={MAXRPSEND}
                             step={valueRPS}
-                            marks={{ interval: 2000, min: 100, max: MAXRPSEND }}
+                            marks={{ interval: 5000, min: 100, max: MAXRPSEND }}
                             disabled={isTestRunning}
+                            extraLabel={`Start: ${valueStart} / End: ${valueEnd}`}
                         />
                         <SingleSlider
-                            text="Time per interval (seconds)"
+                            text="Time per interval"
                             id="time-per-int-slider"
                             key="time-per-int-slider"
                             value={valueSeconds}
@@ -82,6 +84,9 @@ const RangeSliders: () => JSX.Element = () => {
                             step={1}
                             marks={{ interval: 1, min: 1, max: MAXSECONDS }}
                             disabled={isTestRunning}
+                            extraLabel={`${valueSeconds} second${
+                                valueSeconds === 1 ? '' : 's'
+                            } per interval`}
                         />
                     </Col>
                 </Row>

@@ -13,14 +13,14 @@ import CardContent from '@material-ui/core/CardContent';
 const TestPage: () => JSX.Element = () => {
     return (
         <Row className="mx-4">
-            <Col>
+            <Col className="col-12 col-xl-6">
                 <Card raised>
                     <CardContent>
                         <TargetInputs />
                     </CardContent>
                 </Card>
             </Col>
-            <Col>
+            <Col className="col-12 col-xl-6">
                 <Card raised>
                     <CardContent>
                         <RangeSliders />

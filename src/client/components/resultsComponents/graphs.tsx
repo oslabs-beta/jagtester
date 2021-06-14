@@ -31,8 +31,11 @@ const StackedBar: (props: {
         plugins: {
             title: {
                 display: true,
-                text: singleRoute ? routeName : 'All routes',
+                text: singleRoute ? `Route - ${routeName}` : 'All routes',
                 color: darkMode ? 'white' : 'black',
+                font: {
+                    size: '30rem',
+                },
             },
         },
         responsive: true,
