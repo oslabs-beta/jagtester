@@ -53,7 +53,7 @@ const Buttons: () => JSX.Element = () => {
                         block
                         onClick={handleStartTest}
                     >
-                        Start testing
+                        Start Testing
                     </Button>
                 </Col>
                 <Col sm={4}>
@@ -63,7 +63,7 @@ const Buttons: () => JSX.Element = () => {
                         block
                         onClick={handleStopTest}
                     >
-                        Stop and get data
+                        Stop
                     </Button>
                 </Col>
                 <Col sm={2}></Col>

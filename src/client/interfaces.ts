@@ -34,6 +34,7 @@ export enum Jagtestercommands {
     running,
     endTest,
 }
+
 export enum ioSocketCommands {
     testRunningStateChange,
     singleRPSfinished,
