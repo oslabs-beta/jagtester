@@ -121,12 +121,13 @@ eventEmitter.on(ioSocketCommands.allRPSfinished, () => {
     }
 
     if (Object.keys(pulledDataFromTest).length > 0) {
-        allPulledDataFromTest.push({
+        const newPulledData = {
             testTime: Date.now(),
             testData: pulledDataFromTest,
-        });
+        };
+        allPulledDataFromTest.push(newPulledData);
+        io.emit(ioSocketCommands.allRPSfinished, [newPulledData]);
     }
-    io.emit(ioSocketCommands.allRPSfinished, allPulledDataFromTest);
 });
 
 const agent = new http.Agent({ keepAlive: true });

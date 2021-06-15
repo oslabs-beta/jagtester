@@ -29,7 +29,7 @@ const ResultsPage: () => JSX.Element = () => {
     };
 
     const deleteAllData = () => {
-        dispatch(Actions.SetReceivedData([]));
+        dispatch(Actions.DeleteReceivedData());
         dispatch(Actions.SetResultsTabValue(0));
         fetch('/api/saveddata', {
             method: HTTPMethods.DELETE,

@@ -18,6 +18,7 @@ enum ActionTypes {
     deleteTarget = 'deleteTarget',
 
     setReceivedData = 'setRedeceivedData',
+    deleteReceivedData = 'deleteReceivedData',
 
     setShowModal = 'setShowModal',
     setModalError = 'setModalError',
@@ -53,6 +54,7 @@ const AddTarget = createAction(ActionTypes.addTarget);
 const DeleteTarget = createAction<number>(ActionTypes.deleteTarget);
 
 const SetReceivedData = createAction<AllPulledDataFromTest[]>(ActionTypes.setReceivedData);
+const DeleteReceivedData = createAction(ActionTypes.deleteReceivedData);
 
 const SetShowModal = createAction<boolean>(ActionTypes.setShowModal);
 const SetModalError = createAction<string>(ActionTypes.setModalError);
@@ -85,6 +87,7 @@ const Actions = {
     SetCurTestStartTime,
     SetDarkMode,
     ResetState,
+    DeleteReceivedData,
 };
 
 export default Actions;

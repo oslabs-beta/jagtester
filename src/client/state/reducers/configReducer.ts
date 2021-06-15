@@ -150,7 +150,10 @@ const configReducer = createReducer(initialState, (builder) => {
             state.inputsData.splice(action.payload, 1);
         })
         .addCase(Actions.SetReceivedData, (state, action) => {
-            state.receivedData = action.payload;
+            state.receivedData.push(...action.payload);
+        })
+        .addCase(Actions.DeleteReceivedData, (state) => {
+            state.receivedData = [];
         })
         .addCase(Actions.SetShowModal, (s, a) => {
             s.showModal = a.payload;

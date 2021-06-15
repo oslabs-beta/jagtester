@@ -7,6 +7,9 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node ./server/index.js"
     },
+    "bin": {
+        "jagtester": "./server/index.js"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/oslabs-beta/jagtester.git"
@@ -28,7 +31,7 @@
     "homepage": "https://github.com/oslabs-beta/jagtester#readme",
     "dependencies": {
         "abort-controller": "^3.0.0",
-        "express": "^4.17.1",
+        "express": "4.16.0",
         "node-fetch": "^2.6.1",
         "path": "^0.12.7",
         "response-time": "^2.3.2",

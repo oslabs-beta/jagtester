@@ -91,12 +91,13 @@ eventEmitter.on(interfaces_1.ioSocketCommands.allRPSfinished, () => {
         }
     }
     if (Object.keys(pulledDataFromTest).length > 0) {
-        allPulledDataFromTest.push({
+        const newPulledData = {
             testTime: Date.now(),
             testData: pulledDataFromTest,
-        });
+        };
+        allPulledDataFromTest.push(newPulledData);
+        index_1.io.emit(interfaces_1.ioSocketCommands.allRPSfinished, [newPulledData]);
     }
-    index_1.io.emit(interfaces_1.ioSocketCommands.allRPSfinished, allPulledDataFromTest);
 });
 const agent = new http_1.default.Agent({ keepAlive: true });
 // const targetURL = 'http://localhost:3030/testroute';
