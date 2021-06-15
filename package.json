@@ -10,7 +10,9 @@
         "dev-front": "webpack serve --config webpack.dev.config.ts",
         "dev-back": "tsc --build -w src & nodemon ./dist/server/index.js",
         "dev": "tsc --build -w src & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts",
-        "prod": "node ./dist/server/index.js"
+        "prod": "node ./dist/server/index.js",
+        "splash-build": "webpack --config ./splash/webpack.prod.config.ts",
+        "splash-dev": "webpack serve --config ./splash/webpack.dev.config.ts"
     },
     "repository": {
         "type": "git",
