@@ -30,6 +30,9 @@ const Navigation: () => JSX.Element = () => {
                     <LinkContainer exact to="/results">
                         <Nav.Link>Results</Nav.Link>
                     </LinkContainer>
+                    <Nav.Link href="https://jagtester.com" target="_blank">
+                        About Us
+                    </Nav.Link>
                 </Nav>
                 <Nav className="ml-auto h5">
                     <DarkSwitch />
