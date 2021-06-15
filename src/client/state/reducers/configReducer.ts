@@ -114,7 +114,7 @@ const configReducer = createReducer(initialState, (builder) => {
             const newValue = action.payload.newValue;
             let diffWithNext = state.inputsData[index].percentage - newValue;
             const diffWithNextCopy = diffWithNext;
-            while (diffWithNext > 0) {
+            while (diffWithNext !== 0) {
                 index = index < state.inputsData.length - 1 ? index + 1 : 0;
 
                 if (state.inputsData[index].percentage + diffWithNext > 100) {

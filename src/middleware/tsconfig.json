@@ -7,12 +7,12 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": false,
-        "outDir": "./",
+        "outDir": "../../dist/middleware",
         "baseUrl": ".",
         "paths": {
-            "*": ["../node_modules/*"]
+            "*": ["../../node_modules/*"]
         }
     },
     "files": ["./index.ts"],
-    "exclude": ["../node_modules/*"]
+    "exclude": ["../../node_modules/*"]
 }

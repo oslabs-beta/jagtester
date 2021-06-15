@@ -71,6 +71,7 @@ const StackedBar: (props: {
                 },
             },
             yError: {
+                display: !singleRoute,
                 position: 'right',
                 title: {
                     text: 'Error %',
