@@ -80,7 +80,6 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Gatsby files
 .cache/
@@ -104,4 +103,4 @@ dist
 .tern-port
 
 # MacOs specific folder files 
-.DS_Store
+.DS_Storef

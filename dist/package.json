@@ -1,0 +1,38 @@
+{
+    "name": "jagtester",
+    "version": "0.5",
+    "description": "Load tester for Express servers with detailed middleware metrics.",
+    "main": "middleware/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node ./server/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/oslabs-beta/jagtester.git"
+    },
+    "keywords": [
+        "express",
+        "load",
+        "load tester",
+        "jag tester",
+        "stress tester",
+        "express fast",
+        "express test"
+    ],
+    "author": "Grigor Minasyan, Jason de Vera, Abigail Dorso",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/oslabs-beta/jagtester/issues"
+    },
+    "homepage": "https://github.com/oslabs-beta/jagtester#readme",
+    "dependencies": {
+        "abort-controller": "^3.0.0",
+        "express": "^4.17.1",
+        "http": "^0.0.1-security",
+        "node-fetch": "^2.6.1",
+        "path": "^0.12.7",
+        "response-time": "^2.3.2",
+        "socket.io": "^4.1.2"
+    }
+}
