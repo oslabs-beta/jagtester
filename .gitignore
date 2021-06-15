@@ -103,4 +103,4 @@ typings/
 .tern-port
 
 # MacOs specific folder files 
-.DS_Storef
+.DS_Store
