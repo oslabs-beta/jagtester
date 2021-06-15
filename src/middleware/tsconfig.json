@@ -13,5 +13,6 @@
             "*": ["../../node_modules/*"]
         }
     },
-    "files": ["./index.ts"]
+    "files": ["./index.ts"],
+    "exclude": ["../../node_modules/*"]
 }

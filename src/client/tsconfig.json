@@ -13,12 +13,10 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "composite": true,
         "jsx": "react",
         "paths": {
             "*": ["../../node_modules/*"]
         }
     },
-    "include": ["./**/*", "../custom.d.ts"],
-    "references": [{ "path": "../server" }]
+    "include": ["./**/*", "../custom.d.ts"]
 }

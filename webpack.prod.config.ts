@@ -9,7 +9,7 @@ const config: webpack.Configuration = {
     mode: 'production',
     entry: './src/client/index.tsx',
     output: {
-        path: path.resolve(__dirname, 'dist/clientbuild'),
+        path: path.resolve(__dirname, 'dist/client'),
         filename: '[name].[contenthash].js',
         publicPath: '',
     },
