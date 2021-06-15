@@ -17,11 +17,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', express.static(path.join(__dirname, '../client')));
 
-app.get(['/', '/results'], (_, res) => {
-    res.sendFile(path.join(__dirname, '../client/index.html')); // TODO make this serve the build folder
+app.use('/api', testRouter);
+
+app.get(['/', '/results'], (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
-app.use('/api', testRouter);
+app.use('/*', (req, res) => {
+    res.redirect('/');
+});
 
 http.on('error', function (e: NodeJS.ErrnoException) {
     if (e.code === 'EADDRINUSE') {
