@@ -35,7 +35,7 @@ npx jagtester
 
 and it will start up jagtester on a local server port 15000 (or next available port).
 
-With our intuitive web interface, you will ba able to configure the test and run it.
+With our intuitive web interface, you will ba able to configure the test and run it. Make sure to also start your own server you want to use Jagtester on.
 
 ## Building
 
