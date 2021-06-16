@@ -44,6 +44,7 @@
         "react-redux": "^7.2.4",
         "react-router-bootstrap": "^0.25.0",
         "react-router-dom": "^5.2.0",
+        "react-scrollspy-nav": "^1.2.4",
         "redux-persist": "^6.0.0",
         "response-time": "^2.3.2",
         "socket.io": "^4.1.2",

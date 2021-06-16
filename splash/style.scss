@@ -1,4 +1,23 @@
 #root {
     // background-color: rgb(61, 66, 124);
     // min-height: 100vh;
+    font-family: Helvetica;
+}
+
+@media screen and (max-width:600px){
+    h1{
+        font-size: 25px
+    }
+}
+
+@media screen and (max-width:1024px){
+    h1{
+        font-size: 30px
+    }
+}
+footer{
+    position: fixed;
+    bottom: 0;
+    left:0;
+    right:0;
 }

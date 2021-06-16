@@ -1,26 +1,28 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import CardColumns from 'react-bootstrap/CardColumns';
 
 const Features: () => JSX.Element = () => {
     return (
-        <CardColumns>
-            <Card className="shadow p-3 mb-5 bg-white rounded">
-                <Card.Body>
-                    <Card.Title>Custom Test Configurations</Card.Title>
-                    <Card.Text>
-                        This feature allows you to fully customize your server load test. Having the
-                        ability to adjust the routes being tested, the percentage per route, the
-                        amount of requests, and the frequency of the requests.
-                    </Card.Text>
-                </Card.Body>
-            </Card>
-            <Card className="shadow p-3 mb-5 bg-white rounded">
-                <blockquote className="blockquote mb-0 card-body">
-                    <p>Jagtester&apos;s Main Features</p>
-                </blockquote>
-            </Card>
-            <Card className="shadow p-3 mb-5 bg-white rounded">
+        <Container>
+            <Row xs={1} sm={1} md={1} lg={2} xl={2}>
+                <Col>
+                    <Card text="white" className="shadow p-3 mb-5 bg-transparent rounded">
+                        <Card.Body>
+                            <Card.Title>Custom Test Configurations</Card.Title>
+                            <Card.Text>
+                                This feature allows you to fully customize your server load test. Having the
+                                ability to adjust the routes being tested, the percentage per route, the
+                                amount of requests, and the frequency of the requests.
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col>
+            <Card text="white"  className="shadow p-3 mb-5 bg-transparent rounded" >
                 <Card.Body>
                     <Card.Title>Stop Testing</Card.Title>
                     <Card.Text>
@@ -29,7 +31,9 @@ const Features: () => JSX.Element = () => {
                     </Card.Text>
                 </Card.Body>
             </Card>
-            <Card className="text-center shadow p-3 mb-5 bg-white rounded">
+            </Col>
+            <Col>
+            <Card text="white" className="shadow p-3 mb-5 bg-transparent rounded">
                 <Card.Body>
                     <Card.Title>Results Visualization Page</Card.Title>
                     <Card.Text>
@@ -38,7 +42,9 @@ const Features: () => JSX.Element = () => {
                     </Card.Text>
                 </Card.Body>
             </Card>
-            <Card className="shadow p-3 mb-5 bg-white rounded">
+            </Col>
+            <Col>
+            <Card text="white" className="shadow p-3 mb-5 bg-transparent rounded">
                 <Card.Body>
                     <Card.Title>Exportable Data</Card.Title>
                     <Card.Text>
@@ -46,13 +52,9 @@ const Features: () => JSX.Element = () => {
                     </Card.Text>
                 </Card.Body>
             </Card>
-            <Card className="shadow p-3 mb-5 bg-white rounded">
-                <Card.Body>
-                    <Card.Title>Dark Mode!</Card.Title>
-                    <Card.Text>Get your testing done in either light or dark mode.</Card.Text>
-                </Card.Body>
-            </Card>
-        </CardColumns>
+            </Col>
+        </Row>
+        </Container>
     );
 };
 

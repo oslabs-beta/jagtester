@@ -9,9 +9,15 @@ import favicon from './img/favicon3.svg';
 import logotext from './img/logotext.svg';
 import github from './img/github.svg'
 import npm from './img/npm.svg'
+import install from './img/install.png'
 import linkedin from './img/linkedin.svg'
-
 import Features from './components/Features';
+import ScrollspyNav from "react-scrollspy-nav";
+import GetAppIcon from '@material-ui/icons/GetApp';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import CallSplitIcon from '@material-ui/icons/CallSplit';
+import singleroute from './img/singleroute.gif'
+import exportdelete from './img/exportdelete.gif'
 
 
 const App: () => JSX.Element = () => {
@@ -21,7 +27,23 @@ const App: () => JSX.Element = () => {
         root: {
             backgroundColor: bgColor,
             minHeight: '100vh',
+            "overflow-y": "auto",
+            fontFamily: "Helvetica",
+            paddingBottom: '25vh',
+            
         },
+        splash: {
+            padding: "30vh 0 25vh 0",
+            height: "75vh"
+        },
+        content1: {
+            padding: "30vh 0 30vh 0",
+            height: "75vh"
+        },
+        content2: {
+            padding: "30vh 0 30vh 0",
+            height: "75vh"
+        }
     };
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
@@ -58,16 +80,25 @@ const App: () => JSX.Element = () => {
     };
     return (
         <Container fluid id="root" style={styles.root}>
-            <Navbar variant="dark" sticky="top" id="navbar">
-                <Nav className="mr-auto ml-5 h6" >
-                    <Nav.Link href ="#">
+            <ScrollspyNav
+                scrollTargetIds={[
+                    "home",
+                    "about",
+                    "features"
+                ]}
+                activeNavClass="active"
+                scrollDuration="500"
+                >
+            <Navbar variant="dark" fixed="top" id="navbar">
+                <Nav className="mr-auto ml-5 h6">
+                    <Nav.Link href ="#home">
                         <img src={favicon} width={"auto"} height={"50px"}/>
                     </Nav.Link>
-                    <Nav.Link className="mt-3" href ="/">
+                    <Nav.Link className="mt-3" href="#about">
                         About
                     </Nav.Link>
                     <Nav.Link className="mt-3" href="#features">
-                        Features
+                        Get Started
                     </Nav.Link>
                 </Nav>
                 <Nav className="ml-auto mr-5">
@@ -82,10 +113,10 @@ const App: () => JSX.Element = () => {
                     </Nav.Link>
                 </Nav>
             </Navbar>
-            <div data-spy="scroll" data-target="#navbar" data-offset="0">
+            </ScrollspyNav>
             <Row className="justify-content-center">
-                <Col sm={6}>
-                <div id="splash" style={{margin: "25vh 0 0 0", height:"100vh"}}>
+                <Col sm={8}>
+                <div id="home" style={styles.splash}>
                     <Row className="align-items-center">
                         <Col>
                             <Fade left>
@@ -109,40 +140,95 @@ const App: () => JSX.Element = () => {
                         </Col>
                     </Row>
                         <Fade up>
-                            <Row className="text-center h1" style={{color: "white"}}>
+                            <Row className="text-center h1" style={{color: "white", marginTop: "20px"}}>
                                 <Col>
-                                     An Express Server Middleware Load Tool
+                                     <h1>An Express Server Middleware Load Tool</h1>
                                 </Col>
                             </Row>
                         </Fade>
                     </div>
-                    <div id={'about'} style={{height:"100vh"}}>
-                        <Row className="h1">
+                    <div id="about" style={styles.content1}>
+                        <Row>
                             <Col className="text-center" style={{color: "white"}}>
-                                What is Jagtester?
+                                <h1>What is Jagtester?</h1>
                             </Col>
                         </Row>
-                        <Row className="h4">
+                        <Row>
                             <Col className="text-center" style={{color: "white"}}>
-                                Jagtester is load testing tool that simulates life-like traffic on your server, monitoring response time at every middleware. 
+                                <h4>Jagtester is load testing tool that simulates life-like traffic on your server, monitoring response time at every middleware. 
                                 Not sure where theres a bottleneck? We&apos;ve got you covered.
+                                </h4>
                             </Col>
+                            
                         </Row>
-                        <Row className="h4">
-                            <Col className="text-center" style={{color: "white"}}>
-                                something?
-                            </Col>
-                            <Col className="text-center" style={{color: "white"}}>
-                                something?
-                            </Col>
-                            <Col className="text-center" style={{color: "white"}}>
-                                something?
-                            </Col>
-                        </Row>
+                        <br/><br/>
+                        <div className="container text-white text-center">
+                            <div className="row justify-content-center">
+                                <Col sm={4} xl={3}>
+                                    <div className="mx-auto mb-5 mb-lg-0 mb-lg-3">
+                                        <h1><CallSplitIcon fontSize="large"/></h1>
+                                        <h5>Split Load Tests</h5>
+                                        <p className="lead mb-0">Multiple routes can be tested simultaneously.</p>
+                                    </div>
+                                </Col>
+                                <Col sm={4} xl={3}>
+                                    <div className="mx-auto mb-5 mb-lg-0 mb-lg-3">
+                                        <h1><GetAppIcon fontSize="large"/></h1>
+                                        <h5>Export Data</h5>
+                                        <p className="lead mb-0">Easily download/export data in a readable JSON format.</p>
+                                    </div>
+                                </Col>
+                                <Col sm={4} xl={3}>
+                                    <div className="mx-auto mb-0 mb-lg-3">
+                                        <h1><BarChartIcon fontSize="large"/></h1>
+                                        <h5>Visualize Data</h5>
+                                        <p className="lead mb-0">View results on graphs and tables.</p>
+                                    </div>
+                                </Col>
+                            </div>
+                        </div>
+                        {/* <Features /> */}
                     </div>
-                    <div id={'features'}>
-                        <Features />
+                    <div id="features" style={styles.content2}>
+                        <Row>
+                            <Col className="text-center" style={{color: "white"}}>
+                                <h1>Get Started</h1>
+                                <h6>Install, start, and test.</h6>
+                            </Col>
+                        </Row>  
+                        <br/><br/>
+                        <div className="container text-white text-center">
+                            <div className="row justify-content-center">
+                                <Col sm={8} md={8} lg={4}>
+                                    <div className="mx-auto mb-5 mb-lg-0 mb-lg-3">
+                                        <img src={install} width="100%"/>
+                                        <h5>Install and Start Server</h5>
+                                        <p className="lead mb-0">Multiple routes can be tested simultaneously.</p>
+                                    </div>
+                                </Col>
+                                <Col sm={8} md={8} lg={4}>
+                                    <div className="mx-auto mb-5 mb-lg-0 mb-lg-3">
+                                        <img src={singleroute} width="100%" style={{paddingBottom: "15px"}}/>
+                                        <br/>
+                                        <h5>Export Data</h5>
+                                        <p className="lead mb-0">Easily download/export data in a readable JSON format.</p>
+                                    </div>
+                                </Col>
+                                <Col sm={8} md={8} lg={4}>
+                                    <div className="mx-auto mb-0 mb-lg-3">
+                                    <img src={exportdelete} width="100%" style={{paddingBottom: "15px"}}/>
+                                        <h5>Visualize Data</h5>
+                                        <p className="lead mb-0">View results on graphs and tables.</p>
+                                    </div>
+                                </Col>
+                            </div>
+                        </div>
+                        
+                            
+                        
+
                     </div>
+                    {/* <div style={styles.content2}>
                     <p>
                         {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
                         consequat velit a urna tempor eleifend. Vestibulum eros mi, dignissim vitae
@@ -155,14 +241,16 @@ const App: () => JSX.Element = () => {
                             10
                         )}
                     </p>
+                    </div> */}
+                    <div className="row justify-content-bottom">
+                        <div className="col text-center h6" >
+                            <footer style={{backgroundColor: bgColor}}>Jagtester is Open Source and ISC Licensed.</footer>
+                        </div>
+                    </div>
                 </Col>
+                
             </Row>
-            <Row className="justify-content-bottom">
-                <Col className="text-center h6">
-                    Jagtester is Open Source and ISC Licensed.
-                </Col>
-            </Row>
-            </div>
+           
         </Container>
     );
 };
