@@ -16,12 +16,12 @@ const config: Configuration = {
     output: {
         publicPath: '/',
     },
-    entry: './src/client/index.tsx',
+    entry: path.join(__dirname, 'index.tsx'),
     module: {
         rules: [
             {
                 test: /\.(ts|js)x?$/i,
-                exclude: [/node_modules/, __dirname + './splash'],
+                exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -35,7 +35,6 @@ const config: Configuration = {
             },
             {
                 test: /\.(png|jp(e*)g|gif)$/,
-                exclude: __dirname + './splash',
                 use: [
                     {
                         loader: 'file-loader',
@@ -44,24 +43,28 @@ const config: Configuration = {
             },
             {
                 test: /\.svg$/,
-                exclude: __dirname + './splash',
                 use: ['babel-loader', '@svgr/webpack', 'file-loader'],
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: ['style-loader', 'css-loader', 'sass-loader'],
             },
         ],
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        modules: [path.resolve(__dirname, '../node_modules'), path.resolve(__dirname, './splash')],
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/client/index.html',
-            favicon: './src/client/img/favicon.svg',
+            template: path.join(__dirname, 'index.html'),
+            favicon: path.join(__dirname, 'img/favicon.svg'),
         }),
         new webpack.HotModuleReplacementPlugin(),
         new ForkTsCheckerWebpackPlugin({
             async: false,
             typescript: {
-                configFile: './src/client/tsconfig.json',
+                configFile: path.join(__dirname, 'tsconfig.json'),
             },
         }),
         new ESLintPlugin({
@@ -70,13 +73,6 @@ const config: Configuration = {
     ],
     devtool: 'inline-source-map',
     devServer: {
-        proxy: {
-            '/api': 'http://localhost:15000',
-            '/socket.io/': {
-                target: 'http://localhost:15000',
-                ws: true,
-            },
-        },
         contentBase: path.join(__dirname, 'build'),
         historyApiFallback: true,
         port: 8080,

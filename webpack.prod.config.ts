@@ -17,7 +17,7 @@ const config: webpack.Configuration = {
         rules: [
             {
                 test: /\.(ts|js)x?$/i,
-                exclude: /node_modules/,
+                exclude: [/node_modules/, __dirname + './splash'],
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -31,6 +31,7 @@ const config: webpack.Configuration = {
             },
             {
                 test: /\.(png|jp(e*)g|gif)$/,
+                exclude: __dirname + './splash',
                 use: [
                     {
                         loader: 'file-loader',
@@ -39,6 +40,7 @@ const config: webpack.Configuration = {
             },
             {
                 test: /\.svg$/,
+                exclude: __dirname + './splash',
                 use: ['babel-loader', '@svgr/webpack', 'file-loader'],
             },
         ],
