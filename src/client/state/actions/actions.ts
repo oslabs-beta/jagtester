@@ -30,6 +30,8 @@ enum ActionTypes {
     setCurTestStartTime = 'setCurTestStartTime',
     setDarkMode = 'setDarkMode',
     resetState = 'resetState',
+    setHighRPSwarning = 'setHighRPSwarning',
+    setStoppingSpinner = 'setStoppingSpinner',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -64,6 +66,8 @@ const SetCurRPSpercent = createAction<number>(ActionTypes.setCurRPSpercent);
 const SetCurTestStartTime = createAction<number>(ActionTypes.setCurTestStartTime);
 const SetDarkMode = createAction<boolean>(ActionTypes.setDarkMode);
 const ResetState = createAction(ActionTypes.resetState);
+const SetHighRPSwarning = createAction<boolean>(ActionTypes.setHighRPSwarning);
+const SetStoppingSpinner = createAction<boolean>(ActionTypes.setStoppingSpinner);
 
 const Actions = {
     SetValueRPS,
@@ -88,6 +92,8 @@ const Actions = {
     SetDarkMode,
     ResetState,
     DeleteReceivedData,
+    SetHighRPSwarning,
+    SetStoppingSpinner,
 };
 
 export default Actions;

@@ -23,6 +23,7 @@ const SingleSlider: (props: {
     };
     disabled?: boolean;
     extraLabel?: string;
+    extraLabelDanger?: string | undefined;
 }) => JSX.Element = (props) => {
     const darkMode = useAppSelector((state) => state.darkMode);
     // generates marks for the sliders

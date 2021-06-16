@@ -170,6 +170,7 @@ const StackedBar: (props: {
                 data: resultObj[route].elapsedTimes,
                 backgroundColor: [lineColor],
                 borderWidth: 0,
+                order: 2,
             });
             const lineColorRed = shadedColor(
                 i,
@@ -187,6 +188,7 @@ const StackedBar: (props: {
                 borderColor: lineColorRed,
                 borderWidth: 4,
                 fill: false,
+                order: 1,
             });
         });
     }
