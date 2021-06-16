@@ -8,6 +8,7 @@ import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import Actions from '../../state/actions/actions';
 
 import { HTTPMethods, TestConfigData } from '../../interfaces';
+import StopButtonSpinner from './buttonStopSpinner';
 
 const Buttons: () => JSX.Element = () => {
     const isTestRunning = useAppSelector((state) => state.isTestRunning);
@@ -21,10 +22,15 @@ const Buttons: () => JSX.Element = () => {
     const jagEndabledInputs = inputsData.some((target) => !target.jagTesterEnabled);
 
     const handleStopTest = () => {
-        fetch('/api/stopTest').catch((err) => {
-            dispatch(Actions.SetShowModal(true));
-            dispatch(Actions.SetModalError(err.toString()));
-        });
+        dispatch(Actions.SetStoppingSpinner(true));
+        fetch('/api/stopTest')
+            .then(() => {
+                dispatch(Actions.SetStoppingSpinner(false));
+            })
+            .catch((err) => {
+                dispatch(Actions.SetShowModal(true));
+                dispatch(Actions.SetModalError(err.toString()));
+            });
     };
 
     const handleStartTest = () => {
@@ -79,6 +85,7 @@ const Buttons: () => JSX.Element = () => {
                     </Button>
                 </Col>
             </Row>
+            <StopButtonSpinner />
         </Container>
     );
 };
