@@ -4,9 +4,9 @@
     "description": "",
     "main": "dist/server/index.js",
     "scripts": {
-        "build-front": "webpack --config webpack.prod.config.ts",
-        "build-back": "tsc --build src",
-        "build": "tsc --build src && webpack --config webpack.prod.config.ts",
+        "build-front": "webpack --config webpack.prod.config.ts && cp README.md dist/README.md",
+        "build-back": "tsc --build src && cp README.md dist/README.md",
+        "build": "tsc --build src && webpack --config webpack.prod.config.ts && cp README.md dist/README.md",
         "dev-front": "webpack serve --config webpack.dev.config.ts",
         "dev-back": "tsc --build -w src & nodemon ./dist/server/index.js",
         "dev": "tsc --build -w src & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts",
