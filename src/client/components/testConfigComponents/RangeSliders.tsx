@@ -7,6 +7,9 @@ import SingleSlider from './SingleSlider';
 
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import Actions from '../../state/actions/actions';
+import Typography from '@material-ui/core/Typography';
+
+import HighRPSWarning from './highrpswarning';
 
 const RangeSliders: () => JSX.Element = () => {
     const MAXRPS = 1000,
@@ -95,14 +98,15 @@ const RangeSliders: () => JSX.Element = () => {
                 <Row>
                     <Col>
                         {isTestRunning ? (
-                            <h2 className="text-center">
+                            <Typography paragraph variant="h4" align="center">
                                 Estimated time remaining: {Math.round(estimatedTime)} seconds
-                            </h2>
+                            </Typography>
                         ) : (
-                            <h2 className="text-center">
+                            <Typography paragraph variant="h4" align="center">
                                 Approximate test time: {Math.round(approximateTestTime)} seconds
-                            </h2>
+                            </Typography>
                         )}
+                        <HighRPSWarning />
                     </Col>
                 </Row>
             </Container>

@@ -24,6 +24,8 @@ interface InitialState {
     curTestTotalPercent: number;
     curTestStartTime: number;
     darkMode: boolean;
+    highRPSwarning: boolean;
+    stoppingSpinner: boolean;
 }
 
 const initialState: InitialState = {
@@ -55,6 +57,8 @@ const initialState: InitialState = {
     curTestTotalPercent: 0,
     curTestStartTime: 0,
     darkMode: false,
+    highRPSwarning: false,
+    stoppingSpinner: false,
 };
 
 const calculateTotalTestPercent = (
@@ -82,6 +86,9 @@ const configReducer = createReducer(initialState, (builder) => {
             state.valueStart = action.payload;
         })
         .addCase(Actions.SetValueEnd, (state, action) => {
+            if (state.valueEnd < 10000 && action.payload > 10000) {
+                state.highRPSwarning = true;
+            }
             state.valueEnd = action.payload;
         })
         .addCase(Actions.SetValueSeconds, (state, action) => {
@@ -199,6 +206,14 @@ const configReducer = createReducer(initialState, (builder) => {
             state.curRPSpercent = initialState.curRPSpercent;
             state.curTestTotalPercent = initialState.curTestTotalPercent;
             state.curTestStartTime = initialState.curTestStartTime;
+            state.highRPSwarning = initialState.highRPSwarning;
+            state.stoppingSpinner = initialState.stoppingSpinner;
+        })
+        .addCase(Actions.SetHighRPSwarning, (state, action) => {
+            state.highRPSwarning = action.payload;
+        })
+        .addCase(Actions.SetStoppingSpinner, (state, action) => {
+            state.stoppingSpinner = action.payload;
         });
 });
 
