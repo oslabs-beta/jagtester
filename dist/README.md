@@ -22,7 +22,7 @@ yarn add jagtester
 
 It is very easy to use jagtester, just install it and include it as a middleware in your Express server, and you are ready to go.
 
-```bash
+```JavaScript
 const jagtester = require('jagtester');
 app.use(jagtester(app));
 ```
