@@ -55,7 +55,6 @@ const config: webpack.Configuration = {
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'index.html'),
             favicon: path.join(__dirname, 'img/favicon.svg'),
-            filename: 'home.html',
         }),
         new ForkTsCheckerWebpackPlugin({
             async: false,
