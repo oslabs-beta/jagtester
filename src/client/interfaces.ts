@@ -87,4 +87,5 @@ export interface ChartDataSet {
     borderColor?: string;
     fill?: boolean;
     yAxisID?: string;
+    order?: number;
 }

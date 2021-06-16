@@ -10,6 +10,7 @@ const path_1 = __importDefault(require("path"));
 const testrouter_1 = __importDefault(require("./testrouter"));
 // TODO use cluster to imrpove our server performance
 const http_1 = require("http");
+const open_1 = __importDefault(require("open"));
 const socket_io_1 = require("socket.io");
 const app = express_1.default();
 const http = http_1.createServer(app);
@@ -34,5 +35,6 @@ http.on('error', function (e) {
 });
 http.on('listening', function () {
     console.log(`Jagtester running on http://localhost:${port}`);
+    open_1.default(`http://localhost:${port}`).catch((err) => console.log(err));
 });
 http.listen(port);

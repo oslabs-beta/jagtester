@@ -4,7 +4,7 @@ import path from 'path';
 import testRouter from './testrouter';
 // TODO use cluster to imrpove our server performance
 import { createServer } from 'http';
-
+import open from 'open';
 import { Server } from 'socket.io';
 
 const app = express();
@@ -37,6 +37,7 @@ http.on('error', function (e: NodeJS.ErrnoException) {
 
 http.on('listening', function () {
     console.log(`Jagtester running on http://localhost:${port}`);
+    open(`http://localhost:${port}`).catch((err) => console.log(err));
 });
 
 http.listen(port);
