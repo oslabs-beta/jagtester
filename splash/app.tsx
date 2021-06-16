@@ -3,10 +3,16 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Fade from 'react-reveal/Fade';
-import favicon from './img/favicon.svg';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import favicon from './img/favicon3.svg';
 import logotext from './img/logotext.svg';
+import github from './img/github.svg'
+import npm from './img/npm.svg'
+import linkedin from './img/linkedin.svg'
 
 import Features from './components/Features';
+
 
 const App: () => JSX.Element = () => {
     const initialColor = [90, 90, 180];
@@ -52,15 +58,41 @@ const App: () => JSX.Element = () => {
     };
     return (
         <Container fluid id="root" style={styles.root}>
+            <Navbar variant="dark" sticky="top" id="navbar">
+                <Nav className="mr-auto ml-5 h6" >
+                    <Nav.Link href ="#">
+                        <img src={favicon} width={"auto"} height={"50px"}/>
+                    </Nav.Link>
+                    <Nav.Link className="mt-3" href ="/">
+                        About
+                    </Nav.Link>
+                    <Nav.Link className="mt-3" href="#features">
+                        Features
+                    </Nav.Link>
+                </Nav>
+                <Nav className="ml-auto mr-5">
+                    <Nav.Link href="https://github.com/oslabs-beta/jagtester">
+                        <img src={github} height={"40px"} width={"auto"}/>
+                    </Nav.Link>
+                    <Nav.Link href="https://www.npmjs.com/package/jagtester">
+                        <img src={npm} height={"40px"} width={"auto"}/>
+                    </Nav.Link>
+                    <Nav.Link href="https://www.linkedin.com/company/jagtester">
+                        <img src={linkedin} height={"40px"} width={"auto"}/>
+                    </Nav.Link>
+                </Nav>
+            </Navbar>
+            <div data-spy="scroll" data-target="#navbar" data-offset="0">
             <Row className="justify-content-center">
                 <Col sm={6}>
+                <div id="splash" style={{"margin": "200px 0 200px 0"}}>
                     <Row className="align-items-center">
                         <Col>
                             <Fade left>
                                 <img
                                     src={favicon}
-                                    height={'50%'}
-                                    width={'50%'}
+                                    height={'auto'}
+                                    width={'75%'}
                                     className="float-right"
                                 />
                             </Fade>
@@ -69,14 +101,24 @@ const App: () => JSX.Element = () => {
                             <Fade right>
                                 <img
                                     src={logotext}
-                                    height={'50%'}
-                                    width={'50%'}
+                                    height={'auto'}
+                                    width={'75%'}
                                     className="float-left"
                                 />
                             </Fade>
                         </Col>
                     </Row>
-                    <Features />
+                        <Fade up>
+                            <Row className="text-center h1" style={{color: "white"}}>
+                                <Col>
+                                     An Express Server Middleware Tool
+                                </Col>
+                            </Row>
+                        </Fade>
+                    </div>
+                    <div id={'features'}>
+                        <Features />
+                    </div>
                     <p>
                         {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
                         consequat velit a urna tempor eleifend. Vestibulum eros mi, dignissim vitae
@@ -91,6 +133,7 @@ const App: () => JSX.Element = () => {
                     </p>
                 </Col>
             </Row>
+            </div>
         </Container>
     );
 };
