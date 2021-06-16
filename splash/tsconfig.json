@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "lib": ["dom", "dom.iterable", "esnext", "webworker", "es6", "scripthost"],
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react",
+        "paths": {
+            "*": ["../../node_modules/*"]
+        }
+    },
+    "include": ["./custom.d.ts", "./*"]
+}

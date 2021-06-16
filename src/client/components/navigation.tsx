@@ -9,7 +9,7 @@ import Asset from '../img/Asset.svg';
 import DarkSwitch from './darkModeSwitch';
 const Navigation: () => JSX.Element = () => {
     return (
-        <Container className="m-0 p-0 mb-5 sticky-top" fluid>
+        <Container className="m-0 p-0 mb-5 sticky-top" fluid data-spy="scroll" data-target=".navbar" data-offset="50">
             <Navbar
                 variant="dark"
                 className="mb-0 pb-0 align-items-center"
