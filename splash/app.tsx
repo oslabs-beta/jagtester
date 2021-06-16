@@ -85,7 +85,7 @@ const App: () => JSX.Element = () => {
             <div data-spy="scroll" data-target="#navbar" data-offset="0">
             <Row className="justify-content-center">
                 <Col sm={6}>
-                <div id="splash" style={{"margin": "200px 0 200px 0"}}>
+                <div id="splash" style={{margin: "25vh 0 0 0", height:"100vh"}}>
                     <Row className="align-items-center">
                         <Col>
                             <Fade left>
@@ -111,10 +111,34 @@ const App: () => JSX.Element = () => {
                         <Fade up>
                             <Row className="text-center h1" style={{color: "white"}}>
                                 <Col>
-                                     An Express Server Middleware Tool
+                                     An Express Server Middleware Load Tool
                                 </Col>
                             </Row>
                         </Fade>
+                    </div>
+                    <div id={'about'} style={{height:"100vh"}}>
+                        <Row className="h1">
+                            <Col className="text-center" style={{color: "white"}}>
+                                What is Jagtester?
+                            </Col>
+                        </Row>
+                        <Row className="h4">
+                            <Col className="text-center" style={{color: "white"}}>
+                                Jagtester is load testing tool that simulates life-like traffic on your server, monitoring response time at every middleware. 
+                                Not sure where theres a bottleneck? We&apos;ve got you covered.
+                            </Col>
+                        </Row>
+                        <Row className="h4">
+                            <Col className="text-center" style={{color: "white"}}>
+                                something?
+                            </Col>
+                            <Col className="text-center" style={{color: "white"}}>
+                                something?
+                            </Col>
+                            <Col className="text-center" style={{color: "white"}}>
+                                something?
+                            </Col>
+                        </Row>
                     </div>
                     <div id={'features'}>
                         <Features />
@@ -131,6 +155,11 @@ const App: () => JSX.Element = () => {
                             10
                         )}
                     </p>
+                </Col>
+            </Row>
+            <Row className="justify-content-bottom">
+                <Col className="text-center h6">
+                    Jagtester is Open Source and ISC Licensed.
                 </Col>
             </Row>
             </div>
