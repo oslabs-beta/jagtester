@@ -16,8 +16,23 @@
     }
 }
 footer{
-    position: fixed;
+    position: relative;
     bottom: 0;
     left:0;
     right:0;
+    color:white;
 }
+
+.image-cropper {
+    width: 400px;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    width:100%;
+    height: auto;
+  }
+  
+  .social-team{
+      margin: 0 10px 0 10px;
+  }
