@@ -6,6 +6,7 @@
         "target": "ES5",
         "noImplicitAny": true,
         "moduleResolution": "node",
+        "declaration": true,
         "sourceMap": false,
         "outDir": "../../dist/middleware",
         "baseUrl": ".",
