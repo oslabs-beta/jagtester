@@ -184,7 +184,6 @@ const App: () => JSX.Element = () => {
                                     </Col>
                                 </div>
                             </Container>
-                            {/* <Features /> */}
                         </div>
                         <Container fluid className="text-white text-center">
                             <div id="features" style={styles.content2}>
@@ -199,7 +198,7 @@ const App: () => JSX.Element = () => {
                                 <div className="row justify-content-center">
                                     <Col sm={8} md={8} lg={4}>
                                         <div className="mx-auto mb-5 mb-lg-0 mb-lg-3">
-                                            <img src={install} width="100%" />
+                                            <img src={install} width="100%" style={{ paddingBottom: '15px' }} />
                                             <h5>1. Install and Start Server</h5>
                                         </div>
                                     </Col>
@@ -220,6 +219,7 @@ const App: () => JSX.Element = () => {
                             </div>
                         </Container>
                         <Container fluid className="text-white text-center">
+                            {/* Use team images that are at least 500px x 500px */}
                             <div id="team" style={styles.content2}>
                                 <Row>
                                     <Col className="text-center" style={{ color: 'white' }}>
@@ -235,13 +235,13 @@ const App: () => JSX.Element = () => {
                                                 <img src={team3} style={styles.team} />
                                             </div>
                                             <h3>Abigail Dorso</h3>
-                                            <a href="https://github.com/abbydorso">
+                                            <a href="https://github.com/abbydorso" target="_blank" rel="noreferrer">
                                                 <img className="social-team" src={github} height={'40px'} width={'auto'} />
                                             </a>
-                                            <a href="https://www.linkedin.com/in/abigaildorso/">
+                                            <a href="https://www.linkedin.com/in/abigaildorso/" target="_blank" rel="noreferrer">
                                                 <img className="social-team" src={linkedin} height={'40px'} width={'auto'} />
                                             </a>
-                                            <a href="https://twitter.com/abbydorso">
+                                            <a href="https://twitter.com/abbydorso" target="_blank" rel="noreferrer">
                                                 <img className="social-team" src={twitter} height={'40px'} width={'auto'} />
                                             </a>
                                         </div>
@@ -252,13 +252,13 @@ const App: () => JSX.Element = () => {
                                                 <img src={team1} style={styles.team} />
                                             </div>
                                             <h3>Grigor Minasyan</h3>
-                                            <a href="https://github.com/grigor-minasyan/">
+                                            <a href="https://github.com/grigor-minasyan/" target="_blank" rel="noreferrer">
                                                 <img className="social-team" src={github} height={'40px'} width={'auto'} />
                                             </a>
-                                            <a href="https://www.linkedin.com/in/grigor-minasyan/">
+                                            <a href="https://www.linkedin.com/in/grigor-minasyan/" target="_blank" rel="noreferrer">
                                                 <img className="social-team" src={linkedin} height={'40px'} width={'auto'} />
                                             </a>
-                                            <a href="https://twitter.com/grigorminas">
+                                            <a href="https://twitter.com/grigorminas" target="_blank" rel="noreferrer">
                                                 <img className="social-team" src={twitter} height={'40px'} width={'auto'} />
                                             </a>
                                         </div>
@@ -269,13 +269,13 @@ const App: () => JSX.Element = () => {
                                                 <img src={team2} style={styles.team} />
                                             </div>
                                             <h3>Jason Charles de Vera</h3>
-                                            <a href="https://github.com/jcdevera">
+                                            <a href="https://github.com/jcdevera" target="_blank" rel="noreferrer">
                                                 <img className="social-team" src={github} height={'40px'} width={'auto'} />
                                             </a>
-                                            <a href="https://www.linkedin.com/in/jason-charles-de-vera/">
+                                            <a href="https://www.linkedin.com/in/jason-charles-de-vera/" target="_blank" rel="noreferrer">
                                                 <img className="social-team" src={linkedin} height={'40px'} width={'auto'} />
                                             </a>
-                                            <a href="https://twitter.com/jachrode">
+                                            <a href="https://twitter.com/jachrode" target="_blank" rel="noreferrer">
                                                 <img className="social-team" src={twitter} height={'40px'} width={'auto'} />
                                             </a>
                                         </div>
