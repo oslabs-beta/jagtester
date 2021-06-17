@@ -4,6 +4,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 const config: webpack.Configuration = {
     mode: 'production',
@@ -30,12 +31,8 @@ const config: webpack.Configuration = {
                 },
             },
             {
-                test: /\.(png|jp(e*)g|gif)$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                    },
-                ],
+                test: /\.(jpe?g|png|gif)$/i,
+                type: 'asset',
             },
             {
                 test: /\.svg$/,
@@ -66,6 +63,18 @@ const config: webpack.Configuration = {
             extensions: ['js', 'jsx', 'ts', 'tsx'],
         }),
         new CleanWebpackPlugin(),
+
+        new ImageMinimizerPlugin({
+            minimizerOptions: {
+                // Lossless optimization with custom option
+                // Feel free to experiment with options for better result for you
+                plugins: [
+                    ['gifsicle', { interlaced: true, optimizationLevel: 3, color: 16 }],
+                    ['jpegtran', { progressive: true }],
+                    ['optipng', { optimizationLevel: 5 }],
+                ],
+            },
+        }),
     ],
 };
 
