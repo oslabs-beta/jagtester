@@ -4,16 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var response_time_1 = __importDefault(require("response-time"));
+var Jagtestercommands;
+(function (Jagtestercommands) {
+    Jagtestercommands[Jagtestercommands["updateLayer"] = 0] = "updateLayer";
+    Jagtestercommands[Jagtestercommands["running"] = 1] = "running";
+    Jagtestercommands[Jagtestercommands["endTest"] = 2] = "endTest";
+})(Jagtestercommands || (Jagtestercommands = {}));
 var getMiddleware = function (app) {
     var collectedData = {};
     var routeData = {};
     var isPrototypeChanged = false;
-    var Jagtestercommands;
-    (function (Jagtestercommands) {
-        Jagtestercommands[Jagtestercommands["updateLayer"] = 0] = "updateLayer";
-        Jagtestercommands[Jagtestercommands["running"] = 1] = "running";
-        Jagtestercommands[Jagtestercommands["endTest"] = 2] = "endTest";
-    })(Jagtestercommands || (Jagtestercommands = {}));
     var resetLayerPrototype = function () {
         app._router.stack[0].__proto__.handle_request = originalLayerHandleRequest;
         isPrototypeChanged = false;

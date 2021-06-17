@@ -5,31 +5,31 @@ type FunctionType = (
     app: Application
 ) => (req: Request, res: Response, next: NextFunction) => unknown;
 
+interface CollectedData {
+    [key: string]: {
+        reqId: string;
+        reqRoute: string;
+        middlewares: {
+            fnName: string;
+            elapsedTime: number;
+        }[];
+    };
+}
+
+interface RouteData {
+    [key: string]: CollectedData;
+}
+
+enum Jagtestercommands {
+    updateLayer,
+    running,
+    endTest,
+}
+
 const getMiddleware: FunctionType = (app: Application) => {
-    interface CollectedData {
-        [key: string]: {
-            reqId: string;
-            reqRoute: string;
-            middlewares: {
-                fnName: string;
-                elapsedTime: number;
-            }[];
-        };
-    }
-
-    interface RouteData {
-        [key: string]: CollectedData;
-    }
-
     let collectedData: CollectedData = {};
     let routeData: RouteData = {};
     let isPrototypeChanged = false;
-
-    enum Jagtestercommands {
-        updateLayer,
-        running,
-        endTest,
-    }
 
     const resetLayerPrototype = () => {
         app._router.stack[0].__proto__.handle_request = originalLayerHandleRequest;
