@@ -289,7 +289,7 @@ const App: () => JSX.Element = () => {
             <Container fluid className="text-center">
                 <Row className="py-5" style={{ backgroundColor: bgColor }}>
                     <Col>
-                        <footer style={{ backgroundColor: bgColor }}>Jagtester is Open Source and MIT licensed.</footer>
+                        <footer style={{ backgroundColor: bgColor }}>Jagtester is Open Source and licensed under ISC.</footer>
                     </Col>
                 </Row>
             </Container>
