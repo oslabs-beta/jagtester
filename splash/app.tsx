@@ -85,7 +85,7 @@ const App: () => JSX.Element = () => {
     return (
         <>
         <Container fluid id="root" style={styles.root}>
-            <ScrollspyNav scrollTargetIds={['home', 'about', 'features']} activeNavClass="active" scrollDuration="500">
+            <ScrollspyNav scrollTargetIds={['home', 'about', 'features', 'team']} activeNavClass="active" scrollDuration="500">
                 <Navbar variant="dark" fixed="top" id="navbar">
                     <Nav className="mr-auto ml-5 h6">
                         <Nav.Link href="#home">
