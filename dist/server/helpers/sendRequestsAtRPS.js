@@ -5,21 +5,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const interfaces_1 = require("../interfaces");
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const sendRequestsAtRPS = (rpsInterval, startRPS, endRPS, testLength, inputsData, globalVariables, allRPSfinished, globalTestConfig, io, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, agent, sendRequests, singleRPSfinished, emitPercentage) => {
+const allRPSfinished_1 = __importDefault(require("./allRPSfinished"));
+const sendRequests_1 = __importDefault(require("./sendRequests"));
+const sendRequestsAtRPS = (globalVariables, globalTestConfig, io) => {
     // check if finished testing
-    const curRPS = startRPS + globalVariables.currentInterval * rpsInterval;
-    const call_allRPSfinished = () => {
-        allRPSfinished(globalTestConfig, io, globalVariables, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest);
-    };
-    if (curRPS > endRPS) {
-        // eventEmitter.emit(ioSocketCommands.allRPSfinished);
-        call_allRPSfinished();
+    const curRPS = globalTestConfig.startRPS + globalVariables.currentInterval * globalTestConfig.rpsInterval;
+    if (curRPS > globalTestConfig.endRPS) {
+        allRPSfinished_1.default(globalTestConfig, io, globalVariables);
         return;
     }
     // update layer first then start testing
-    for (const target of inputsData) {
+    for (const target of globalTestConfig.inputsData) {
         node_fetch_1.default(target.targetURL, {
-            agent,
+            agent: globalVariables.agent,
             headers: {
                 jagtestercommand: interfaces_1.Jagtestercommands.updateLayer.toString(),
             },
@@ -27,11 +25,11 @@ const sendRequestsAtRPS = (rpsInterval, startRPS, endRPS, testLength, inputsData
             .then(() => {
             // saving the resroute into the collection object
             const resRoute = new URL(target.targetURL).pathname;
-            if (timeArrRoutes[resRoute] === undefined) {
-                timeArrRoutes[resRoute] = {};
+            if (globalVariables.timeArrRoutes[resRoute] === undefined) {
+                globalVariables.timeArrRoutes[resRoute] = {};
             }
-            if (timeArrRoutes[resRoute][curRPS.toString()] === undefined) {
-                timeArrRoutes[resRoute][curRPS.toString()] = {
+            if (globalVariables.timeArrRoutes[resRoute][curRPS.toString()] === undefined) {
+                globalVariables.timeArrRoutes[resRoute][curRPS.toString()] = {
                     receivedTotalTime: 0,
                     errorCount: 0,
                     successfulResCount: 0,
@@ -39,10 +37,10 @@ const sendRequestsAtRPS = (rpsInterval, startRPS, endRPS, testLength, inputsData
             }
             globalVariables.errorCount = 0;
             globalVariables.successfulResCount = 0;
-            sendRequests(target.targetURL, curRPS, Math.round((curRPS * target.percentage) / 100), testLength, agent, timeArrRoutes, trackedVariables, globalVariables, io, timeOutArray, singleRPSfinished, allRPSfinished, emitPercentage, globalTestConfig, pulledDataFromTest, sendRequestsAtRPS);
+            sendRequests_1.default(target.targetURL, curRPS, Math.round((curRPS * target.percentage) / 100), globalTestConfig.testLength, globalVariables, io, globalTestConfig);
         })
             .catch(() => {
-            call_allRPSfinished();
+            allRPSfinished_1.default(globalTestConfig, io, globalVariables);
         });
     }
 };

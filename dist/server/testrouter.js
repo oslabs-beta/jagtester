@@ -8,10 +8,6 @@ const node_fetch_1 = __importDefault(require("node-fetch"));
 const http_1 = __importDefault(require("http"));
 const index_1 = require("./index");
 const interfaces_1 = require("./interfaces");
-const sendRequests_1 = __importDefault(require("./helpers/sendRequests"));
-const singleRPSfinished_1 = __importDefault(require("./helpers/singleRPSfinished"));
-const emitPercentage_1 = __importDefault(require("./helpers/emitPercentage"));
-const allRPSfinished_1 = __importDefault(require("./helpers/allRPSfinished"));
 const sendRequestsAtRPS_1 = __importDefault(require("./helpers/sendRequestsAtRPS"));
 const abort_controller_1 = __importDefault(require("abort-controller"));
 const router = express_1.default.Router();
@@ -20,13 +16,11 @@ const globalVariables = {
     errorCount: 0,
     successfulResCount: 0,
     abortController: new abort_controller_1.default(),
-};
-let timeArrRoutes = {};
-let pulledDataFromTest = {};
-let globalTestConfig;
-const timeOutArray = [];
-const trackedVariables = {
+    timeArrRoutes: {},
+    timeOutArray: [],
+    pulledDataFromTest: {},
     isTestRunningInternal: false,
+    agent: new http_1.default.Agent({ keepAlive: true }),
     isTestRunningListener: (val) => {
         index_1.io.emit(interfaces_1.ioSocketCommands.testRunningStateChange, val);
     },
@@ -38,12 +32,12 @@ const trackedVariables = {
         return this.isTestRunningInternal;
     },
 };
-const agent = new http_1.default.Agent({ keepAlive: true });
+let globalTestConfig;
 router.post('/startmultiple', (req, res) => {
-    if (!trackedVariables.isTestRunning) {
-        trackedVariables.isTestRunning = true;
-        timeArrRoutes = {};
-        pulledDataFromTest = {};
+    if (!globalVariables.isTestRunning) {
+        globalVariables.isTestRunning = true;
+        globalVariables.timeArrRoutes = {};
+        globalVariables.pulledDataFromTest = {};
         globalVariables.currentInterval = 0;
         globalTestConfig = {
             rpsInterval: req.body.rpsInterval,
@@ -52,15 +46,14 @@ router.post('/startmultiple', (req, res) => {
             testLength: req.body.testLength,
             inputsData: req.body.inputsData,
         };
-        const { rpsInterval, startRPS, endRPS, testLength, inputsData } = req.body;
-        sendRequestsAtRPS_1.default(rpsInterval, startRPS, endRPS, testLength, inputsData, globalVariables, allRPSfinished_1.default, globalTestConfig, index_1.io, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, agent, sendRequests_1.default, singleRPSfinished_1.default, emitPercentage_1.default);
+        sendRequestsAtRPS_1.default(globalVariables, globalTestConfig, index_1.io);
     }
     res.sendStatus(200);
 });
 router.post('/checkjagtester', (req, res) => {
     node_fetch_1.default(req.body.inputURL, {
         method: req.body.method,
-        agent,
+        agent: globalVariables.agent,
         headers: {
             jagtestercommand: interfaces_1.Jagtestercommands.updateLayer.toString(),
         },

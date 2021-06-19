@@ -1,3 +1,4 @@
+import http from 'http';
 export interface TimeArrInterface {
     receivedTotalTime: number;
     recordedTotalTime: number;
@@ -95,4 +96,11 @@ export interface GlobalVariables {
     errorCount: number;
     successfulResCount: number;
     abortController: AbortController;
+    timeArrRoutes: TimeArrRoutes;
+    timeOutArray: NodeJS.Timeout[];
+    pulledDataFromTest: PulledDataFromTest;
+    isTestRunningInternal: boolean;
+    isTestRunningListener: (val: boolean) => void;
+    isTestRunning: boolean;
+    agent: http.Agent;
 }

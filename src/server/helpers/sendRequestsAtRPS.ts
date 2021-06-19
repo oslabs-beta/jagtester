@@ -1,91 +1,33 @@
-import {
-    Jagtestercommands,
-    TimeArrRoutes,
-    TrackedVariables,
-    GlobalVariables,
-    TestConfigData,
-    PulledDataFromTest,
-} from '../interfaces';
+import { Jagtestercommands, GlobalVariables, TestConfigData } from '../interfaces';
 import { Server } from 'socket.io';
-import http from 'http';
 import fetch from 'node-fetch';
-import { AllRPSfinished } from './allRPSfinished';
-import { SendRequests } from './sendRequests';
-import { SingleRPSfinished } from './singleRPSfinished';
-import { EmitPercentage } from './emitPercentage';
+import allRPSfinished from './allRPSfinished';
+import sendRequests from './sendRequests';
 
 type SendRequestsAtRPS = (
-    rpsInterval: number,
-    startRPS: number,
-    endRPS: number,
-    testLength: number,
-    inputsData: {
-        method: string;
-        targetURL: string;
-        percentage: number;
-    }[],
     globalVariables: GlobalVariables,
-    allRPSfinished: AllRPSfinished,
     globalTestConfig: TestConfigData,
-    io: Server,
-    trackedVariables: TrackedVariables,
-    timeOutArray: NodeJS.Timeout[],
-    timeArrRoutes: TimeArrRoutes,
-    pulledDataFromTest: PulledDataFromTest,
-    agent: http.Agent,
-    sendRequests: SendRequests,
-    singleRPSfinished: SingleRPSfinished,
-    emitPercentage: EmitPercentage
+    io: Server
 ) => void;
 
 const sendRequestsAtRPS: SendRequestsAtRPS = (
-    rpsInterval: number,
-    startRPS: number,
-    endRPS: number,
-    testLength: number,
-    inputsData: {
-        method: string;
-        targetURL: string;
-        percentage: number;
-    }[],
     globalVariables: GlobalVariables,
-    allRPSfinished: AllRPSfinished,
     globalTestConfig: TestConfigData,
-    io: Server,
-    trackedVariables: TrackedVariables,
-    timeOutArray: NodeJS.Timeout[],
-    timeArrRoutes: TimeArrRoutes,
-    pulledDataFromTest: PulledDataFromTest,
-    agent: http.Agent,
-    sendRequests: SendRequests,
-    singleRPSfinished: SingleRPSfinished,
-    emitPercentage: EmitPercentage
+    io: Server
 ) => {
     // check if finished testing
-    const curRPS = startRPS + globalVariables.currentInterval * rpsInterval;
+    const curRPS =
+        globalTestConfig.startRPS + globalVariables.currentInterval * globalTestConfig.rpsInterval;
 
-    const call_allRPSfinished = () => {
-        allRPSfinished(
-            globalTestConfig,
-            io,
-            globalVariables,
-            trackedVariables,
-            timeOutArray,
-            timeArrRoutes,
-            pulledDataFromTest
-        );
-    };
-
-    if (curRPS > endRPS) {
-        // eventEmitter.emit(ioSocketCommands.allRPSfinished);
-        call_allRPSfinished();
+    if (curRPS > globalTestConfig.endRPS) {
+        allRPSfinished(globalTestConfig, io, globalVariables);
         return;
     }
 
     // update layer first then start testing
-    for (const target of inputsData) {
+    for (const target of globalTestConfig.inputsData) {
         fetch(target.targetURL, {
-            agent,
+            agent: globalVariables.agent,
             headers: {
                 jagtestercommand: Jagtestercommands.updateLayer.toString(),
             },
@@ -93,11 +35,11 @@ const sendRequestsAtRPS: SendRequestsAtRPS = (
             .then(() => {
                 // saving the resroute into the collection object
                 const resRoute = new URL(target.targetURL).pathname;
-                if (timeArrRoutes[resRoute] === undefined) {
-                    timeArrRoutes[resRoute] = {};
+                if (globalVariables.timeArrRoutes[resRoute] === undefined) {
+                    globalVariables.timeArrRoutes[resRoute] = {};
                 }
-                if (timeArrRoutes[resRoute][curRPS.toString()] === undefined) {
-                    timeArrRoutes[resRoute][curRPS.toString()] = {
+                if (globalVariables.timeArrRoutes[resRoute][curRPS.toString()] === undefined) {
+                    globalVariables.timeArrRoutes[resRoute][curRPS.toString()] = {
                         receivedTotalTime: 0,
                         errorCount: 0,
                         successfulResCount: 0,
@@ -110,23 +52,14 @@ const sendRequestsAtRPS: SendRequestsAtRPS = (
                     target.targetURL,
                     curRPS,
                     Math.round((curRPS * target.percentage) / 100),
-                    testLength,
-                    agent,
-                    timeArrRoutes,
-                    trackedVariables,
+                    globalTestConfig.testLength,
                     globalVariables,
                     io,
-                    timeOutArray,
-                    singleRPSfinished,
-                    allRPSfinished,
-                    emitPercentage,
-                    globalTestConfig,
-                    pulledDataFromTest,
-                    sendRequestsAtRPS
+                    globalTestConfig
                 );
             })
             .catch(() => {
-                call_allRPSfinished();
+                allRPSfinished(globalTestConfig, io, globalVariables);
             });
     }
 };

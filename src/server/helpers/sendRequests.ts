@@ -1,38 +1,19 @@
-import {
-    Jagtestercommands,
-    TimeArrRoutes,
-    TrackedVariables,
-    GlobalVariables,
-    TestConfigData,
-    PulledDataFromTest,
-} from '../interfaces';
-
-import type { SendRequestsAtRPS } from './sendRequestsAtRPS';
+import { Jagtestercommands, GlobalVariables, TestConfigData } from '../interfaces';
 
 import fetch from 'node-fetch';
-import http from 'http';
 import { Server } from 'socket.io';
-import type { SingleRPSfinished } from './singleRPSfinished';
-import type { AllRPSfinished } from './allRPSfinished';
-import { EmitPercentage } from './emitPercentage';
+import singleRPSfinished from './singleRPSfinished';
+import allRPSfinished from './allRPSfinished';
+import emitPercentage from './emitPercentage';
 
 type SendRequests = (
     targetURL: string,
     rpsGroup: number,
     rpsActual: number,
     secondsToTest: number,
-    agent: http.Agent,
-    timeArrRoutes: TimeArrRoutes,
-    trackedVariables: TrackedVariables,
     globalVariables: GlobalVariables,
     io: Server,
-    timeOutArray: NodeJS.Timeout[],
-    singleRPSfinished: SingleRPSfinished,
-    allRPSfinished: AllRPSfinished,
-    emitPercentage: EmitPercentage,
-    globalTestConfig: TestConfigData,
-    pulledDataFromTest: PulledDataFromTest,
-    sendRequestsAtRPS: SendRequestsAtRPS
+    globalTestConfig: TestConfigData
 ) => void;
 
 const sendRequests: SendRequests = (
@@ -40,40 +21,13 @@ const sendRequests: SendRequests = (
     rpsGroup: number,
     rpsActual: number,
     secondsToTest: number,
-    agent: http.Agent,
-    timeArrRoutes: TimeArrRoutes,
-    trackedVariables: TrackedVariables,
     globalVariables: GlobalVariables,
     io: Server,
-    timeOutArray: NodeJS.Timeout[],
-    singleRPSfinished: SingleRPSfinished,
-    allRPSfinished: AllRPSfinished,
-    emitPercentage: EmitPercentage,
-    globalTestConfig: TestConfigData,
-    pulledDataFromTest: PulledDataFromTest,
-    sendRequestsAtRPS: SendRequestsAtRPS
+    globalTestConfig: TestConfigData
 ) => {
-    const call_singleRPSfinished = () => {
-        singleRPSfinished(
-            rpsGroup,
-            io,
-            globalTestConfig,
-            globalVariables,
-            pulledDataFromTest,
-            allRPSfinished,
-            sendRequestsAtRPS,
-            trackedVariables,
-            timeOutArray,
-            timeArrRoutes,
-            agent,
-            sendRequests,
-            emitPercentage
-        );
-    };
-
     const sendFetch = (reqId: number) => {
         fetch(targetURL, {
-            agent,
+            agent: globalVariables.agent,
             signal: globalVariables.abortController.signal,
             headers: {
                 jagtestercommand: Jagtestercommands.running.toString(),
@@ -82,47 +36,38 @@ const sendRequests: SendRequests = (
         })
             .then((res) => {
                 const resRoute = new URL(targetURL).pathname;
-                timeArrRoutes[resRoute][rpsGroup].successfulResCount++;
+                globalVariables.timeArrRoutes[resRoute][rpsGroup].successfulResCount++;
                 globalVariables.successfulResCount++;
                 emitPercentage(globalVariables, rpsGroup, secondsToTest, io);
                 if (
                     globalVariables.successfulResCount + globalVariables.errorCount >=
                     rpsGroup * secondsToTest
                 ) {
-                    call_singleRPSfinished();
+                    singleRPSfinished(rpsGroup, io, globalTestConfig, globalVariables);
                 }
                 if (res.headers.has('x-response-time')) {
                     const xResponseTime = res.headers.get('x-response-time');
-                    timeArrRoutes[resRoute][rpsGroup].receivedTotalTime += xResponseTime
-                        ? +xResponseTime
-                        : 0;
+                    globalVariables.timeArrRoutes[resRoute][rpsGroup].receivedTotalTime +=
+                        xResponseTime ? +xResponseTime : 0;
                 }
             })
             .catch((error) => {
                 if (error.name === 'AbortError') {
-                    if (trackedVariables.isTestRunning) {
-                        trackedVariables.isTestRunning = false;
+                    if (globalVariables.isTestRunning) {
+                        globalVariables.isTestRunning = false;
                         // eventEmitter.emit(ioSocketCommands.allRPSfinished);
-                        allRPSfinished(
-                            globalTestConfig,
-                            io,
-                            globalVariables,
-                            trackedVariables,
-                            timeOutArray,
-                            timeArrRoutes,
-                            pulledDataFromTest
-                        );
+                        allRPSfinished(globalTestConfig, io, globalVariables);
                     }
                 } else {
                     const resRoute = new URL(targetURL).pathname;
-                    timeArrRoutes[resRoute][rpsGroup].errorCount++;
+                    globalVariables.timeArrRoutes[resRoute][rpsGroup].errorCount++;
                     globalVariables.errorCount++;
                     emitPercentage(globalVariables, rpsGroup, secondsToTest, io);
                     if (
                         globalVariables.successfulResCount + globalVariables.errorCount >=
                         rpsGroup * secondsToTest
                     ) {
-                        call_singleRPSfinished();
+                        singleRPSfinished(rpsGroup, io, globalTestConfig, globalVariables);
                     }
                 }
             });
@@ -135,7 +80,7 @@ const sendRequests: SendRequests = (
                 sendFetch.bind(this, i + j * rpsActual),
                 Math.floor(Math.random() * 1000 + 1000 * j)
             );
-            timeOutArray.push(timeout);
+            globalVariables.timeOutArray.push(timeout);
         }
     }
     return;
