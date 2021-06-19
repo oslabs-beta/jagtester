@@ -76,3 +76,28 @@ export enum HTTPMethods {
     CONNECT = 'CONNECT',
     TRACE = 'TRACE',
 }
+
+export interface TimeArrRoutes {
+    // this key is used as the route name
+    [key: string]: {
+        //this key is used as the rps number
+        [key: string]: {
+            receivedTotalTime: number;
+            errorCount: number;
+            successfulResCount: number;
+        };
+    };
+}
+
+export interface TrackedVariables {
+    isTestRunningInternal: boolean;
+    isTestRunningListener: (val: boolean) => void;
+    isTestRunning: boolean;
+}
+
+export interface GlobalVariables {
+    currentInterval: number;
+    errorCount: number;
+    successfulResCount: number;
+    abortController: AbortController;
+}

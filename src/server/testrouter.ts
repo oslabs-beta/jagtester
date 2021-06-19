@@ -1,41 +1,43 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import http from 'http';
-import events from 'events';
 import { io } from './index';
 import {
-    CollectedData,
     PulledDataFromTest,
     AllPulledDataFromTest,
     Jagtestercommands,
     TestConfigData,
     ioSocketCommands,
+    TimeArrRoutes,
+    TrackedVariables,
+    GlobalVariables,
 } from './interfaces';
 
-import { processData, processLastMiddleware, emitPercentage } from './helperFunctions';
+import sendRequests from './helpers/sendRequests';
+import singleRPSfinished from './helpers/singleRPSfinished';
+import emitPercentage from './helpers/emitPercentage';
+import allRPSfinished from './helpers/allRPSfinished';
+import sendRequestsAtRPS from './helpers/sendRequestsAtRPS';
 
 import AbortController from 'abort-controller';
-let abortController = new AbortController();
 
 const router = express.Router();
-let timeArrRoutes: {
-    // this key is used as the route name
-    [key: string]: {
-        //this key is used as the rps number
-        [key: string]: {
-            receivedTotalTime: number;
-            errorCount: number;
-            successfulResCount: number;
-        };
-    };
-} = {};
+
+const globalVariables: GlobalVariables = {
+    currentInterval: 0,
+    errorCount: 0,
+    successfulResCount: 0,
+    abortController: new AbortController(),
+};
+
+let timeArrRoutes: TimeArrRoutes = {};
 
 const allPulledDataFromTest: AllPulledDataFromTest[] = [];
 let pulledDataFromTest: PulledDataFromTest = {};
 let globalTestConfig: TestConfigData;
 const timeOutArray: NodeJS.Timeout[] = [];
 
-const trackedVariables = {
+const trackedVariables: TrackedVariables = {
     isTestRunningInternal: false,
     isTestRunningListener: (val: boolean) => {
         io.emit(ioSocketCommands.testRunningStateChange, val);
@@ -49,217 +51,14 @@ const trackedVariables = {
     },
 };
 
-let currentInterval = 0;
-let errorCount = 0;
-let successfulResCount = 0;
-
-const eventEmitter = new events.EventEmitter();
-eventEmitter.on(ioSocketCommands.singleRPSfinished, (rpsGroup: number) => {
-    io.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
-    const { rpsInterval, startRPS, endRPS, testLength, inputsData } = globalTestConfig;
-
-    fetch(globalTestConfig.inputsData[0].targetURL, {
-        headers: {
-            jagtestercommand: Jagtestercommands.endTest.toString(),
-        },
-    })
-        .then((fetchRes) => fetchRes.json())
-        .then((data) => {
-            const curRPS = startRPS + currentInterval * rpsInterval;
-            pulledDataFromTest[curRPS.toString()] = data;
-            currentInterval++;
-            sendRequestsAtRPS(rpsInterval, startRPS, endRPS, testLength, inputsData);
-        })
-        .catch(() => {
-            eventEmitter.emit(ioSocketCommands.allRPSfinished);
-        });
-});
-
-eventEmitter.on(ioSocketCommands.allRPSfinished, () => {
-    fetch(globalTestConfig.inputsData[0].targetURL, {
-        headers: {
-            jagtestercommand: Jagtestercommands.endTest.toString(),
-        },
-    }).catch((err) => {
-        io.emit(ioSocketCommands.errorInfo, err.toString());
-    });
-    abortController = new AbortController();
-    trackedVariables.isTestRunning = false;
-
-    // clear timeouts
-    for (const timeout of timeOutArray) {
-        clearTimeout(timeout);
-    }
-    timeOutArray.splice(0, timeOutArray.length);
-
-    // getting the average response time, since we had the total response times added together
-    for (const route in timeArrRoutes) {
-        for (const rpsGroup in timeArrRoutes[route]) {
-            timeArrRoutes[route][rpsGroup].receivedTotalTime =
-                Math.round(
-                    (1000 * timeArrRoutes[route][rpsGroup].receivedTotalTime) /
-                        timeArrRoutes[route][rpsGroup].successfulResCount
-                ) / 1000;
-        }
-    }
-
-    // processing middlewares, averaging them, then combining timearrroutes
-    for (const rps in pulledDataFromTest) {
-        for (const route in pulledDataFromTest[rps]) {
-            pulledDataFromTest[rps][route] = processData(
-                pulledDataFromTest[rps][route] as CollectedData
-            );
-            pulledDataFromTest[rps][route].receivedTime =
-                timeArrRoutes[route][rps].receivedTotalTime;
-            pulledDataFromTest[rps][route].errorCount = timeArrRoutes[route][rps].errorCount;
-            pulledDataFromTest[rps][route].successfulResCount =
-                timeArrRoutes[route][rps].successfulResCount;
-
-            //fixing the elapsed time for the last middleware
-            processLastMiddleware(pulledDataFromTest, rps, route);
-        }
-    }
-
-    if (Object.keys(pulledDataFromTest).length > 0) {
-        const newPulledData = {
-            testTime: Date.now(),
-            testData: pulledDataFromTest,
-        };
-        allPulledDataFromTest.push(newPulledData);
-        io.emit(ioSocketCommands.allRPSfinished, [newPulledData]);
-    }
-});
-
 const agent = new http.Agent({ keepAlive: true });
-// const targetURL = 'http://localhost:3030/testroute';
-
-const sendRequests = (
-    targetURL: string,
-    rpsGroup: number,
-    rpsActual: number,
-    secondsToTest: number
-) => {
-    const sendFetch = (reqId: number) => {
-        fetch(targetURL, {
-            agent,
-            signal: abortController.signal,
-            headers: {
-                jagtestercommand: Jagtestercommands.running.toString(),
-                jagtesterreqid: reqId.toString(),
-            },
-        })
-            .then((res) => {
-                const resRoute = new URL(targetURL).pathname;
-                timeArrRoutes[resRoute][rpsGroup].successfulResCount++;
-                successfulResCount++;
-                emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
-                if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
-                    eventEmitter.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
-                }
-                if (res.headers.has('x-response-time')) {
-                    const xResponseTime = res.headers.get('x-response-time');
-                    timeArrRoutes[resRoute][rpsGroup].receivedTotalTime += xResponseTime
-                        ? +xResponseTime
-                        : 0;
-                }
-            })
-            .catch((error) => {
-                if (error.name === 'AbortError') {
-                    if (trackedVariables.isTestRunning) {
-                        trackedVariables.isTestRunning = false;
-                        eventEmitter.emit(ioSocketCommands.allRPSfinished);
-                    }
-                } else {
-                    const resRoute = new URL(targetURL).pathname;
-                    timeArrRoutes[resRoute][rpsGroup].errorCount++;
-                    errorCount++;
-                    emitPercentage(successfulResCount, errorCount, rpsGroup, secondsToTest);
-                    if (successfulResCount + errorCount >= rpsGroup * secondsToTest) {
-                        eventEmitter.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
-                    }
-                }
-            });
-    };
-
-    // outer for loop to run for every second and set timeouts for after that second
-    for (let j = 0; j < secondsToTest; j++) {
-        for (let i = 0; i < rpsActual; i++) {
-            const timeout = setTimeout(
-                sendFetch.bind(this, i + j * rpsActual),
-                Math.floor(Math.random() * 1000 + 1000 * j)
-            );
-            timeOutArray.push(timeout);
-        }
-    }
-};
-
-const sendRequestsAtRPS = (
-    rpsInterval: number,
-    startRPS: number,
-    endRPS: number,
-    testLength: number,
-    inputsData: {
-        method: string;
-        targetURL: string;
-        percentage: number;
-    }[]
-) => {
-    // check if finished testing
-    const curRPS = startRPS + currentInterval * rpsInterval;
-    if (curRPS > endRPS) {
-        eventEmitter.emit(ioSocketCommands.allRPSfinished);
-        return;
-    }
-
-    // update layer first then start testing
-    for (const target of inputsData) {
-        fetch(target.targetURL, {
-            agent,
-            headers: {
-                jagtestercommand: Jagtestercommands.updateLayer.toString(),
-            },
-        })
-            .then(() => {
-                // saving the resroute into the collection object
-                const resRoute = new URL(target.targetURL).pathname;
-                if (timeArrRoutes[resRoute] === undefined) {
-                    timeArrRoutes[resRoute] = {};
-                    timeArrRoutes[resRoute][curRPS.toString()] = {
-                        receivedTotalTime: 0,
-                        errorCount: 0,
-                        successfulResCount: 0,
-                    };
-                } else {
-                    if (timeArrRoutes[resRoute][curRPS.toString()] === undefined) {
-                        timeArrRoutes[resRoute][curRPS.toString()] = {
-                            receivedTotalTime: 0,
-                            errorCount: 0,
-                            successfulResCount: 0,
-                        };
-                    }
-                }
-                errorCount = 0;
-                successfulResCount = 0;
-                sendRequests(
-                    target.targetURL,
-                    curRPS,
-                    Math.round((curRPS * target.percentage) / 100),
-                    testLength
-                );
-                // res.json({ jagtester: true });
-            })
-            .catch(() => {
-                eventEmitter.emit(ioSocketCommands.allRPSfinished);
-            });
-    }
-};
 
 router.post('/startmultiple', (req, res) => {
     if (!trackedVariables.isTestRunning) {
         trackedVariables.isTestRunning = true;
         timeArrRoutes = {};
         pulledDataFromTest = {};
-        currentInterval = 0;
+        globalVariables.currentInterval = 0;
         globalTestConfig = {
             rpsInterval: req.body.rpsInterval,
             startRPS: req.body.startRPS,
@@ -269,7 +68,26 @@ router.post('/startmultiple', (req, res) => {
         };
 
         const { rpsInterval, startRPS, endRPS, testLength, inputsData } = req.body;
-        sendRequestsAtRPS(rpsInterval, startRPS, endRPS, testLength, inputsData);
+        sendRequestsAtRPS(
+            rpsInterval,
+            startRPS,
+            endRPS,
+            testLength,
+            inputsData,
+            globalVariables,
+            allRPSfinished,
+            globalTestConfig,
+            io,
+            trackedVariables,
+            timeOutArray,
+            timeArrRoutes,
+            pulledDataFromTest,
+            allPulledDataFromTest,
+            agent,
+            sendRequests,
+            singleRPSfinished,
+            emitPercentage
+        );
     }
     res.sendStatus(200);
 });
@@ -287,7 +105,7 @@ router.post('/checkjagtester', (req, res) => {
 });
 
 router.get('/stopTest', (req, res) => {
-    abortController.abort();
+    globalVariables.abortController.abort();
     res.sendStatus(200);
 });
 router.delete('/saveddata', (req, res) => {

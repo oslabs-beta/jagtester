@@ -67,3 +67,23 @@ export declare enum HTTPMethods {
     CONNECT = "CONNECT",
     TRACE = "TRACE"
 }
+export interface TimeArrRoutes {
+    [key: string]: {
+        [key: string]: {
+            receivedTotalTime: number;
+            errorCount: number;
+            successfulResCount: number;
+        };
+    };
+}
+export interface TrackedVariables {
+    isTestRunningInternal: boolean;
+    isTestRunningListener: (val: boolean) => void;
+    isTestRunning: boolean;
+}
+export interface GlobalVariables {
+    currentInterval: number;
+    errorCount: number;
+    successfulResCount: number;
+    abortController: AbortController;
+}

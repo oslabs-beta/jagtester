@@ -3,58 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendRequests = exports.emitPercentage = exports.processLastMiddleware = exports.processData = void 0;
-const interfaces_1 = require("./interfaces");
+const interfaces_1 = require("../interfaces");
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const processData = (data) => {
-    const collectedDataArr = [];
-    for (const key in data) {
-        collectedDataArr.push(data[key]);
-    }
-    // add middlewares elapsed times
-    const collectedDataSingle = collectedDataArr.reduce((acc, cur) => {
-        for (let i = 0; i < acc.middlewares.length; i++) {
-            if (i < cur.middlewares.length) {
-                acc.middlewares[i].elapsedTime += cur.middlewares[i].elapsedTime;
-            }
-        }
-        return acc;
-    });
-    // divide by the count of requests
-    collectedDataSingle.middlewares.forEach((middleware) => {
-        middleware.elapsedTime =
-            Math.round((100 * middleware.elapsedTime) / collectedDataArr.length) / 100;
-    });
-    return collectedDataSingle;
-};
-exports.processData = processData;
-const processLastMiddleware = (pulledDataFromTest, rps, route) => {
-    const indexOfLast = pulledDataFromTest[rps][route].middlewares.length - 1;
-    const tempMiddleware = {
-        fnName: 'temp',
-        elapsedTime: 0,
-    };
-    pulledDataFromTest[rps][route].middlewares[indexOfLast].elapsedTime =
-        Math.round(100 *
-            (pulledDataFromTest[rps][route].receivedTime -
-                pulledDataFromTest[rps][route].middlewares.reduce((acc, cur) => {
-                    acc.elapsedTime += cur.elapsedTime;
-                    return acc;
-                }, tempMiddleware).elapsedTime)) / 100;
-};
-exports.processLastMiddleware = processLastMiddleware;
-const emitPercentage = (successfulResCount, errorCount, rpsGroup, secondsToTest, io) => {
-    const percent = (successfulResCount + errorCount) / (rpsGroup * secondsToTest);
-    if (Math.floor(10000 * percent) % 1000 === 0) {
-        io.emit(interfaces_1.ioSocketCommands.currentRPSProgress, percent);
-    }
-};
-exports.emitPercentage = emitPercentage;
-const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, abortController, timeArrRoutes, trackedVariables, globalVariables, io, timeOutArray, singleRPSfinished, allRPSfinished, emitPercentage) => {
+const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, timeArrRoutes, trackedVariables, globalVariables, io, timeOutArray, singleRPSfinished, allRPSfinished, emitPercentage, globalTestConfig, pulledDataFromTest, allPulledDataFromTest, sendRequestsAtRPS) => {
     const sendFetch = (reqId) => {
         node_fetch_1.default(targetURL, {
             agent,
-            signal: abortController.signal,
+            signal: globalVariables.abortController.signal,
             headers: {
                 jagtestercommand: interfaces_1.Jagtestercommands.running.toString(),
                 jagtesterreqid: reqId.toString(),
@@ -68,7 +23,7 @@ const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, abor
             if (globalVariables.successfulResCount + globalVariables.errorCount >=
                 rpsGroup * secondsToTest) {
                 // eventEmitter.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
-                singleRPSfinished(rpsGroup);
+                singleRPSfinished(rpsGroup, io, globalTestConfig, globalVariables, pulledDataFromTest, allRPSfinished, sendRequestsAtRPS, trackedVariables, timeOutArray, timeArrRoutes, allPulledDataFromTest, agent, sendRequests, emitPercentage);
             }
             if (res.headers.has('x-response-time')) {
                 const xResponseTime = res.headers.get('x-response-time');
@@ -82,7 +37,7 @@ const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, abor
                 if (trackedVariables.isTestRunning) {
                     trackedVariables.isTestRunning = false;
                     // eventEmitter.emit(ioSocketCommands.allRPSfinished);
-                    allRPSfinished();
+                    allRPSfinished(globalTestConfig, io, globalVariables, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, allPulledDataFromTest);
                 }
             }
             else {
@@ -92,8 +47,7 @@ const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, abor
                 emitPercentage(globalVariables.successfulResCount, globalVariables.errorCount, rpsGroup, secondsToTest, io);
                 if (globalVariables.successfulResCount + globalVariables.errorCount >=
                     rpsGroup * secondsToTest) {
-                    // eventEmitter.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
-                    singleRPSfinished(rpsGroup);
+                    singleRPSfinished(rpsGroup, io, globalTestConfig, globalVariables, pulledDataFromTest, allRPSfinished, sendRequestsAtRPS, trackedVariables, timeOutArray, timeArrRoutes, allPulledDataFromTest, agent, sendRequests, emitPercentage);
                 }
             }
         });
@@ -107,4 +61,4 @@ const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, abor
     }
     return;
 };
-exports.sendRequests = sendRequests;
+exports.default = sendRequests;
