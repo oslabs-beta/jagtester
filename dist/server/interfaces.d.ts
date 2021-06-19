@@ -53,10 +53,6 @@ export interface PulledDataFromTest {
         [key: string]: CollectedDataSingle | CollectedData;
     };
 }
-export interface AllPulledDataFromTest {
-    testTime: number;
-    testData: PulledDataFromTest;
-}
 export declare enum HTTPMethods {
     GET = "GET",
     POST = "POST",

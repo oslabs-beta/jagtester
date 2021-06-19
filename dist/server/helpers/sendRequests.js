@@ -5,7 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const interfaces_1 = require("../interfaces");
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, timeArrRoutes, trackedVariables, globalVariables, io, timeOutArray, singleRPSfinished, allRPSfinished, emitPercentage, globalTestConfig, pulledDataFromTest, allPulledDataFromTest, sendRequestsAtRPS) => {
+const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, timeArrRoutes, trackedVariables, globalVariables, io, timeOutArray, singleRPSfinished, allRPSfinished, emitPercentage, globalTestConfig, pulledDataFromTest, sendRequestsAtRPS) => {
+    const call_singleRPSfinished = () => {
+        singleRPSfinished(rpsGroup, io, globalTestConfig, globalVariables, pulledDataFromTest, allRPSfinished, sendRequestsAtRPS, trackedVariables, timeOutArray, timeArrRoutes, agent, sendRequests, emitPercentage);
+    };
+    const call_emitPercentage = () => {
+        emitPercentage(globalVariables.successfulResCount, globalVariables.errorCount, rpsGroup, secondsToTest, io);
+    };
     const sendFetch = (reqId) => {
         node_fetch_1.default(targetURL, {
             agent,
@@ -19,11 +25,10 @@ const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, time
             const resRoute = new URL(targetURL).pathname;
             timeArrRoutes[resRoute][rpsGroup].successfulResCount++;
             globalVariables.successfulResCount++;
-            emitPercentage(globalVariables.successfulResCount, globalVariables.errorCount, rpsGroup, secondsToTest, io);
+            call_emitPercentage();
             if (globalVariables.successfulResCount + globalVariables.errorCount >=
                 rpsGroup * secondsToTest) {
-                // eventEmitter.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
-                singleRPSfinished(rpsGroup, io, globalTestConfig, globalVariables, pulledDataFromTest, allRPSfinished, sendRequestsAtRPS, trackedVariables, timeOutArray, timeArrRoutes, allPulledDataFromTest, agent, sendRequests, emitPercentage);
+                call_singleRPSfinished();
             }
             if (res.headers.has('x-response-time')) {
                 const xResponseTime = res.headers.get('x-response-time');
@@ -37,17 +42,17 @@ const sendRequests = (targetURL, rpsGroup, rpsActual, secondsToTest, agent, time
                 if (trackedVariables.isTestRunning) {
                     trackedVariables.isTestRunning = false;
                     // eventEmitter.emit(ioSocketCommands.allRPSfinished);
-                    allRPSfinished(globalTestConfig, io, globalVariables, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, allPulledDataFromTest);
+                    allRPSfinished(globalTestConfig, io, globalVariables, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest);
                 }
             }
             else {
                 const resRoute = new URL(targetURL).pathname;
                 timeArrRoutes[resRoute][rpsGroup].errorCount++;
                 globalVariables.errorCount++;
-                emitPercentage(globalVariables.successfulResCount, globalVariables.errorCount, rpsGroup, secondsToTest, io);
+                call_emitPercentage();
                 if (globalVariables.successfulResCount + globalVariables.errorCount >=
                     rpsGroup * secondsToTest) {
-                    singleRPSfinished(rpsGroup, io, globalTestConfig, globalVariables, pulledDataFromTest, allRPSfinished, sendRequestsAtRPS, trackedVariables, timeOutArray, timeArrRoutes, allPulledDataFromTest, agent, sendRequests, emitPercentage);
+                    call_singleRPSfinished();
                 }
             }
         });

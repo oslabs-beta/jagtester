@@ -7,7 +7,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import VerticalTabs from '../components/resultsComponents/verticalTabs';
 import { useAppSelector, useAppDispatch } from '../state/hooks';
 import Actions from '../state/actions/actions';
-import { HTTPMethods } from '../interfaces';
 
 const ResultsPage: () => JSX.Element = () => {
     const receivedData = useAppSelector((state) => state.receivedData);
@@ -31,12 +30,6 @@ const ResultsPage: () => JSX.Element = () => {
     const deleteAllData = () => {
         dispatch(Actions.DeleteReceivedData());
         dispatch(Actions.SetResultsTabValue(0));
-        fetch('/api/saveddata', {
-            method: HTTPMethods.DELETE,
-        }).catch((err) => {
-            dispatch(Actions.SetShowModal(true));
-            dispatch(Actions.SetModalError(err.toString()));
-        });
     };
 
     return (

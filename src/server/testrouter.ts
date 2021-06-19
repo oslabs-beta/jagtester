@@ -4,7 +4,6 @@ import http from 'http';
 import { io } from './index';
 import {
     PulledDataFromTest,
-    AllPulledDataFromTest,
     Jagtestercommands,
     TestConfigData,
     ioSocketCommands,
@@ -32,7 +31,6 @@ const globalVariables: GlobalVariables = {
 
 let timeArrRoutes: TimeArrRoutes = {};
 
-const allPulledDataFromTest: AllPulledDataFromTest[] = [];
 let pulledDataFromTest: PulledDataFromTest = {};
 let globalTestConfig: TestConfigData;
 const timeOutArray: NodeJS.Timeout[] = [];
@@ -82,7 +80,6 @@ router.post('/startmultiple', (req, res) => {
             timeOutArray,
             timeArrRoutes,
             pulledDataFromTest,
-            allPulledDataFromTest,
             agent,
             sendRequests,
             singleRPSfinished,
@@ -106,16 +103,6 @@ router.post('/checkjagtester', (req, res) => {
 
 router.get('/stopTest', (req, res) => {
     globalVariables.abortController.abort();
-    res.sendStatus(200);
-});
-router.delete('/saveddata', (req, res) => {
-    allPulledDataFromTest.splice(0, allPulledDataFromTest.length);
-    res.sendStatus(200);
-});
-router.delete('/singledata/:index', (req, res) => {
-    if (req.params.index && Number(req.params.index) < allPulledDataFromTest.length) {
-        allPulledDataFromTest.splice(Number(req.params.index), 1);
-    }
     res.sendStatus(200);
 });
 

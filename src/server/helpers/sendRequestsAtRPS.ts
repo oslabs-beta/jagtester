@@ -5,7 +5,6 @@ import {
     GlobalVariables,
     TestConfigData,
     PulledDataFromTest,
-    AllPulledDataFromTest,
 } from '../interfaces';
 import { Server } from 'socket.io';
 import http from 'http';
@@ -33,7 +32,6 @@ type SendRequestsAtRPS = (
     timeOutArray: NodeJS.Timeout[],
     timeArrRoutes: TimeArrRoutes,
     pulledDataFromTest: PulledDataFromTest,
-    allPulledDataFromTest: AllPulledDataFromTest[],
     agent: http.Agent,
     sendRequests: SendRequests,
     singleRPSfinished: SingleRPSfinished,
@@ -58,7 +56,6 @@ const sendRequestsAtRPS: SendRequestsAtRPS = (
     timeOutArray: NodeJS.Timeout[],
     timeArrRoutes: TimeArrRoutes,
     pulledDataFromTest: PulledDataFromTest,
-    allPulledDataFromTest: AllPulledDataFromTest[],
     agent: http.Agent,
     sendRequests: SendRequests,
     singleRPSfinished: SingleRPSfinished,
@@ -75,8 +72,7 @@ const sendRequestsAtRPS: SendRequestsAtRPS = (
             trackedVariables,
             timeOutArray,
             timeArrRoutes,
-            pulledDataFromTest,
-            allPulledDataFromTest
+            pulledDataFromTest
         );
     };
 
@@ -131,7 +127,6 @@ const sendRequestsAtRPS: SendRequestsAtRPS = (
                     emitPercentage,
                     globalTestConfig,
                     pulledDataFromTest,
-                    allPulledDataFromTest,
                     sendRequestsAtRPS
                 );
             })

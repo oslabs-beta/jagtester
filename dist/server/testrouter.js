@@ -22,7 +22,6 @@ const globalVariables = {
     abortController: new abort_controller_1.default(),
 };
 let timeArrRoutes = {};
-const allPulledDataFromTest = [];
 let pulledDataFromTest = {};
 let globalTestConfig;
 const timeOutArray = [];
@@ -54,7 +53,7 @@ router.post('/startmultiple', (req, res) => {
             inputsData: req.body.inputsData,
         };
         const { rpsInterval, startRPS, endRPS, testLength, inputsData } = req.body;
-        sendRequestsAtRPS_1.default(rpsInterval, startRPS, endRPS, testLength, inputsData, globalVariables, allRPSfinished_1.default, globalTestConfig, index_1.io, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, allPulledDataFromTest, agent, sendRequests_1.default, singleRPSfinished_1.default, emitPercentage_1.default);
+        sendRequestsAtRPS_1.default(rpsInterval, startRPS, endRPS, testLength, inputsData, globalVariables, allRPSfinished_1.default, globalTestConfig, index_1.io, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, agent, sendRequests_1.default, singleRPSfinished_1.default, emitPercentage_1.default);
     }
     res.sendStatus(200);
 });
@@ -72,16 +71,6 @@ router.post('/checkjagtester', (req, res) => {
 });
 router.get('/stopTest', (req, res) => {
     globalVariables.abortController.abort();
-    res.sendStatus(200);
-});
-router.delete('/saveddata', (req, res) => {
-    allPulledDataFromTest.splice(0, allPulledDataFromTest.length);
-    res.sendStatus(200);
-});
-router.delete('/singledata/:index', (req, res) => {
-    if (req.params.index && Number(req.params.index) < allPulledDataFromTest.length) {
-        allPulledDataFromTest.splice(Number(req.params.index), 1);
-    }
     res.sendStatus(200);
 });
 exports.default = router;

@@ -9,7 +9,6 @@ import {
     TimeArrRoutes,
     TrackedVariables,
     PulledDataFromTest,
-    AllPulledDataFromTest,
     GlobalVariables,
 } from '../interfaces';
 
@@ -23,8 +22,7 @@ type AllRPSfinished = (
     trackedVariables: TrackedVariables,
     timeOutArray: NodeJS.Timeout[],
     timeArrRoutes: TimeArrRoutes,
-    pulledDataFromTest: PulledDataFromTest,
-    allPulledDataFromTest: AllPulledDataFromTest[]
+    pulledDataFromTest: PulledDataFromTest
 ) => void;
 
 const allRPSfinished: AllRPSfinished = (
@@ -34,8 +32,7 @@ const allRPSfinished: AllRPSfinished = (
     trackedVariables: TrackedVariables,
     timeOutArray: NodeJS.Timeout[],
     timeArrRoutes: TimeArrRoutes,
-    pulledDataFromTest: PulledDataFromTest,
-    allPulledDataFromTest: AllPulledDataFromTest[]
+    pulledDataFromTest: PulledDataFromTest
 ) => {
     fetch(globalTestConfig.inputsData[0].targetURL, {
         headers: {
@@ -86,7 +83,6 @@ const allRPSfinished: AllRPSfinished = (
             testTime: Date.now(),
             testData: pulledDataFromTest,
         };
-        allPulledDataFromTest.push(newPulledData);
         io.emit(ioSocketCommands.allRPSfinished, [newPulledData]);
     }
 };

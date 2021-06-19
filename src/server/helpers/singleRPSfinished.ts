@@ -9,7 +9,6 @@ import {
     PulledDataFromTest,
     TrackedVariables,
     TimeArrRoutes,
-    AllPulledDataFromTest,
 } from '../interfaces';
 import type { AllRPSfinished } from './allRPSfinished';
 import { EmitPercentage } from './emitPercentage';
@@ -27,7 +26,6 @@ type SingleRPSfinished = (
     trackedVariables: TrackedVariables,
     timeOutArray: NodeJS.Timeout[],
     timeArrRoutes: TimeArrRoutes,
-    allPulledDataFromTest: AllPulledDataFromTest[],
     agent: http.Agent,
     sendRequests: SendRequests,
     emitPercentage: EmitPercentage
@@ -44,7 +42,6 @@ const singleRPSfinished: SingleRPSfinished = (
     trackedVariables: TrackedVariables,
     timeOutArray: NodeJS.Timeout[],
     timeArrRoutes: TimeArrRoutes,
-    allPulledDataFromTest: AllPulledDataFromTest[],
     agent: http.Agent,
     sendRequests: SendRequests,
     emitPercentage: EmitPercentage
@@ -76,7 +73,6 @@ const singleRPSfinished: SingleRPSfinished = (
                 timeOutArray,
                 timeArrRoutes,
                 pulledDataFromTest,
-                allPulledDataFromTest,
                 agent,
                 sendRequests,
                 singleRPSfinished,
@@ -92,8 +88,7 @@ const singleRPSfinished: SingleRPSfinished = (
                 trackedVariables,
                 timeOutArray,
                 timeArrRoutes,
-                pulledDataFromTest,
-                allPulledDataFromTest
+                pulledDataFromTest
             );
         });
 };

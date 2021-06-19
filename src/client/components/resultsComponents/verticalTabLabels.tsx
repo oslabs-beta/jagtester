@@ -8,7 +8,6 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import Actions from '../../state/actions/actions';
-import { HTTPMethods } from '../../interfaces';
 
 const useStyles = makeStyles(() => ({
     deleteIcon: {
@@ -27,12 +26,6 @@ const TabLabels: (props: { index: number; time: number }) => JSX.Element = ({ in
     const handleDelete = () => {
         dispatch(Actions.DeleteSingleData(index));
         dispatch(Actions.SetResultsTabValue(index));
-        fetch(`/api/singledata/${index}`, {
-            method: HTTPMethods.DELETE,
-        }).catch((err) => {
-            dispatch(Actions.SetShowModal(true));
-            dispatch(Actions.SetModalError(err.toString()));
-        });
     };
 
     const handleExport = () => {

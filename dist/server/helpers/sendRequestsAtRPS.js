@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const interfaces_1 = require("../interfaces");
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const sendRequestsAtRPS = (rpsInterval, startRPS, endRPS, testLength, inputsData, globalVariables, allRPSfinished, globalTestConfig, io, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, allPulledDataFromTest, agent, sendRequests, singleRPSfinished, emitPercentage) => {
+const sendRequestsAtRPS = (rpsInterval, startRPS, endRPS, testLength, inputsData, globalVariables, allRPSfinished, globalTestConfig, io, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, agent, sendRequests, singleRPSfinished, emitPercentage) => {
     // check if finished testing
     const curRPS = startRPS + globalVariables.currentInterval * rpsInterval;
     const call_allRPSfinished = () => {
-        allRPSfinished(globalTestConfig, io, globalVariables, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, allPulledDataFromTest);
+        allRPSfinished(globalTestConfig, io, globalVariables, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest);
     };
     if (curRPS > endRPS) {
         // eventEmitter.emit(ioSocketCommands.allRPSfinished);
@@ -46,7 +46,7 @@ const sendRequestsAtRPS = (rpsInterval, startRPS, endRPS, testLength, inputsData
             }
             globalVariables.errorCount = 0;
             globalVariables.successfulResCount = 0;
-            sendRequests(target.targetURL, curRPS, Math.round((curRPS * target.percentage) / 100), testLength, agent, timeArrRoutes, trackedVariables, globalVariables, io, timeOutArray, singleRPSfinished, allRPSfinished, emitPercentage, globalTestConfig, pulledDataFromTest, allPulledDataFromTest, sendRequestsAtRPS);
+            sendRequests(target.targetURL, curRPS, Math.round((curRPS * target.percentage) / 100), testLength, agent, timeArrRoutes, trackedVariables, globalVariables, io, timeOutArray, singleRPSfinished, allRPSfinished, emitPercentage, globalTestConfig, pulledDataFromTest, sendRequestsAtRPS);
         })
             .catch(() => {
             call_allRPSfinished();

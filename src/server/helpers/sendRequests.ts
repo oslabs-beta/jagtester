@@ -5,7 +5,6 @@ import {
     GlobalVariables,
     TestConfigData,
     PulledDataFromTest,
-    AllPulledDataFromTest,
 } from '../interfaces';
 
 import type { SendRequestsAtRPS } from './sendRequestsAtRPS';
@@ -38,7 +37,6 @@ type SendRequests = (
     ) => void,
     globalTestConfig: TestConfigData,
     pulledDataFromTest: PulledDataFromTest,
-    allPulledDataFromTest: AllPulledDataFromTest[],
     sendRequestsAtRPS: SendRequestsAtRPS
 ) => void;
 
@@ -64,9 +62,36 @@ const sendRequests: SendRequests = (
     ) => void,
     globalTestConfig: TestConfigData,
     pulledDataFromTest: PulledDataFromTest,
-    allPulledDataFromTest: AllPulledDataFromTest[],
     sendRequestsAtRPS: SendRequestsAtRPS
 ) => {
+    const call_singleRPSfinished = () => {
+        singleRPSfinished(
+            rpsGroup,
+            io,
+            globalTestConfig,
+            globalVariables,
+            pulledDataFromTest,
+            allRPSfinished,
+            sendRequestsAtRPS,
+            trackedVariables,
+            timeOutArray,
+            timeArrRoutes,
+            agent,
+            sendRequests,
+            emitPercentage
+        );
+    };
+
+    const call_emitPercentage = () => {
+        emitPercentage(
+            globalVariables.successfulResCount,
+            globalVariables.errorCount,
+            rpsGroup,
+            secondsToTest,
+            io
+        );
+    };
+
     const sendFetch = (reqId: number) => {
         fetch(targetURL, {
             agent,
@@ -80,34 +105,12 @@ const sendRequests: SendRequests = (
                 const resRoute = new URL(targetURL).pathname;
                 timeArrRoutes[resRoute][rpsGroup].successfulResCount++;
                 globalVariables.successfulResCount++;
-                emitPercentage(
-                    globalVariables.successfulResCount,
-                    globalVariables.errorCount,
-                    rpsGroup,
-                    secondsToTest,
-                    io
-                );
+                call_emitPercentage();
                 if (
                     globalVariables.successfulResCount + globalVariables.errorCount >=
                     rpsGroup * secondsToTest
                 ) {
-                    // eventEmitter.emit(ioSocketCommands.singleRPSfinished, rpsGroup);
-                    singleRPSfinished(
-                        rpsGroup,
-                        io,
-                        globalTestConfig,
-                        globalVariables,
-                        pulledDataFromTest,
-                        allRPSfinished,
-                        sendRequestsAtRPS,
-                        trackedVariables,
-                        timeOutArray,
-                        timeArrRoutes,
-                        allPulledDataFromTest,
-                        agent,
-                        sendRequests,
-                        emitPercentage
-                    );
+                    call_singleRPSfinished();
                 }
                 if (res.headers.has('x-response-time')) {
                     const xResponseTime = res.headers.get('x-response-time');
@@ -128,41 +131,19 @@ const sendRequests: SendRequests = (
                             trackedVariables,
                             timeOutArray,
                             timeArrRoutes,
-                            pulledDataFromTest,
-                            allPulledDataFromTest
+                            pulledDataFromTest
                         );
                     }
                 } else {
                     const resRoute = new URL(targetURL).pathname;
                     timeArrRoutes[resRoute][rpsGroup].errorCount++;
                     globalVariables.errorCount++;
-                    emitPercentage(
-                        globalVariables.successfulResCount,
-                        globalVariables.errorCount,
-                        rpsGroup,
-                        secondsToTest,
-                        io
-                    );
+                    call_emitPercentage();
                     if (
                         globalVariables.successfulResCount + globalVariables.errorCount >=
                         rpsGroup * secondsToTest
                     ) {
-                        singleRPSfinished(
-                            rpsGroup,
-                            io,
-                            globalTestConfig,
-                            globalVariables,
-                            pulledDataFromTest,
-                            allRPSfinished,
-                            sendRequestsAtRPS,
-                            trackedVariables,
-                            timeOutArray,
-                            timeArrRoutes,
-                            allPulledDataFromTest,
-                            agent,
-                            sendRequests,
-                            emitPercentage
-                        );
+                        call_singleRPSfinished();
                     }
                 }
             });

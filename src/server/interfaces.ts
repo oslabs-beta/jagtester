@@ -61,11 +61,6 @@ export interface PulledDataFromTest {
     };
 }
 
-export interface AllPulledDataFromTest {
-    testTime: number;
-    testData: PulledDataFromTest;
-}
-
 export enum HTTPMethods {
     GET = 'GET',
     POST = 'POST',

@@ -8,7 +8,7 @@ const abort_controller_1 = __importDefault(require("abort-controller"));
 const interfaces_1 = require("../interfaces");
 const processData_1 = __importDefault(require("./processData"));
 const processLastMiddleware_1 = __importDefault(require("./processLastMiddleware"));
-const allRPSfinished = (globalTestConfig, io, globalVariables, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest, allPulledDataFromTest) => {
+const allRPSfinished = (globalTestConfig, io, globalVariables, trackedVariables, timeOutArray, timeArrRoutes, pulledDataFromTest) => {
     node_fetch_1.default(globalTestConfig.inputsData[0].targetURL, {
         headers: {
             jagtestercommand: interfaces_1.Jagtestercommands.endTest.toString(),
@@ -49,7 +49,6 @@ const allRPSfinished = (globalTestConfig, io, globalVariables, trackedVariables,
             testTime: Date.now(),
             testData: pulledDataFromTest,
         };
-        allPulledDataFromTest.push(newPulledData);
         io.emit(interfaces_1.ioSocketCommands.allRPSfinished, [newPulledData]);
     }
 };
