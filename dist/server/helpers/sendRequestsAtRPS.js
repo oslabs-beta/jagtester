@@ -29,20 +29,13 @@ const sendRequestsAtRPS = (rpsInterval, startRPS, endRPS, testLength, inputsData
             const resRoute = new URL(target.targetURL).pathname;
             if (timeArrRoutes[resRoute] === undefined) {
                 timeArrRoutes[resRoute] = {};
+            }
+            if (timeArrRoutes[resRoute][curRPS.toString()] === undefined) {
                 timeArrRoutes[resRoute][curRPS.toString()] = {
                     receivedTotalTime: 0,
                     errorCount: 0,
                     successfulResCount: 0,
                 };
-            }
-            else {
-                if (timeArrRoutes[resRoute][curRPS.toString()] === undefined) {
-                    timeArrRoutes[resRoute][curRPS.toString()] = {
-                        receivedTotalTime: 0,
-                        errorCount: 0,
-                        successfulResCount: 0,
-                    };
-                }
             }
             globalVariables.errorCount = 0;
             globalVariables.successfulResCount = 0;
