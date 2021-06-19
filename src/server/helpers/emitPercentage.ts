@@ -1,22 +1,17 @@
 import { Server } from 'socket.io';
-import { ioSocketCommands } from '../interfaces';
+import { GlobalVariables, ioSocketCommands } from '../interfaces';
 
 type EmitPercentage = (
-    successfulResCount: number,
-    errorCount: number,
+    globalVariables: GlobalVariables,
     rpsGroup: number,
     secondsToTest: number,
     io: Server
 ) => void;
 
-const emitPercentage: EmitPercentage = (
-    successfulResCount,
-    errorCount,
-    rpsGroup,
-    secondsToTest,
-    io
-) => {
-    const percent = (successfulResCount + errorCount) / (rpsGroup * secondsToTest);
+const emitPercentage: EmitPercentage = (globalVariables, rpsGroup, secondsToTest, io) => {
+    const percent =
+        (globalVariables.successfulResCount + globalVariables.errorCount) /
+        (rpsGroup * secondsToTest);
     if (Math.floor(10000 * percent) % 1000 === 0) {
         io.emit(ioSocketCommands.currentRPSProgress, percent);
     }

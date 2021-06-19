@@ -14,6 +14,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import type { SingleRPSfinished } from './singleRPSfinished';
 import type { AllRPSfinished } from './allRPSfinished';
+import { EmitPercentage } from './emitPercentage';
 
 type SendRequests = (
     targetURL: string,
@@ -28,13 +29,7 @@ type SendRequests = (
     timeOutArray: NodeJS.Timeout[],
     singleRPSfinished: SingleRPSfinished,
     allRPSfinished: AllRPSfinished,
-    emitPercentage: (
-        successfulResCount: number,
-        errorCount: number,
-        rpsGroup: number,
-        secondsToTest: number,
-        io: Server
-    ) => void,
+    emitPercentage: EmitPercentage,
     globalTestConfig: TestConfigData,
     pulledDataFromTest: PulledDataFromTest,
     sendRequestsAtRPS: SendRequestsAtRPS
@@ -53,13 +48,7 @@ const sendRequests: SendRequests = (
     timeOutArray: NodeJS.Timeout[],
     singleRPSfinished: SingleRPSfinished,
     allRPSfinished: AllRPSfinished,
-    emitPercentage: (
-        successfulResCount: number,
-        errorCount: number,
-        rpsGroup: number,
-        secondsToTest: number,
-        io: Server
-    ) => void,
+    emitPercentage: EmitPercentage,
     globalTestConfig: TestConfigData,
     pulledDataFromTest: PulledDataFromTest,
     sendRequestsAtRPS: SendRequestsAtRPS
@@ -82,16 +71,6 @@ const sendRequests: SendRequests = (
         );
     };
 
-    const call_emitPercentage = () => {
-        emitPercentage(
-            globalVariables.successfulResCount,
-            globalVariables.errorCount,
-            rpsGroup,
-            secondsToTest,
-            io
-        );
-    };
-
     const sendFetch = (reqId: number) => {
         fetch(targetURL, {
             agent,
@@ -105,7 +84,7 @@ const sendRequests: SendRequests = (
                 const resRoute = new URL(targetURL).pathname;
                 timeArrRoutes[resRoute][rpsGroup].successfulResCount++;
                 globalVariables.successfulResCount++;
-                call_emitPercentage();
+                emitPercentage(globalVariables, rpsGroup, secondsToTest, io);
                 if (
                     globalVariables.successfulResCount + globalVariables.errorCount >=
                     rpsGroup * secondsToTest
@@ -138,7 +117,7 @@ const sendRequests: SendRequests = (
                     const resRoute = new URL(targetURL).pathname;
                     timeArrRoutes[resRoute][rpsGroup].errorCount++;
                     globalVariables.errorCount++;
-                    call_emitPercentage();
+                    emitPercentage(globalVariables, rpsGroup, secondsToTest, io);
                     if (
                         globalVariables.successfulResCount + globalVariables.errorCount >=
                         rpsGroup * secondsToTest
