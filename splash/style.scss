@@ -1,69 +1,69 @@
 $px: '(0.8px + 0.04335vw)';
 
 #root {
-    // background-color: rgb(61, 66, 124);
-    // min-height: 100vh;
-    font-family: Helvetica;
-    color: white;
+	// background-color: rgb(61, 66, 124);
+	// min-height: 100vh;
+	font-family: Helvetica;
+	color: white;
 }
 body {
-    position: relative;
+	position: relative;
 }
 footer {
-    position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    color: white;
+	position: relative;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	color: white;
 }
 
 .image-cropper {
-    width: 400px;
-    height: 400px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 50%;
-    width: 100%;
-    height: auto;
+	width: 400px;
+	height: 400px;
+	position: relative;
+	overflow: hidden;
+	border-radius: 50%;
+	width: 100%;
+	height: auto;
 }
 
 .social-team {
-    margin: 0 10px 0 10px;
+	margin: 0 10px 0 10px;
 }
 
 $grid-breakpoints: (
-    xs: 0,
-    sm: 576px,
-    md: 768px,
-    lg: 992px,
-    xl: 1200px,
-    xxl: 1400px,
+	xs: 0,
+	sm: 576px,
+	md: 768px,
+	lg: 992px,
+	xl: 1200px,
+	xxl: 1400px,
 );
 
 h1 {
-    font-size: calc(#{$px} * 30);
+	font-size: calc(#{$px} * 30);
 }
 h2 {
-    font-size: calc(#{$px} * 28);
+	font-size: calc(#{$px} * 28);
 }
 h3 {
-    font-size: calc(#{$px} * 24);
+	font-size: calc(#{$px} * 24);
 }
 h4 {
-    font-size: calc(#{$px} * 20);
+	font-size: calc(#{$px} * 20);
 }
 h5 {
-    font-size: calc(#{$px} * 13);
+	font-size: calc(#{$px} * 13);
 }
 h6 {
-    font-size: calc(#{$px} * 10);
+	font-size: calc(#{$px} * 10);
 }
 p {
-    font-size: calc(#{$px} * 15);
+	font-size: calc(#{$px} * 15);
 }
 
 .navbar-collapse.collapsing,
 .navbar-collapse.show {
-    background-color: rgba(45, 45, 45, 0.75);
-    border-color: white;
+	background-color: rgba(45, 45, 45, 0.75);
+	border-color: white;
 }

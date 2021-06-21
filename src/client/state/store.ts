@@ -6,16 +6,16 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
 const persistConfig = {
-    key: 'root',
-    storage,
+	key: 'root',
+	storage,
 };
 
 const persistedReducer = persistReducer(persistConfig, configReducer);
 
 const store = configureStore({
-    reducer: persistedReducer,
-    devTools: process.env.NODE_ENV !== 'production',
-    middleware: [thunk],
+	reducer: persistedReducer,
+	devTools: process.env.NODE_ENV !== 'production',
+	middleware: [thunk],
 });
 
 export type RootState = ReturnType<typeof store.getState>;

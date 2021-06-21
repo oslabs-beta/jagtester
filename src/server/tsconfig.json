@@ -1,19 +1,19 @@
 {
-    "compilerOptions": {
-        "rootDir": ".",
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "strict": true,
-        "moduleResolution": "node",
-        "declaration": true,
-        "sourceMap": false,
-        "outDir": "../../dist/server",
-        "baseUrl": ".",
-        "paths": {
-            "*": ["../../node_modules/*"]
-        }
-    },
-    "include": ["./**/*"]
+	"compilerOptions": {
+		"rootDir": ".",
+		"module": "commonjs",
+		"esModuleInterop": true,
+		"target": "es6",
+		"noImplicitAny": true,
+		"strict": true,
+		"moduleResolution": "node",
+		"declaration": true,
+		"sourceMap": false,
+		"outDir": "../../dist/server",
+		"baseUrl": ".",
+		"paths": {
+			"*": ["../../node_modules/*"]
+		}
+	},
+	"include": ["./**/*"]
 }

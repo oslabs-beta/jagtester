@@ -21,23 +21,23 @@ app.use('/', express.static(path.join(__dirname, '../client')));
 app.use('/api', testRouter);
 
 app.get(['/', '/results'], (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/index.html'));
+	res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
 app.use('/*', (req, res) => {
-    res.redirect('/');
+	res.redirect('/');
 });
 
 http.on('error', function (e: NodeJS.ErrnoException) {
-    if (e.code === 'EADDRINUSE') {
-        port++;
-        http.listen(port);
-    }
+	if (e.code === 'EADDRINUSE') {
+		port++;
+		http.listen(port);
+	}
 });
 
 http.on('listening', function () {
-    console.log(`Jagtester running on http://localhost:${port}`);
-    open(`http://localhost:${port}`).catch((err) => console.log(err));
+	console.log(`Jagtester running on http://localhost:${port}`);
+	open(`http://localhost:${port}`).catch((err) => console.log(err));
 });
 
 http.listen(port);

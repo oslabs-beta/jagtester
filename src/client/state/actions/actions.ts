@@ -3,35 +3,35 @@ import { createAction } from '@reduxjs/toolkit';
 import { HTTPMethods, AllPulledDataFromTest } from '../../interfaces';
 
 enum ActionTypes {
-    setValueRPS = 'setValueRPS',
-    setValueStart = 'setValueStart',
-    setValueEnd = 'setValueEnd',
-    setValueSeconds = 'setValueSeconds',
-    setIsTestRunning = 'setIsTestRunning',
-    setCurRunningRPS = 'setCurRunningRPS',
+	setValueRPS = 'setValueRPS',
+	setValueStart = 'setValueStart',
+	setValueEnd = 'setValueEnd',
+	setValueSeconds = 'setValueSeconds',
+	setIsTestRunning = 'setIsTestRunning',
+	setCurRunningRPS = 'setCurRunningRPS',
 
-    changeTargetMethod = 'changeTargetMethod',
-    changeTargetURL = 'changeTargetURL',
-    changeTargetJagEnabled = 'changeTargetJagEnabled',
-    changeTargetPercent = 'changeTargetPercent',
-    addTarget = 'addTarget',
-    deleteTarget = 'deleteTarget',
+	changeTargetMethod = 'changeTargetMethod',
+	changeTargetURL = 'changeTargetURL',
+	changeTargetJagEnabled = 'changeTargetJagEnabled',
+	changeTargetPercent = 'changeTargetPercent',
+	addTarget = 'addTarget',
+	deleteTarget = 'deleteTarget',
 
-    setReceivedData = 'setRedeceivedData',
-    deleteReceivedData = 'deleteReceivedData',
+	setReceivedData = 'setRedeceivedData',
+	deleteReceivedData = 'deleteReceivedData',
 
-    setShowModal = 'setShowModal',
-    setModalError = 'setModalError',
+	setShowModal = 'setShowModal',
+	setModalError = 'setModalError',
 
-    deleteSingleData = 'deleteSingleData',
-    setResultsTabValue = 'setResultsTabValue',
-    setCurRPSpercent = 'setCurRPSpercent',
+	deleteSingleData = 'deleteSingleData',
+	setResultsTabValue = 'setResultsTabValue',
+	setCurRPSpercent = 'setCurRPSpercent',
 
-    setCurTestStartTime = 'setCurTestStartTime',
-    setDarkMode = 'setDarkMode',
-    resetState = 'resetState',
-    setHighRPSwarning = 'setHighRPSwarning',
-    setStoppingSpinner = 'setStoppingSpinner',
+	setCurTestStartTime = 'setCurTestStartTime',
+	setDarkMode = 'setDarkMode',
+	resetState = 'resetState',
+	setHighRPSwarning = 'setHighRPSwarning',
+	setStoppingSpinner = 'setStoppingSpinner',
 }
 
 const SetValueRPS = createAction<number>(ActionTypes.setValueRPS);
@@ -41,16 +41,16 @@ const SetValueSeconds = createAction<number>(ActionTypes.setValueSeconds);
 const SetIsTestRunning = createAction<boolean>(ActionTypes.setIsTestRunning);
 const SetCurRunningRPS = createAction<number>(ActionTypes.setCurRunningRPS);
 const ChangeTargetMethod = createAction<{ index: number; method: HTTPMethods }>(
-    ActionTypes.changeTargetMethod
+	ActionTypes.changeTargetMethod
 );
 const ChangeTargetURL = createAction<{ index: number; newURL: string }>(
-    ActionTypes.changeTargetURL
+	ActionTypes.changeTargetURL
 );
 const ChangeTargetJagEnabled = createAction<{ index: number; isEnabled: boolean }>(
-    ActionTypes.changeTargetJagEnabled
+	ActionTypes.changeTargetJagEnabled
 );
 const ChangeTargetPercent = createAction<{ index: number; newValue: number }>(
-    ActionTypes.changeTargetPercent
+	ActionTypes.changeTargetPercent
 );
 const AddTarget = createAction(ActionTypes.addTarget);
 const DeleteTarget = createAction<number>(ActionTypes.deleteTarget);
@@ -70,30 +70,30 @@ const SetHighRPSwarning = createAction<boolean>(ActionTypes.setHighRPSwarning);
 const SetStoppingSpinner = createAction<boolean>(ActionTypes.setStoppingSpinner);
 
 const Actions = {
-    SetValueRPS,
-    SetValueStart,
-    SetValueEnd,
-    SetValueSeconds,
-    SetIsTestRunning,
-    SetCurRunningRPS,
-    ChangeTargetMethod,
-    ChangeTargetURL,
-    ChangeTargetJagEnabled,
-    ChangeTargetPercent,
-    AddTarget,
-    DeleteTarget,
-    SetReceivedData,
-    SetShowModal,
-    SetModalError,
-    DeleteSingleData,
-    SetResultsTabValue,
-    SetCurRPSpercent,
-    SetCurTestStartTime,
-    SetDarkMode,
-    ResetState,
-    DeleteReceivedData,
-    SetHighRPSwarning,
-    SetStoppingSpinner,
+	SetValueRPS,
+	SetValueStart,
+	SetValueEnd,
+	SetValueSeconds,
+	SetIsTestRunning,
+	SetCurRunningRPS,
+	ChangeTargetMethod,
+	ChangeTargetURL,
+	ChangeTargetJagEnabled,
+	ChangeTargetPercent,
+	AddTarget,
+	DeleteTarget,
+	SetReceivedData,
+	SetShowModal,
+	SetModalError,
+	DeleteSingleData,
+	SetResultsTabValue,
+	SetCurRPSpercent,
+	SetCurTestStartTime,
+	SetDarkMode,
+	ResetState,
+	DeleteReceivedData,
+	SetHighRPSwarning,
+	SetStoppingSpinner,
 };
 
 export default Actions;
