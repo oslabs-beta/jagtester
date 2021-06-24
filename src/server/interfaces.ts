@@ -57,7 +57,9 @@ export interface TestConfigData {
 }
 
 export interface PulledDataFromTest {
+	// used as rps
 	[key: string]: {
+		//used as route
 		[key: string]: CollectedDataSingle | CollectedData;
 	};
 }
