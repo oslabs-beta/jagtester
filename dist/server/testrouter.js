@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const http_1 = __importDefault(require("http"));
-const index_1 = require("./index");
+const server_1 = require("./server");
 const interfaces_1 = require("./interfaces");
 const sendRequestsAtRPS_1 = __importDefault(require("./helpers/sendRequestsAtRPS"));
 const abort_controller_1 = __importDefault(require("abort-controller"));
@@ -22,7 +22,7 @@ const globalVariables = {
     isTestRunningInternal: false,
     agent: new http_1.default.Agent({ keepAlive: true }),
     isTestRunningListener: (val) => {
-        index_1.io.emit(interfaces_1.ioSocketCommands.testRunningStateChange, val);
+        server_1.io.emit(interfaces_1.ioSocketCommands.testRunningStateChange, val);
     },
     set isTestRunning(val) {
         this.isTestRunningInternal = val;
@@ -46,7 +46,7 @@ router.post('/startmultiple', (req, res) => {
             testLength: req.body.testLength,
             inputsData: req.body.inputsData,
         };
-        sendRequestsAtRPS_1.default(globalVariables, globalTestConfig, index_1.io);
+        sendRequestsAtRPS_1.default(globalVariables, globalTestConfig, server_1.io);
     }
     res.sendStatus(200);
 });

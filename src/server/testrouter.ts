@@ -1,7 +1,7 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import http from 'http';
-import { io } from './index';
+import { io } from './server';
 import { Jagtestercommands, TestConfigData, ioSocketCommands, GlobalVariables } from './interfaces';
 
 import sendRequestsAtRPS from './helpers/sendRequestsAtRPS';

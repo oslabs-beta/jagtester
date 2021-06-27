@@ -7,10 +7,8 @@ const processData = (data) => {
     }
     // add middlewares elapsed times
     const collectedDataSingle = collectedDataArr.reduce((acc, cur) => {
-        for (let i = 0; i < acc.middlewares.length; i++) {
-            if (i < cur.middlewares.length) {
-                acc.middlewares[i].elapsedTime += cur.middlewares[i].elapsedTime;
-            }
+        for (let i = 0; i < acc.middlewares.length && i < cur.middlewares.length; i++) {
+            acc.middlewares[i].elapsedTime += cur.middlewares[i].elapsedTime;
         }
         return acc;
     });
