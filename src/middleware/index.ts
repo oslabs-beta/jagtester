@@ -172,4 +172,4 @@ const getMiddleware: FunctionType = (app: Application) => {
 		return responseTime({ suffix: false })(req, res, next);
 	};
 };
-module.exports = getMiddleware;
+export default getMiddleware;
