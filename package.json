@@ -13,7 +13,8 @@
 		"prod": "node ./dist/server/index.js",
 		"splash-build": "webpack --config ./splash/webpack.prod.config.ts && cp -a ./splash/.well-known ./splash/bundle/",
 		"splash-dev": "webpack serve --config ./splash/webpack.dev.config.ts",
-		"test": "jest"
+		"test": "jest",
+		"test-w": "jest --watch"
 	},
 	"repository": {
 		"type": "git",
