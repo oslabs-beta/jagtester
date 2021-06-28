@@ -7,7 +7,7 @@ import {
 	TestConfigData,
 	GlobalVariables,
 	PulledDataFromTest,
-} from './interfaces';
+} from '../src/server/interfaces';
 
 let timeOutArray,
 	abortController,

@@ -14,8 +14,9 @@ server_1.http.on('error', function (e) {
         server_1.http.listen(port);
     }
 });
-server_1.http.on('listening', function () {
+const server = server_1.http.on('listening', function () {
     console.log(`Jagtester running on http://localhost:${port}`);
     open_1.default(`http://localhost:${port}`).catch((err) => console.log(err));
 });
 server_1.http.listen(port);
+exports.default = server;

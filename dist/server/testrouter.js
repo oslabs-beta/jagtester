@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.globalVariables = void 0;
 const express_1 = __importDefault(require("express"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const http_1 = __importDefault(require("http"));
@@ -32,6 +33,7 @@ const globalVariables = {
         return this.isTestRunningInternal;
     },
 };
+exports.globalVariables = globalVariables;
 let globalTestConfig;
 router.post('/startmultiple', (req, res) => {
     if (!globalVariables.isTestRunning) {

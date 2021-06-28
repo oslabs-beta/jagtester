@@ -71,3 +71,4 @@ router.get('/stopTest', (req, res) => {
 });
 
 export default router;
+export { globalVariables };

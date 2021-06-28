@@ -12,7 +12,7 @@ import {
 	globalVariables,
 	io,
 	initializeVariables,
-} from '../src/server/sampleTestVariables';
+} from '../__tests-server__/sampleTestVariables';
 
 describe('Testing allRPSfinished functionality', () => {
 	beforeEach(() => {
@@ -21,6 +21,9 @@ describe('Testing allRPSfinished functionality', () => {
 	});
 	it('should assign a new instance of abortcontroller', () => {
 		expect(globalVariables.abortController).not.toBe(abortController);
+	});
+	it('should not have an aborted signal', () => {
+		expect(!globalVariables.abortController.signal.aborted);
 	});
 	it('should switch off is test running boolean', () => {
 		expect(globalVariables.isTestRunning).toEqual(false);

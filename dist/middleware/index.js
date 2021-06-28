@@ -135,4 +135,5 @@ var getMiddleware = function (app) {
         return response_time_1.default({ suffix: false })(req, res, next);
     };
 };
+exports.default = getMiddleware;
 module.exports = getMiddleware;

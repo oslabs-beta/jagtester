@@ -14,7 +14,7 @@
 		"splash-build": "webpack --config ./splash/webpack.prod.config.ts && cp -a ./splash/.well-known ./splash/bundle/",
 		"splash-dev": "webpack serve --config ./splash/webpack.dev.config.ts",
 		"test": "jest",
-		"test-w": "jest --watch"
+		"test-w": "jest --watch --detectOpenHandles --verbose"
 	},
 	"repository": {
 		"type": "git",

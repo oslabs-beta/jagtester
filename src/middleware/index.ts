@@ -173,3 +173,4 @@ const getMiddleware: FunctionType = (app: Application) => {
 	};
 };
 export default getMiddleware;
+module.exports = getMiddleware;

@@ -6,7 +6,7 @@ import {
 	io,
 	initializeVariables,
 	globalTestConfig,
-} from '../src/server/sampleTestVariables';
+} from '../__tests-server__/sampleTestVariables';
 
 describe('Testing emitPercentage functionality', () => {
 	beforeEach(() => {
