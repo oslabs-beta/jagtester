@@ -25,7 +25,6 @@ describe('Testing singleRPSfinished functionality', () =>{
     singleRPSfinished(globalTestConfig.rpsInterval, io, globalTestConfig, globalVariables)
   });
   it('should call emit singleRPS finished with rpsGroup', () => {
-    expect(io.emit).toBeCalledTimes(1)
     expect(io.emit).toBeCalledWith(ioSocketCommands.singleRPSfinished, globalTestConfig.rpsInterval)
   });
   it('should call fetch with correct header jagtester command and return correct response data', async () =>{
