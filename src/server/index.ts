@@ -12,9 +12,11 @@ http.on('error', function (e: NodeJS.ErrnoException) {
 	}
 });
 
-http.on('listening', function () {
+const server = http.on('listening', function () {
 	console.log(`Jagtester running on http://localhost:${port}`);
 	open(`http://localhost:${port}`).catch((err) => console.log(err));
 });
 
 http.listen(port);
+
+export default server;
