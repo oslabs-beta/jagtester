@@ -9,7 +9,7 @@ const config: webpack.Configuration = {
 	mode: 'production',
 	entry: './src/client/index.tsx',
 	output: {
-		path: path.resolve(__dirname, 'dist/client'),
+		path: path.resolve(__dirname, 'splash/bundle/demo'),
 		filename: '[name].js',
 		publicPath: '',
 	},
