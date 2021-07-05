@@ -1,3 +1,5 @@
+/// <reference types="node" />
+import http from 'http';
 export interface TimeArrInterface {
     receivedTotalTime: number;
     recordedTotalTime: number;
@@ -53,10 +55,6 @@ export interface PulledDataFromTest {
         [key: string]: CollectedDataSingle | CollectedData;
     };
 }
-export interface AllPulledDataFromTest {
-    testTime: number;
-    testData: PulledDataFromTest;
-}
 export declare enum HTTPMethods {
     GET = "GET",
     POST = "POST",
@@ -66,4 +64,31 @@ export declare enum HTTPMethods {
     HEAD = "HEAD",
     CONNECT = "CONNECT",
     TRACE = "TRACE"
+}
+export interface TimeArrRoutes {
+    [key: string]: {
+        [key: string]: {
+            receivedTotalTime: number;
+            errorCount: number;
+            successfulResCount: number;
+        };
+    };
+}
+export interface TrackedVariables {
+    isTestRunningInternal: boolean;
+    isTestRunningListener: (val: boolean) => void;
+    isTestRunning: boolean;
+}
+export interface GlobalVariables {
+    currentInterval: number;
+    errorCount: number;
+    successfulResCount: number;
+    abortController: AbortController;
+    timeArrRoutes: TimeArrRoutes;
+    timeOutArray: NodeJS.Timeout[];
+    pulledDataFromTest: PulledDataFromTest;
+    isTestRunningInternal: boolean;
+    isTestRunningListener: (val: boolean) => void;
+    isTestRunning: boolean;
+    agent: http.Agent;
 }

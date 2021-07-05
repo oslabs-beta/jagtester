@@ -6,17 +6,17 @@ import TargetInputSingle, { TargetInputDisabled } from './TargetInputSingle';
 import { useAppSelector } from '../../state/hooks';
 //---------------------------- will render single targets based on the state passed down from the parent
 const TartgetInputs: () => JSX.Element = () => {
-    const inputsData = useAppSelector((state) => state.inputsData);
+	const inputsData = useAppSelector((state) => state.inputsData);
 
-    //---------------------------- inputting all inputs into an array
-    const inputsArr: JSX.Element[] = [];
-    for (let i = 0; i < inputsData.length; i++) {
-        inputsArr.push(<TargetInputSingle index={i} key={i} />);
-    }
-    // pushing a disabled input
-    inputsArr.push(<TargetInputDisabled key={-1} />);
+	//---------------------------- inputting all inputs into an array
+	const inputsArr: JSX.Element[] = [];
+	for (let i = 0; i < inputsData.length; i++) {
+		inputsArr.push(<TargetInputSingle index={i} key={i} />);
+	}
+	// pushing a disabled input
+	inputsArr.push(<TargetInputDisabled key={-1} />);
 
-    return <Container className="p-2">{inputsArr}</Container>;
+	return <Container className="p-2">{inputsArr}</Container>;
 };
 
 export default TartgetInputs;

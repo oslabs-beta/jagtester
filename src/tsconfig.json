@@ -1,8 +1,8 @@
 {
-    "compilerOptions": {
-        "rootDir": ".",
-        "outDir": "../dist"
-    },
-    "files": [],
-    "references": [{ "path": "./client" }, { "path": "./server" }, { "path": "./middleware" }]
+	"compilerOptions": {
+		"rootDir": ".",
+		"outDir": "../dist"
+	},
+	"files": [],
+	"references": [{ "path": "./client" }, { "path": "./server" }, { "path": "./middleware" }]
 }

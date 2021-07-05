@@ -1,18 +1,19 @@
 {
-    "compilerOptions": {
-        "rootDir": ".",
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "ES5",
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "sourceMap": false,
-        "outDir": "../../dist/middleware",
-        "baseUrl": ".",
-        "paths": {
-            "*": ["../../node_modules/*"]
-        }
-    },
-    "files": ["./index.ts"],
-    "exclude": ["../../node_modules/*"]
+	"compilerOptions": {
+		"rootDir": ".",
+		"module": "commonjs",
+		"esModuleInterop": true,
+		"target": "ES5",
+		"noImplicitAny": true,
+		"moduleResolution": "node",
+		"declaration": true,
+		"sourceMap": false,
+		"outDir": "../../dist/middleware",
+		"baseUrl": ".",
+		"paths": {
+			"*": ["../../node_modules/*"]
+		}
+	},
+	"files": ["./index.ts"],
+	"exclude": ["../../node_modules/*"]
 }
