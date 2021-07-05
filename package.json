@@ -90,6 +90,7 @@
         "imagemin-jpegtran": "^7.0.0",
         "imagemin-optipng": "^8.0.0",
         "imagemin-svgo": "^9.0.0",
+        "jpegtran": "^2.0.0",
         "nodemon": "^2.0.7",
         "react-reveal": "^1.2.2",
         "sass": "^1.35.1",
