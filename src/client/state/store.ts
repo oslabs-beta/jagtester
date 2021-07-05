@@ -16,6 +16,11 @@ const store = configureStore({
 	devTools: process.env.NODE_ENV !== 'production',
 });
 
+const storeNoPersist = configureStore({
+	reducer: configReducer,
+	devTools: process.env.NODE_ENV !== 'production',
+});
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-export default store;
+export default process.env.JAG === 'demo' ? storeNoPersist : store;
