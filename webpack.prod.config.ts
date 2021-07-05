@@ -9,7 +9,10 @@ const config: webpack.Configuration = {
 	mode: 'production',
 	entry: './src/client/index.tsx',
 	output: {
-		path: path.resolve(__dirname, 'dist/client'),
+		path: path.resolve(
+			__dirname,
+			process.env.JAG === 'demo' ? 'splash/bundle/demo' : 'dist/client'
+		),
 		filename: '[name].js',
 		publicPath: '',
 	},

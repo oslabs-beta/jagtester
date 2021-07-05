@@ -30,7 +30,7 @@ const Navigation: () => JSX.Element = () => {
 					}}
 				/>
 				<Nav className="ml-4 h5">
-					<LinkContainer exact to="/">
+					<LinkContainer exact to={process.env.JAG === 'demo' ? '/demo' : '/'}>
 						<Nav.Link>Test</Nav.Link>
 					</LinkContainer>
 					<LinkContainer exact to="/results">
