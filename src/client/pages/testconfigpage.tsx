@@ -9,6 +9,7 @@ import RangeSliders from '../components/testConfigComponents/RangeSliders';
 //MUI imports
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 const TestPage: () => JSX.Element = () => {
 	return (
@@ -25,6 +26,14 @@ const TestPage: () => JSX.Element = () => {
 					<CardContent>
 						<RangeSliders />
 						<Buttons />
+						{process.env.JAG === 'demo' && (
+							<Typography paragraph variant="h4" align="center">
+								Warning! Currently running in demo mode and you cannot start any
+								tests. You can look around the app and check out our features. Take
+								a look at the results page and see what kinds of data we are
+								reporting. To use it, simpliy download from npm and use it locally.
+							</Typography>
+						)}
 					</CardContent>
 				</Card>
 			</Col>

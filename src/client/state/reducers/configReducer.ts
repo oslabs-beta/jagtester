@@ -1,65 +1,9 @@
 import Actions from '../actions/actions';
 import { createReducer } from '@reduxjs/toolkit';
 
-import { HTTPMethods, AllPulledDataFromTest } from '../../interfaces';
+import { HTTPMethods } from '../../interfaces';
 
-interface InitialState {
-	valueRPS: number;
-	valueStart: number;
-	valueEnd: number;
-	valueSeconds: number;
-	isTestRunning: boolean;
-	curRunningRPS: number;
-	inputsData: {
-		method: HTTPMethods;
-		targetURL: string;
-		percentage: number;
-		jagTesterEnabled: boolean;
-	}[];
-	receivedData: AllPulledDataFromTest[];
-	showModal: boolean;
-	modalError: string;
-	resultsTabValue: number;
-	curRPSpercent: number;
-	curTestTotalPercent: number;
-	curTestStartTime: number;
-	darkMode: boolean;
-	highRPSwarning: boolean;
-	stoppingSpinner: boolean;
-}
-
-const initialState: InitialState = {
-	valueRPS: 500,
-	valueStart: 100,
-	valueEnd: 600,
-	valueSeconds: 1,
-	isTestRunning: false,
-	curRunningRPS: 0,
-	inputsData: [
-		{
-			method: HTTPMethods.GET,
-			targetURL: 'http://localhost:',
-			percentage: 100,
-			jagTesterEnabled: false,
-		},
-		// {
-		//     method: HTTPMethods.GET,
-		//     targetURL: 'http://localhost:3030/testroute',
-		//     percentage: 80,
-		//     jagTesterEnabled: false,
-		// },
-	],
-	receivedData: [],
-	showModal: false,
-	modalError: '',
-	resultsTabValue: 0,
-	curRPSpercent: 0,
-	curTestTotalPercent: 0,
-	curTestStartTime: 0,
-	darkMode: false,
-	highRPSwarning: false,
-	stoppingSpinner: false,
-};
+import { initialState } from './initialState';
 
 const calculateTotalTestPercent = (
 	valueRPS: number,

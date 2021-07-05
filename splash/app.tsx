@@ -151,6 +151,9 @@ const App: () => JSX.Element = () => {
 							<Nav.Link href="#about">About</Nav.Link>
 							<Nav.Link href="#getstarted">Get Started</Nav.Link>
 							<Nav.Link href="#team">Meet the Team</Nav.Link>
+							<Nav.Link href="/demo" target="_blank">
+								Demo
+							</Nav.Link>
 						</Nav>
 						<Nav className="ml-auto align-items-center">
 							<Nav.Link

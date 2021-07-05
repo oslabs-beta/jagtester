@@ -31,36 +31,38 @@ const App: () => JSX.Element = () => {
 	);
 
 	useEffect(() => {
-		const socket = socketIOClient();
-		// start----------------------------------- socket io funcitonality
-		socket.on(ioSocketCommands.singleRPSfinished, (rps: number) => {
-			dispatch(Actions.SetCurRunningRPS(rps));
-			dispatch(Actions.SetCurRPSpercent(0));
-		});
-		socket.on(ioSocketCommands.testRunningStateChange, (isTestRunning: boolean) => {
-			dispatch(Actions.SetIsTestRunning(isTestRunning));
-		});
-		socket.on(
-			ioSocketCommands.allRPSfinished,
-			(allPulledDataFromTest: AllPulledDataFromTest[]) => {
-				dispatch(Actions.SetReceivedData(allPulledDataFromTest));
-			}
-		);
-		socket.on(ioSocketCommands.errorInfo, (errName: string) => {
-			dispatch(Actions.SetShowModal(true));
-			dispatch(Actions.SetModalError(errName));
-		});
-		socket.on(ioSocketCommands.currentRPSProgress, (percent: number) => {
-			dispatch(Actions.SetCurRPSpercent(percent));
-		});
+		if (process.env.JAG !== 'demo') {
+			const socket = socketIOClient();
+			// start----------------------------------- socket io funcitonality
+			socket.on(ioSocketCommands.singleRPSfinished, (rps: number) => {
+				dispatch(Actions.SetCurRunningRPS(rps));
+				dispatch(Actions.SetCurRPSpercent(0));
+			});
+			socket.on(ioSocketCommands.testRunningStateChange, (isTestRunning: boolean) => {
+				dispatch(Actions.SetIsTestRunning(isTestRunning));
+			});
+			socket.on(
+				ioSocketCommands.allRPSfinished,
+				(allPulledDataFromTest: AllPulledDataFromTest[]) => {
+					dispatch(Actions.SetReceivedData(allPulledDataFromTest));
+				}
+			);
+			socket.on(ioSocketCommands.errorInfo, (errName: string) => {
+				dispatch(Actions.SetShowModal(true));
+				dispatch(Actions.SetModalError(errName));
+			});
+			socket.on(ioSocketCommands.currentRPSProgress, (percent: number) => {
+				dispatch(Actions.SetCurRPSpercent(percent));
+			});
 
-		return function cleanup() {
-			socket.off(ioSocketCommands.singleRPSfinished);
-			socket.off(ioSocketCommands.testRunningStateChange);
-			socket.off(ioSocketCommands.allRPSfinished);
-			socket.off(ioSocketCommands.errorInfo);
-			socket.off(ioSocketCommands.currentRPSProgress);
-		};
+			return function cleanup() {
+				socket.off(ioSocketCommands.singleRPSfinished);
+				socket.off(ioSocketCommands.testRunningStateChange);
+				socket.off(ioSocketCommands.allRPSfinished);
+				socket.off(ioSocketCommands.errorInfo);
+				socket.off(ioSocketCommands.currentRPSProgress);
+			};
+		}
 	}, [dispatch]);
 
 	// end  ----------------------------------- socket io funcitonality
