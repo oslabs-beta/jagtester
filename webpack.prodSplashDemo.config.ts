@@ -63,6 +63,7 @@ const config: webpack.Configuration = {
 			extensions: ['js', 'jsx', 'ts', 'tsx'],
 		}),
 		new CleanWebpackPlugin(),
+		new webpack.EnvironmentPlugin(['JAG']),
 	],
 };
 

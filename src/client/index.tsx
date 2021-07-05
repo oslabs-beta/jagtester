@@ -11,17 +11,11 @@ const persistor = persistStore(store);
 
 ReactDOM.render(
 	<Provider store={store}>
-		{process.env.JAG === 'demo' ? (
+		<PersistGate loading={null} persistor={persistor}>
 			<BrowserRouter>
 				<App />
 			</BrowserRouter>
-		) : (
-			<PersistGate loading={null} persistor={persistor}>
-				<BrowserRouter>
-					<App />
-				</BrowserRouter>
-			</PersistGate>
-		)}
+		</PersistGate>
 	</Provider>,
 	document.getElementById('root')
 );
