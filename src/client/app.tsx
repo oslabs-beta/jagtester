@@ -74,7 +74,11 @@ const App: () => JSX.Element = () => {
 				<Container fluid className="mx-0 px-0">
 					<Navigation />
 					<Switch>
-						<Route path={['/', '/demo']} exact component={TestPage} />
+						<Route
+							path={process.env.JAG === 'demo' ? '/demo' : '/'}
+							exact
+							component={TestPage}
+						/>
 						<Route path="/results" exact component={ResultsPage} />
 					</Switch>
 					<Modal />
