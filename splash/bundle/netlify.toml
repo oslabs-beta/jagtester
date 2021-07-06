@@ -1,0 +1,7 @@
+[[redirects]]
+  from = "/results"
+  to = "/demo"
+
+  [[redirects]]
+  from = "/results"
+  to = "/demo"
