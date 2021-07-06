@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "dist/server/index.js",
 	"scripts": {
-		"moveimages": "mv ./splash/bundle/demo/*.png ./splash/bundle/ && mv ./splash/bundle/demo/*.svg ./splash/bundle/",
+		"moveimages": "mv ./splash/bundle/demo/*.png ./splash/bundle/",
 		"build-front": "JAG=real webpack --config webpack.prod.config.ts && cp README.md dist/README.md",
 		"build-back": "tsc --build src && cp README.md dist/README.md",
 		"build": "tsc --build src && JAG=real webpack --config webpack.prod.config.ts && cp README.md dist/README.md",
