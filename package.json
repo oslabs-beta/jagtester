@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "dist/server/index.js",
 	"scripts": {
+		"moveimages": "mv ./splash/bundle/demo/*.png ./splash/bundle/ && mv ./splash/bundle/demo/*.svg ./splash/bundle/",
 		"build-front": "JAG=real webpack --config webpack.prod.config.ts && cp README.md dist/README.md",
 		"build-back": "tsc --build src && cp README.md dist/README.md",
 		"build": "tsc --build src && JAG=real webpack --config webpack.prod.config.ts && cp README.md dist/README.md",
@@ -11,7 +12,7 @@
 		"dev-back": "tsc --build -w src & nodemon ./dist/server/index.js",
 		"dev": "tsc --build -w src & nodemon ./dist/server/index.js & webpack serve --config webpack.dev.config.ts",
 		"prod": "node ./dist/server/index.js",
-		"splash-build": "webpack --config ./splash/webpack.prod.config.ts && cp -a ./splash/tocopy/ ./splash/bundle/ && JAG=demo webpack --config webpack.prod.config.ts",
+		"splash-build": "webpack --config ./splash/webpack.prod.config.ts && cp -a ./splash/tocopy/ ./splash/bundle/ && JAG=demo webpack --config webpack.prod.config.ts && yarn moveimages",
 		"splash-dev": "webpack serve --config ./splash/webpack.dev.config.ts",
 		"test": "jest",
 		"test-w": "jest --watch --detectOpenHandles --verbose"
